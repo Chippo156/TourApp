@@ -6,10 +6,10 @@ spring:
   application:
     name: Tour-app
   datasource:
-    url: jdbc:mariadb://localhost:3306/tour_app?useSSL=false&serverTimezone=UTC
-    username: root
-    password: 12345678
-    driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mariadb://localhost:3306/tour_app?useSSL=false&serverTimezone=UTC
+      username: root
+      password: 12345678
+      driver-class-name: org.mariadb.jdbc.Driver
   servlet:
     multipart:
       max-file-size: 10MB
@@ -28,6 +28,16 @@ jwt:
   secretKey: 90c85b588e8d468d45cf5a70a5517dc6507a0655d7ea0664f6eb70dd4d76394e
   valid-duration: 86400
   refresh-duration: 86400
+
+payment:
+  vnPay:
+    url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    tmnCode: 58X4B4HP
+    hashSecret: VRLDWNVWDNPCOEPBZUTWSEDQAGXJCNGZ
+    returnUrl: http://localhost:8080/api/v1/payment/vnpay-callback
+    version: 2.1.0
+    command: pay
+    order_type: others
 
 
 

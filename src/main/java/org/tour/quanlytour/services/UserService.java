@@ -1,5 +1,4 @@
 package org.tour.quanlytour.services;
 
-public interface TestService {
-
+public interface UserService {
 }

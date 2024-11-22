@@ -1,20 +1,20 @@
 package org.tour.quanlytour.entites;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Table(name = "test")
-@Getter
+@Table(name = "popular_amenities")
 @Setter
+@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Test {
+public class PopularAmenity {
     @Id
+    @Column(name = "amenity_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String amenityName;
+    private String amenityIcon;
 }
