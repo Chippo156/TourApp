@@ -39,7 +39,6 @@ public class PopularAmenityController {
             return new ApiResponse<>(200, "success", popularAmenityService.getPopularAmenity(id));
         } catch (Exception ex) {
             return new ApiResponse<>(400, ex.getMessage(), null);
-
         }
     }
 }
