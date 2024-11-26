@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+import "./App.scss";
+import LayoutUser from "./component/LayoutUser/LayoutUser";
+import Error from "./component/Error";
+import Home from "./page/Home";
+import Login from "./page/Login";
+import Register from "./page/Register";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <LayoutUser />,
+      errorElement: <Error />,
+      children: [
+        { index: true, path: "/", element: <Home /> },
+        // { path: "/product/:id", element: <Product /> },
+        // { path: "/profile", element: <Profile /> },
+        // { path: "/category/:id", element: <CategoryPage /> },
+        // { path: "/cart", element: <CartPage /> },
+        // { path: "/cartManager", element: <CartManager /> },
+      ],
+    },
+    {
+      path: "login",
+      element: <Login />,
+    },
+    {
+      path: "register",
+      element: <Register />,
+    },
+    {
+      path: "/admin",
+      element: <LayoutAdmin />,
+    },
+  ]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="container">
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
-export default App
+export default App;

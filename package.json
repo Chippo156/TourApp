@@ -4,14 +4,23 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.3",
+    "antd": "^5.17.4",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-icons": "^4.11.0",
+    "react-paypal-button-v2": "^2.6.3",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.9.0",
+    "sass": "^1.59.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
