@@ -1,5 +1,6 @@
 package org.tour.quanlytour.services.impl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import  org.tour.quanlytour.dtos.request.DestinationRequest;
 import  org.tour.quanlytour.entites.Category;
 import  org.tour.quanlytour.entites.Destination;
@@ -70,12 +71,9 @@ public class DestinationServiceImpl implements DestinationService {
 
 
     @Override
-    public List<Destination> getAllDestinations(int page, int size) {
+    public Page<Destination> getAllDestinations(int page, int size) {
         try{
-            Sort sort = Sort.by(Sort.Order.asc("id"));
-            Pageable pageable = PageRequest.of(page-1,size,sort);
-            var destinations = destinationRepository.findAll(pageable);
-            return destinations.getContent();
+            return destinationRepository.findAll(PageRequest.of(page,size, Sort.by("id").ascending()));
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.request.TourRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
+import org.tour.quanlytour.dtos.response.ListTourResponse;
 import org.tour.quanlytour.dtos.response.TourResponse;
 import org.tour.quanlytour.entites.Tour;
 import org.tour.quanlytour.mapper.TourMapper;
@@ -27,11 +28,16 @@ public class TourController {
         }
     }
     @GetMapping
-    public ApiResponse<List<TourResponse>> getAllTour(@RequestParam int page, @RequestParam int size) {
+    public ApiResponse<ListTourResponse> getAllTour(@RequestParam int page, @RequestParam int size) {
         try{
-
             List<Tour> tours = tourService.getAllTour(page, size).getContent();
-            return new ApiResponse<>(200,"success",tours.stream().map(tourMapper::toTourResponse).toList());
+            List<TourResponse> tourResponses = tours.stream().map(tourMapper::toTourResponse).toList();
+            ListTourResponse t = ListTourResponse.builder()
+                    .tours(tourResponses)
+                    .totalPage(tourService.getAllTour(page, size).getTotalPages())
+                    .totalElement(tourService.getAllTour(page, size).getNumberOfElements())
+                    .build();
+            return new ApiResponse<>(200,"success",t);
         }
         catch (Exception e) {
             return new ApiResponse<>(400,e.getMessage(),null);

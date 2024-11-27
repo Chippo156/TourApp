@@ -1,5 +1,6 @@
 package org.tour.quanlytour.services.service;
 
+import org.springframework.data.domain.Page;
 import org.tour.quanlytour.dtos.request.DestinationRequest;
 import org.tour.quanlytour.entites.Destination;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,7 @@ public interface DestinationService {
 
     void updateDestination(Long id, DestinationRequest destinationRequest);
 
-    List<Destination> getAllDestinations(int page, int size);
+    Page<Destination> getAllDestinations(int page, int size);
 
     void deleteDestination(Long id);
 

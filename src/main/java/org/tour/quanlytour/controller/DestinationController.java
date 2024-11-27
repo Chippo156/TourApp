@@ -3,8 +3,10 @@ package org.tour.quanlytour.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.tour.quanlytour.dtos.request.DestinationImageRequest;
 import org.tour.quanlytour.dtos.request.DestinationRequest;
+import org.tour.quanlytour.dtos.response.ListDestinationResponse;
 import org.tour.quanlytour.entites.Destination;
 import org.tour.quanlytour.entites.DestinationImage;
 import org.tour.quanlytour.mapper.DestinationMapper;
@@ -48,13 +50,21 @@ public class DestinationController {
     }
 
     @GetMapping
-    public ApiResponse<List<DestinationResponse>> getListDestination(
+    public ApiResponse<ListDestinationResponse> getListDestination(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         try {
+
+            Page<Destination> destinations = destinationService.getAllDestinations(page-1, size);
             return new ApiResponse<>(200, "success",
-                    destinationService.getAllDestinations(page, size).stream().map(mapper::toDestinationResponse).toList());
+                    ListDestinationResponse.builder()
+                            .destinations(destinations.stream().map(mapper::toDestinationResponse).toList())
+                            .totalPage(destinations.getTotalPages())
+                            .totalElement(destinations.getNumberOfElements())
+                            .build()
+            );
+
         } catch (Exception e) {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
