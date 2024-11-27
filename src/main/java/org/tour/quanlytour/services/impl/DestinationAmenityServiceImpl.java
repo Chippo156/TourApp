@@ -21,8 +21,6 @@ public class DestinationAmenityServiceImpl implements DestinationAmenityService 
     private final DestinationAmenityRepository destinationAmenityRepository;
     private final DestinationRepository destinationRepository;
     private final PopularAmenityRepository popularAmenityRepository;
-
-
     @Override
     public DestinationAmenity saveDestinationAmenity(DestinationAmenityRequest request) {
         try{
