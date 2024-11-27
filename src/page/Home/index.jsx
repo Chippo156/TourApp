@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel, Image } from "antd";
 import carousel1 from "../../assets/images/carosel1.png";
 import carousel2 from "../../assets/images/carosel2.png";
 import "./home.scss"; // Import the custom SCSS file
-import { Row, Col, Card, Typography, Button } from "antd";
+import { Row, Col, Card, Typography, Button, List } from "antd";
 import {
   SmileOutlined,
   PercentageOutlined,
   RocketOutlined,
   SafetyOutlined,
 } from "@ant-design/icons";
-
+import { useNavigate } from "react-router-dom";
+import anhHaNoi from "../../assets/images/anh-ha-noi.png";
+import anhDaNang from "../../assets/images/anh-da-nang.png";
+import anhKhac from "../../assets/images/anh-khac.png";
+import anhHoChiMinh from "../../assets/images/anh-hcm.png";
+import { getCountReview } from "../../controller/DetailsController";
+import { handleGetDestination } from "../../controller/homeController";
 const { Title, Text } = Typography;
 
 function Home() {
+  // const navigate = useNavigate();
+  const [dataLastWeekend, setDataLastWeekend] = useState([]);
   const benefits = [
     {
       icon: <SmileOutlined style={{ fontSize: "24px", color: "#ff8a65" }} />,
@@ -42,7 +50,6 @@ function Home() {
         "Read reviews & get reliable customer support. We're with you at every step.",
     },
   ];
-
   const items = [
     {
       image: "https://via.placeholder.com/150", // Replace with actual image URL
@@ -77,7 +84,63 @@ function Home() {
       bookings: "500K+ booked",
     },
   ];
+  const data = [
+    {
+      city: "Hồ Chí Minh",
+      country: "Việt Nam",
+      uri: anhHoChiMinh,
+      value: "Hồ Chí Minh",
+    },
+    {
+      city: "Hà Nội",
+      country: "Việt Nam",
+      uri: anhHaNoi,
+      value: "Hanoi",
+    },
+    {
+      city: "Đà Nẵng",
+      country: "Việt Nam",
+      uri: anhDaNang,
+      value: "Da nang",
+    },
+    {
+      city: "Khu Vực Khác",
+      country: "Việt Nam",
+      uri: anhKhac,
+      value: "Other",
+    },
+  ];
+  const handleGetCountReview = async (des_id) => {
+    let res = await getCountReview(des_id);
+    if (res && res.code === 200) {
+      return res.result;
+    }
+  };
 
+  const handleGetData = async () => {
+    let res = await handleGetDestination();
+    if (res && res.code === 200) {
+      for (const item of res.result) {
+        let count = await handleGetCountReview(item.destination_id);
+        item.count_review = count;
+      }
+      console.log(res);
+
+      setDataLastWeekend(res.result);
+    }
+  };
+
+  useEffect(() => {
+    handleGetData();
+  }, []);
+
+  const handleCityDetail = (value) => {
+    navigate.push(`/destination/${value}`);
+  };
+
+  const handleDetails = (id) => {
+    navigate.push(`/destination/${id}`);
+  };
   return (
     <div className="home-container">
       <Carousel arrows infinite={false} draggable={true} autoplay>
@@ -112,14 +175,11 @@ function Home() {
                 <Card
                   hoverable
                   cover={
-                    <img
-                      alt={item.title}
+                    <Image
+                      preview={false}
                       src={item.image}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        minHeight: 300,
-                      }}
+                      alt={item.title}
+                      style={{ height: "200px" }}
                     />
                   }
                 >
@@ -127,7 +187,7 @@ function Home() {
                     <Text className="title">{item.title}</Text>
                   </div>
                   <div>
-                    <Text type="secondary" block className="location">
+                    <Text type="secondary" block="true" className="location">
                       {item.location}
                     </Text>
                   </div>
@@ -156,13 +216,88 @@ function Home() {
             ))}
           </Row>
 
-          <div style={{ textAlign: "center", marginTop: "40px",display:"flex",alignItems:"center",justifyContent:"center" }}>
-            <Button
-              type="primary"
-              className="button"
-            >
+          <div className="centered-container">
+            <Button type="primary" className="button" block="true">
               See more
             </Button>
+          </div>
+          <div className="padding-container">
+            <Title level={2} className="title-black">
+              Explore stays in trending destinations
+            </Title>
+            <Row gutter={[16, 16]}>
+              {data.map((item, index) => (
+                <Col key={index} span={6}>
+                  <Card
+                    hoverable
+                    cover={
+                      <Image
+                        preview={false}
+                        src={item.uri}
+                        alt={item.city}
+                        className="image-cover"
+                        height={200}
+                      />
+                    }
+                    onClick={() => handleCityDetail(item.value)}
+                  >
+                    <Card.Meta title={item.city} description={item.country} />
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+            <div className="margin-top-bottom">
+              <div className="flex-space-between">
+                <Title level={2} className="title-white">
+                  Last-minute weekend deals
+                </Title>
+              </div>
+              <List
+                grid={{ gutter: 16, column: 4 }}
+                dataSource={dataLastWeekend}
+                renderItem={(item) => (
+                  <List.Item>
+                    <Card
+                      hoverable
+                      cover={
+                        <Image
+                          src={item.image_url}
+                          alt={item.name}
+                          style={{ height: 200 }}
+                        />
+                      }
+                      onClick={() => handleDetails(item.destination_id)}
+                    >
+                      <Card.Meta
+                        title={
+                          <Text className="card-meta-title">{item.name}</Text>
+                        }
+                        description={
+                          <>
+                            <Text className="card-meta-description">
+                              {item.description}
+                            </Text>
+                            <div className="flex-align-center">
+                              <Text className="rating">
+                                {item.average_rating}
+                              </Text>
+                              <Text className="reviews">
+                                ({item.count_review.toFixed(1)} reviews)
+                              </Text>
+                            </div>
+                          </>
+                        }
+                      />
+                    </Card>
+                  </List.Item>
+                )}
+              />
+              <div className="centered-container">
+                <Button type="primary" className="button" block="true">
+                  See more
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

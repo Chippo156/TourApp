@@ -1,16 +1,22 @@
 // header.scss
-.container {
-}
-.header {
-  background-color: #fff;
-  box-shadow: 0 2px 8px #f0f1f2;
+.container_header {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin: 0 auto;
   padding: 20px;
-  max-width: 1200px;
   height: 80px;
+  align-items: center;
+}
+.header {
+  position: fixed;
+  background-color: #fff;
+  box-shadow: 0 2px 8px #f0f1f2;
+  height: 80px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   .logo {
     width: 70px;
     height: auto;
@@ -40,5 +46,4 @@
       justify-content: center;
     }
   }
-
 }

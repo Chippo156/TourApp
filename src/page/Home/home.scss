@@ -1,35 +1,113 @@
 .home-container {
-
+  margin-top: 80px;
   .home-main-container {
     max-width: 1200px;
     margin: 0 auto;
-    .title{
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 20px;
+    .title {
+      font-size: 28px; /* Increased from 24px to 28px */
+      font-weight: 700;
+      margin-bottom: 20px;
     }
-    .location{
-        font-size: 16px;
-        font-weight: 400;
-        margin-bottom: 20px;
+    .location {
+      font-size: 18px; /* Increased from 16px to 18px */
+      font-weight: 400;
+      margin-bottom: 20px;
     }
   }
 }
 .button {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 45px;
-    border-radius: 8px;
-    font-size: 20px;
-    line-height: 20px;
-    min-width: 72px;
-    padding: 7px 12px;
-    border: 1px solid #4a4a4a;
-    color: #212121;
-    background: #fff;
-    font-weight: bold;
-    min-width: 320px;
-    width: 30%;
-  }
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  border-radius: 8px;
+  font-size: 22px; /* Increased from 20px to 22px */
+  line-height: 22px; /* Increased from 20px to 22px */
+  min-width: 72px;
+  padding: 7px 12px;
+  border: 1px solid #4a4a4a;
+  color: #212121;
+  background: #fff;
+  font-weight: bold;
+  min-width: 320px;
+  width: 30%;
+}
+.centered-container {
+  text-align: center;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.padding-container {
+  margin-top: 20px;
+  padding: 16px;
+}
+
+.title-white {
+  color: white;
+}
+
+.title-black {
+  color: #000;
+}
+
+.margin-top-bottom {
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link-button {
+  color: #ff6347;
+  font-size: 20px; /* Increased from 18px to 20px */
+}
+
+.image-cover {
+  width: 100%;
+  height: 250px;
+}
+
+.card-meta-title {
+  color: #000;
+  font-size: 20px; /* Increased from 18px to 20px */
+}
+
+.card-meta-description {
+  color: #000;
+  font-size: 16px; /* Increased from 14px to 16px */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rating {
+  background-color: #57ca61;
+  border-radius: 12px;
+  padding: 8px;
+  color: #000;
+  font-size: 16px; /* Increased from 14px to 16px */
+  min-width: 45px;
+  text-align: center;
+}
+
+.reviews {
+  padding-left: 12px;
+  color: #000;
+  font-size: 16px; /* Increased from 14px to 16px */
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
