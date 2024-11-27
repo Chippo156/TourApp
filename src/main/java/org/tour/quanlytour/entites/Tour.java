@@ -27,9 +27,11 @@ public class Tour {
     @Column(name = "end_date")
     LocalDate endDate;
     String duration;
+    int rating;
+    @Column(name = "max_people")
+    int maxPeople;
     String departure;
     double price;
-
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
     List<Itinerary> itineraries;
 
