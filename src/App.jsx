@@ -1,4 +1,3 @@
-
 import "./App.scss";
 import LayoutUser from "./component/LayoutUser/LayoutUser";
 import Error from "./component/Error";
@@ -7,6 +6,7 @@ import Login from "./page/Login";
 import Register from "./page/Register";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
+import TravelDetail from "./page/Details";
 
 function App() {
   const router = createBrowserRouter([
@@ -15,7 +15,12 @@ function App() {
       element: <LayoutUser />,
       errorElement: <Error />,
       children: [
-        { index: true, path: "/", element: <Home /> },
+        { index: false, path: "/", element: <TravelDetail /> },
+        // {
+        //   index: true,
+        //   path: "/travel/:id",
+        //   element: <TravelDetail />,
+        // },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
@@ -23,6 +28,7 @@ function App() {
         // { path: "/cartManager", element: <CartManager /> },
       ],
     },
+
     {
       path: "login",
       element: <Login />,

@@ -1,8 +1,4 @@
 import axios from "../until/customize-axios";
-import { useDispatch, useSelector } from "react-redux";
-import { loadingTrue, loadingFalse } from "../Redux/userSlice";
-import { Linking } from "react-native";
-import { Alert } from "react-native";
 
 export let createBooking = async (
   user_id,
@@ -77,9 +73,11 @@ export let handleVNPay = async (amount, bankCode, orderId) => {
     );
     const paymentData = response.data;
     if (paymentData?.code === "ok") {
-      Linking.openURL(paymentData.paymentUrl).catch((err) =>
-        console.error("An error occurred while opening the URL", err)
-      );
+      window
+        .open(paymentData.paymentUrl, "_blank")
+        .catch((err) =>
+          console.error("An error occurred while opening the URL", err)
+        );
     }
 
     return "success";
@@ -110,6 +108,27 @@ export let CancelBooking = async (id) => {
   try {
     const response = await axios.delete(`/bookings/${id}`);
     return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+export let createReview = async (
+  title,
+  content,
+  rating,
+  destination_id,
+  user_id
+) => {
+  try {
+    const response = await axios.post("/reviews", {
+      title,
+      content,
+      rating,
+      destination_id,
+      user_id,
+    });
+    return response.data;
   } catch (error) {
     console.error(error);
     return error;

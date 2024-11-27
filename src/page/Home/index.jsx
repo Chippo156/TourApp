@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { Carousel, Image } from "antd";
 import carousel1 from "../../assets/images/carosel1.png";
@@ -20,7 +21,7 @@ import { handleGetDestination } from "../../controller/homeController";
 const { Title, Text } = Typography;
 
 function Home() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [dataLastWeekend, setDataLastWeekend] = useState([]);
   const benefits = [
     {
@@ -167,7 +168,7 @@ function Home() {
           </Row>
 
           <Title level={2} style={{ marginTop: "40px" }}>
-            Travelers' favorite choice
+            Travelers favorite choice
           </Title>
           <Row gutter={[16, 16]}>
             {items.map((item, index) => (
