@@ -27,6 +27,7 @@ import "./details.scss";
 import { Route, useNavigation } from "react-router-dom";
 import { IconBase } from "react-icons";
 import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
+
 export default function TravelDetail() {
   const des_id = 1;
   const dispatch = useDispatch();
@@ -97,6 +98,8 @@ export default function TravelDetail() {
       return; // Nếu đã có ảnh trong state, không cần gọi lại API
     }
     let res = await getImageRoom(id);
+    console.log(res);
+
     setRoomImages((prev) => ({ ...prev, [id]: res })); // Lưu ảnh với ID tương ứng
   };
   const getDestinationDetails = async () => {
@@ -160,11 +163,11 @@ export default function TravelDetail() {
     }
   };
 
-  // useEffect(() => {
-  //   rooms.forEach((room) => {
-  //     fetchImageRoom(room.id);
-  //   });
-  // }, [rooms]);
+  useEffect(() => {
+    rooms.forEach((room) => {
+      fetchImageRoom(room.id);
+    });
+  }, [rooms]);
   useEffect(() => {
     getDestinationDetails();
     // fetchListDestination();
@@ -480,9 +483,31 @@ export default function TravelDetail() {
             dataSource={rooms}
             renderItem={(item) => (
               <div className="room-item-card">
-                <div className="image-placeholder">
-                  <Image style={{ height: 250 }} src={item.image_url} />
-                </div>
+                <Carousel
+                  arrows
+                  infinite={true}
+                  autoplay
+                  style={{ width: "100%", marginBottom: "20px" }} // Adjust the width for the carousel
+                >
+                  {roomImages[item.id]?.map((image, index) => (
+                    <div
+                      key={index}
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <Image
+                        src={image.imageUrl}
+                        alt={`Room image ${index}`}
+                        style={{
+                          width: "100%", // Ensures the images take full width of the container
+                          height: "300px", // Fixed height for all images
+                          objectFit: "cover", // Maintains the aspect ratio while covering the area
+                          borderRadius: "10px", // Optional: Add rounded corners for aesthetics
+                        }}
+                      />
+                    </div>
+                  ))}
+                </Carousel>
+
                 <Text className="room-title">
                   {item?.room_type + " " + item?.description}
                 </Text>
