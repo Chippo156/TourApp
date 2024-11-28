@@ -163,7 +163,7 @@ function Home() {
     setCurrentPage(page);
   };
   const handleExploreClick = () => {
-    navigate('/filter', { state: { value: 'trending' } });
+    navigate("/filter", { state: { value: "trending" } });
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
