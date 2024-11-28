@@ -10,5 +10,6 @@ public interface TourService {
     Tour createTour(TourRequest tourRequest);
     Tour updateTour(Long id, TourRequest tourRequest);
     void deleteTour(Long id);
+    void updateTourImage(Long id, String url);
 
 }

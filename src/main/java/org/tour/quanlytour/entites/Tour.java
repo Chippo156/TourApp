@@ -26,6 +26,8 @@ public class Tour {
     LocalDate startDate;
     @Column(name = "end_date")
     LocalDate endDate;
+    @Column(name = "image_url")
+    String imageUrl;
     String duration;
     int rating;
     @Column(name = "max_people")

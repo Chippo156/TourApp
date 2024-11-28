@@ -73,6 +73,7 @@ public class TourServiceImpl implements TourService {
        }
     }
 
+
     @Override
     public void deleteTour(Long id) {
         try{
@@ -81,6 +82,17 @@ public class TourServiceImpl implements TourService {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    @Override
+    public void updateTourImage(Long id, String url) {
+        try{
+            Tour tour = tourRepository.findById(id).orElseThrow();
+            tour.setImageUrl(url);
+            tourRepository.save(tour);
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 

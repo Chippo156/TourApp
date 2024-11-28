@@ -13,7 +13,6 @@ public interface RoomImageService {
 
     RoomImage uploadImage(Long roomId, RoomImageRequest request);
     List<RoomImage> get(Long roomId);
-
     String fakeData();
 
 }
