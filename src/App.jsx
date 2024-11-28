@@ -6,7 +6,8 @@ import Login from "./page/Login";
 import Register from "./page/Register";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
-import TravelDetail from "./page/Details";
+import TravelDetail from "./page/Hotel_Details";
+import Deserve from "./page/Deserve";
 
 function App() {
   const router = createBrowserRouter([
@@ -15,11 +16,16 @@ function App() {
       element: <LayoutUser />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <TravelDetail /> },
+        { index: false, path: "/", element: <Deserve /> },
         // {
         //   index: true,
         //   path: "/travel/:id",
         //   element: <TravelDetail />,
+        // },
+        // {
+        //   index: true,
+        //   path: "/deserve",
+        //   element: <Deserve />,
         // },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
