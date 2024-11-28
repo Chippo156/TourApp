@@ -1,5 +1,4 @@
 import axios from "../until/customize-axios";
-sssssssssssss
 
 export const getFilterDestination = async (city, param) => {
   try {
