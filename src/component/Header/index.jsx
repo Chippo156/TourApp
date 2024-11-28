@@ -13,11 +13,13 @@ const HeaderPage = () => {
   return (
     <div className="header">
       <div className="container_header">
-        <img
-          src="https://shop-t1.gg/web/upload/appfiles/ZaReJam3QiELznoZeGGkMG/58b927db2fd026ec72d8f4e117571896.svg"
-          alt="logo"
-          className="logo"
-        />
+        <a href="/">
+          <img
+            src="https://shop-t1.gg/web/upload/appfiles/ZaReJam3QiELznoZeGGkMG/58b927db2fd026ec72d8f4e117571896.svg"
+            alt="logo"
+            className="logo"
+          />
+        </a>
         <Input
           placeholder="Search"
           prefix={<SearchOutlined />}

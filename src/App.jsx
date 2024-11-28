@@ -9,6 +9,7 @@ import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
 import FilterPage from "./page/Destination";
 import TravelDetail from "./page/Hotel_Details";
 import Deserve from "./page/Deserve";
+import UserDetails from "./page/UserInformation";
 
 function App() {
   const router = createBrowserRouter([
@@ -17,7 +18,7 @@ function App() {
       element: <LayoutUser />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <Home /> },
+        { index: false, path: "/", element: <UserDetails /> },
         {
           index: true,
           path: "/destination/:id",
@@ -28,6 +29,11 @@ function App() {
           path: "/deserveHotel",
           element: <Deserve />,
         },
+        // {
+        //   index: true,
+        //   path: "/user",
+        //   element: <UserDetails />,
+        // },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
