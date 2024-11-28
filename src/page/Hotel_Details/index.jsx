@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   getAmenities,
+  getCountReview,
   getDestinationById,
   getFilterRoom,
   getImageRoom,
@@ -22,18 +24,27 @@ import {
   Image,
   Carousel,
   Radio,
+  DatePicker,
+  theme,
+  Button,
+  Pagination,
+  Breadcrumb,
+  Modal,
 } from "antd";
 import "./details.scss";
-import { Route, useNavigation } from "react-router-dom";
+import { useNavigate, useNavigation, useParams } from "react-router-dom";
 import { IconBase } from "react-icons";
 import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
-
+import { createReview } from "../../controller/BookingController";
+import { FaCalendarAlt, FaUserAlt } from "react-icons/fa";
+import { message } from "antd";
 export default function TravelDetail() {
-  const des_id = 1;
+  const des_id = useParams().id;
+  const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const [destination, setDestinations] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [amenities, setAmenities] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [checked, setChecked] = useState("first"); // State for radio button
@@ -43,18 +54,27 @@ export default function TravelDetail() {
   const [imagesDes, setImagesDes] = useState([]);
   const [roomImages, setRoomImages] = useState({});
   const [destinations, setListDestination] = useState([]);
-  const [selectDay, setSelectDay] = useState(true);
-  const [selectedSecondLastDay, setSelectedSecondLastDay] = useState("");
-  const [selectedLastDayOfMonth, setSelectedLastDayOfMonth] = useState("");
-  const [visibleDate, setVisibleDate] = useState(false); // Overlay cho ngày
-
-  const [visibleGuest, setVisibleGuest] = useState(false); // Overlay cho khách
   const [numberGuest, setNumberGuest] = useState(1);
   const [numberRoom, setNumbeRoom] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   const currentDate = new Date();
   const refundDate = new Date(currentDate);
+
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const handleChange = (dates) => {
+    if (dates) {
+      setStartDate(dates[0].format("YYYY-MM-DD"));
+      setEndDate(dates[1].format("YYYY-MM-DD"));
+    } else {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
   refundDate.setDate(currentDate.getDate() + 7);
   const formatDateRefund = (date) => {
     const options = {
@@ -65,25 +85,31 @@ export default function TravelDetail() {
     };
     return date.toLocaleDateString("en-US", options);
   };
+  const handleGetCountReview = async (des_id) => {
+    let res = await getCountReview(des_id);
+    if (res && res.code === 200) {
+      return res.result;
+    }
+  };
+  const handleGetData = async () => {
+    let res = await handleGetDestination();
+    console.log(res);
+    if (res && res.code === 200) {
+      for (const item of res.result.destinations) {
+        let count = await handleGetCountReview(item.destination_id);
+        item.count_review = count;
+      }
+      console.log(res);
 
-  const fetchListDestination = async () => {
-    try {
-      let res = await handleGetDestination();
-      setListDestination(res.result);
-    } catch (error) {
-      console.log(error);
+      setListDestination(res.result.destinations);
     }
   };
 
-  const fetchImagesDestination = async () => {
-    // if (route.params && route.params.id) {
-    //   let res = await getImagesDestination(route.params.id);
-    //   setImagesDes(res);
-    // } else {
-    //   let res = await getImagesDestination(1);
-    //   setImagesDes(res);
-    // }
+  useEffect(() => {
+    handleGetData();
+  }, []);
 
+  const fetchImagesDestination = async () => {
     if (destination && destination.destination_id) {
       let res = await getImagesDestination(destination.destination_id);
       setImagesDes(res);
@@ -103,23 +129,10 @@ export default function TravelDetail() {
     setRoomImages((prev) => ({ ...prev, [id]: res })); // Lưu ảnh với ID tương ứng
   };
   const getDestinationDetails = async () => {
-    // if (route.params && route.params.id) {
-    //   let res = await getDestinationById(route.params.id);
-    //   if (res.code === 200) {
-    //     setDestinations(res.result);
-    //     setLoading(false);
-    //   }
-    // } else {
-    //   let res = await getDestinationById(1);
-    //   if (res.code === 200) {
-    //     setDestinations(res.result);
-    //   }
-    // }
     if (des_id) {
       let res = await getDestinationById(des_id);
       if (res.code === 200) {
         setDestinations(res.result);
-        setLoading(false);
       }
     } else {
       let res = await getDestinationById(1);
@@ -170,7 +183,6 @@ export default function TravelDetail() {
   }, [rooms]);
   useEffect(() => {
     getDestinationDetails();
-    // fetchListDestination();
     fetchImagesDestination();
   }, []);
 
@@ -210,7 +222,6 @@ export default function TravelDetail() {
     );
   };
 
-  const toggleGuestOverlay = () => setVisibleGuest(!visibleGuest);
   const handleAddGuest = () => {
     setNumberGuest(numberGuest + 1);
   };
@@ -227,73 +238,14 @@ export default function TravelDetail() {
       setNumbeRoom(numberRoom - 1);
     }
   };
-  const toggleDateOverlay = () => setVisibleDate(!visibleDate);
-  const formatDate = (date) => {
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear();
-    return `${year}-${month}-${day}`;
-  };
-  const getMonthDay = (date) => {
-    const day = date.split("-")[2];
-    const month = date.split("-")[1];
-    return `${day}/${month}`;
-  };
-  // Hàm lấy ngày thứ
-  const getDayOfWeek = (date) => {
-    const daysOfWeek = [
-      "Chủ Nhật",
-      "Thứ Hai ",
-      "Thứ Ba  ",
-      "Thứ Tư  ",
-      "Thứ Năm ",
-      "Thứ Sáu ",
-      "Thứ Bảy ",
-    ];
-    return daysOfWeek[date.getDay()];
-  };
-
-  // Hàm lấy 2 ngày cuối tháng
-  const getLastTwoDaysOfMonth = () => {
-    const today = new Date();
-    const lastDayOfMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 1,
-      0
-    ); // Ngày cuối tháng
-    const secondLastDay = new Date(lastDayOfMonth);
-    secondLastDay.setDate(lastDayOfMonth.getDate() - 1); // Ngày trước đó một ngày
-
-    setSelectedSecondLastDay(formatDate(secondLastDay)); // Thiết lập ngày đã chọn ban đầu
-    setSelectedLastDayOfMonth(formatDate(lastDayOfMonth)); // Thiết lập ngày đã chọn ban đầu
-  };
-
-  useEffect(() => {
-    getLastTwoDaysOfMonth();
-  }, []);
-
-  const handleNavigate = (id) => {
-    navigation.push("TravelDetail", { id });
-  };
-  const handleDeserve = (desid, roomid) => {
-    navigation.navigate("Deserve", {
-      desId: desid,
-      roomId: roomid,
-      startDate: selectedSecondLastDay,
-      endDate: selectedLastDayOfMonth,
-      numberGuest: numberGuest,
-      numberRoom: numberRoom,
-      refund: checked,
-      extra: checkedExtra,
-    });
-  };
+  const { Text, Title } = Typography;
 
   const fetchFilterRoom = async () => {
     try {
       let res = await getFilterRoom(
         numberGuest,
-        selectedSecondLastDay,
-        selectedLastDayOfMonth,
+        startDate.format("YYYY-MM-DD"),
+        endDate.format("YYYY-MM-DD"),
         numberRoom,
         destination.destination_id
       );
@@ -302,79 +254,83 @@ export default function TravelDetail() {
       console.log(error);
     }
   };
-  const handleAddReview = async (review) => {
-    setReviews([...reviews, review]);
-    try {
-      let res = await createReview(
-        review.title,
-        review.content,
-        review.rating,
-        destination.destination_id,
-        1
-      );
-      if (res.code === 200) {
-        setModalVisibleReview(false);
-      } else {
-        Alert.alert("Error", "Create review failed");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     fetchFilterRoom();
-  }, [numberGuest, numberRoom, selectedSecondLastDay, selectedLastDayOfMonth]);
+  }, [numberGuest, numberRoom, endDate]);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = destinations.slice(indexOfFirstItem, indexOfLastItem);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
 
-  const { Text, Title } = Typography;
+    // Fetch the destination details using the des_id
+    getDestinationDetails(des_id);
+  }, [des_id]);
+  const handleDetails = (des_id) => {
+    navigate(`/destination/${des_id}`);
+  };
+  const datePickerRef = useRef(null);
 
-  const renderItem = (item, handleNavigate) => {
-    return (
-      <Card
-        hoverable
-        style={{ margin: 8, borderRadius: 8 }}
-        onClick={() => handleNavigate(item.destination_id)}
-        cover={
-          <AntImage
-            src={item.image_url}
-            alt={item.name}
-            style={{ borderRadius: 8, objectFit: "cover", height: 135 }}
-            preview={false}
-          />
-        }
-      >
-        <Space direction="vertical" style={{ width: "100%" }}>
-          <Title
-            level={4}
-            style={{ margin: 0, fontWeight: "bold", lineHeight: "1.5" }}
-          >
-            {item.name}
-          </Title>
-          <Text ellipsis={{ rows: 2 }} style={{ fontSize: 16 }}>
-            {item.description}
-          </Text>
-          <List
-            dataSource={item.amenities.slice(0, 4)}
-            renderItem={(amenity) => (
-              <Row gutter={8} align="middle" style={{ marginBottom: 4 }}>
-                <Col>
-                  <IconBase
-                    component={amenity.amenityIcon}
-                    style={{ fontSize: 24, color: "#333" }}
-                  />
-                </Col>
-                <Col>
-                  <Text>{amenity.amenityName}</Text>
-                </Col>
-              </Row>
-            )}
-          />
-        </Space>
-      </Card>
-    );
+  const handleDeserve = (des_id, room_id) => {
+    if (startDate === null || endDate === null) {
+      // Scroll to the DatePicker component
+      datePickerRef.current.scrollIntoView({ behavior: "smooth" });
+      message.warning("Please select both start and end dates.");
+
+      return;
+    }
+    navigate(`/deserveHotel`, {
+      state: {
+        desId: des_id,
+        roomId: room_id,
+        startDate: startDate,
+        endDate: endDate,
+        numberGuest: numberGuest,
+        numberRoom: numberRoom,
+        refund: checked,
+        extra: checkedExtra,
+      },
+    });
+  };
+  const formatDate = (date) => {
+    date = new Date(date);
+    if (!(date instanceof Date)) {
+      throw new Error("Invalid date");
+    }
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+
+  const showLoading = () => {
+    setOpen(true);
+    setLoading(true);
+
+    // Simple loading mock. You should add cleanup logic in real world.
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   };
   return (
-    <div className="container">
+    <div className="">
+      <Breadcrumb
+        items={[
+          {
+            title: <a href="/">Home</a>,
+          },
+
+          {
+            title: "Destination details",
+          },
+        ]}
+      />
       <div className="container-main">
         <div className="imageContainer">
           <div style={{ flexGrow: 1 }}>
@@ -439,12 +395,38 @@ export default function TravelDetail() {
             <p className="excellentText">Exceptional</p>
           </div>
         </div>
-        <div
-          onClick={() => setModalVisible(true)}
-          className={{ cursor: "pointer" }}
+        <Button onClick={showLoading}>See all {reviews?.length} reviews</Button>
+        <Modal
+          title={<p>Review {reviews?.length}</p>}
+          loading={loading}
+          open={open}
+          onCancel={() => setOpen(false)}
         >
-          <p className="reviewsText">See all {reviews?.length} reviews</p>
-        </div>
+          <div>
+            <List
+              dataSource={reviews}
+              renderItem={(item) => (
+                <div style={styles.card}>
+                  <h2 style={styles.rating}>{item.rating + 3}/10 Excellent</h2>
+                  <p style={styles.date}>{formatDate(item.created_at)}</p>
+                  <p style={styles.comment}>
+                    <strong>Liked: </strong>
+                    {liked}
+                  </p>
+                  <p style={styles.title}>{item.title}</p>
+                  <p style={styles.description}>{item.content}</p>
+
+                  <div style={styles.response}>
+                    <h3>
+                      Response from {item.username} on{" "}
+                      {formatDate(item.created_at)}
+                    </h3>
+                  </div>
+                </div>
+              )}
+            />
+          </div>
+        </Modal>
         <div>
           <Title level={4} className="sectionTitle">
             About this property
@@ -453,7 +435,7 @@ export default function TravelDetail() {
             {destination?.description}
           </Title>
         </div>
-        <div>
+        <div ref={datePickerRef}>
           <List
             grid={{ gutter: 10, column: 2 }}
             dataSource={amenities}
@@ -476,7 +458,51 @@ export default function TravelDetail() {
         </div>
 
         <Text className="sectionTitle">Choose your room</Text>
-
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <button className="button-container">
+            <FaCalendarAlt size={30} color="green" className="icon" />
+            <div className="button-text">
+              <p>Ngày</p>
+              <DatePicker.RangePicker onChange={handleChange} />
+            </div>
+          </button>
+          <button className="button-container">
+            <FaUserAlt size={30} color="orange" className="icon" />
+            <div
+              className="button-text"
+              style={{ display: "flex", flexDirection: "column", gap: 10 }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span>Guest: </span>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  onClick={handleRemoveGuest}
+                >
+                  -
+                </Button>
+                <span>{numberGuest}</span>
+                <Button type="primary" shape="circle" onClick={handleAddGuest}>
+                  +
+                </Button>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span>Room: </span>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  onClick={handleRemoveRoom}
+                >
+                  -
+                </Button>
+                <span>{numberRoom}</span>
+                <Button type="primary" shape="circle" onClick={handleAddRoom}>
+                  +
+                </Button>
+              </div>
+            </div>
+          </button>
+        </div>
         <div style={{ marginVertical: 20 }}>
           <List
             grid={{ gutter: 16, column: 3 }}
@@ -508,9 +534,11 @@ export default function TravelDetail() {
                   ))}
                 </Carousel>
 
-                <Text className="room-title">
-                  {item?.room_type + " " + item?.description}
-                </Text>
+                <div style={{ height: 60 }}>
+                  <Text className="room-title">
+                    {item?.room_type + " " + item?.description}
+                  </Text>
+                </div>
 
                 <div className="feature-row">
                   <svg
@@ -695,7 +723,99 @@ export default function TravelDetail() {
             )}
           />
         </div>
+
+        <div className="margin-top-bottom">
+          <div className="flex-space-between">
+            <Title level={2} className="title-white">
+              Travelers favorite choice
+            </Title>
+          </div>
+          <List
+            grid={{ gutter: 16, column: 4 }}
+            dataSource={currentItems}
+            renderItem={(item) => (
+              <List.Item>
+                <Card
+                  hoverable
+                  cover={
+                    <Image
+                      src={item.image_url}
+                      alt={item.name}
+                      style={{ height: 200 }}
+                    />
+                  }
+                  onClick={() => handleDetails(item.destination_id)}
+                >
+                  <Card.Meta
+                    title={<Text className="card-meta-title">{item.name}</Text>}
+                    description={
+                      <>
+                        <Text className="card-meta-description">
+                          {item.description}
+                        </Text>
+                        <div className="flex-align-center">
+                          <Text className="rating">{item.average_rating}</Text>
+                          <Text className="reviews">
+                            ({item.count_review.toFixed(1)} reviews)
+                          </Text>
+                        </div>
+                      </>
+                    }
+                  />
+                </Card>
+              </List.Item>
+            )}
+          />
+          <div className="centered-container">
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={destinations.length}
+              onChange={handlePageChange}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+const styles = {
+  card: {
+    border: "1px solid #ddd",
+    padding: "20px",
+    margin: "20px 0",
+    borderRadius: "10px",
+    backgroundColor: "#fff",
+  },
+  rating: {
+    fontSize: "24px",
+    color: "#000",
+  },
+  date: {
+    fontSize: "14px",
+    color: "#666",
+  },
+  comment: {
+    fontSize: "16px",
+    margin: "10px 0",
+  },
+  title: {
+    fontSize: "20px",
+    fontWeight: "bold",
+  },
+  description: {
+    fontSize: "16px",
+    margin: "10px 0",
+  },
+  stay: {
+    fontSize: "14px",
+    color: "#333",
+    fontStyle: "italic",
+  },
+  response: {
+    marginTop: "20px",
+    padding: "10px",
+    backgroundColor: "#f9f9f9",
+    borderRadius: "5px",
+  },
+};

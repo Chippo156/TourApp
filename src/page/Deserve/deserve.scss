@@ -5,8 +5,6 @@ $text-light: #000;
 $text-muted: #ced4da;
 $text-dark: #6c757d;
 
-.container {
-}
 .main-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -127,7 +125,8 @@ $text-dark: #6c757d;
 }
 
 .price-detail {
-  font-size: 16px;
+  font-weight: 500;
+  font-size: 20px;
   margin: 10px 0; // Space between the rows
   display: flex;
   justify-content: space-between; // Align the label and value on opposite ends

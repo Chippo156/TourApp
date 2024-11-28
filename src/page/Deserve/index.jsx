@@ -1,10 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  Alert,
+  Breadcrumb,
   Button,
   Carousel,
   Col,
+  Form,
   Image,
   Input,
+  message,
+  notification,
   Radio,
   Row,
   Typography,
@@ -16,13 +21,39 @@ import {
   getRoomById,
 } from "../../controller/DetailsController";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { createBooking, handleVNPay } from "../../controller/BookingController";
 export default function Deserve() {
   const { Title, Text } = Typography;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {
+    desId,
+    roomId,
+    startDate,
+    endDate,
+    numberGuest,
+    numberRoom,
+    refund,
+    extra,
+  } = location.state || {};
+  console.log(location.state);
+  const [refundCost, setRefundCost] = useState(0);
+  const [extraCost, setExtraCost] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [bookingResponse, setBookingResponse] = useState(null);
 
   const currentDate = new Date();
   const refundDate = new Date(currentDate);
   refundDate.setDate(currentDate.getDate() + 7);
   const formatDate = (date) => {
+    date = new Date(date);
+    if (!(date instanceof Date)) {
+      throw new Error("Invalid date");
+    }
     const options = {
       weekday: "long",
       year: "numeric",
@@ -37,25 +68,11 @@ export default function Deserve() {
       currency: "VND",
     }).format(amount);
   };
-
-  const des_id = 1;
   const [destination, setDestinations] = useState({});
   const [imagesDes, setImagesDes] = useState([]);
   const getDestinationDetails = async () => {
-    // if (route.params && route.params.id) {
-    //   let res = await getDestinationById(route.params.id);
-    //   if (res.code === 200) {
-    //     setDestinations(res.result);
-    //     setLoading(false);
-    //   }
-    // } else {
-    //   let res = await getDestinationById(1);
-    //   if (res.code === 200) {
-    //     setDestinations(res.result);
-    //   }
-    // }
-    if (des_id) {
-      let res = await getDestinationById(des_id);
+    if (desId) {
+      let res = await getDestinationById(desId);
       if (res.code === 200) {
         setDestinations(res.result);
       }
@@ -72,7 +89,7 @@ export default function Deserve() {
   const [room, setRoom] = useState({});
   const fetchRoom = async () => {
     try {
-      let res = await getRoomById(1);
+      let res = await getRoomById(roomId);
       setRoom(res);
       console.log(res);
     } catch (error) {
@@ -84,15 +101,18 @@ export default function Deserve() {
   useEffect(() => {
     fetchRoom();
   }, []);
-  const fetchImagesDestination = async () => {
-    // if (route.params && route.params.id) {
-    //   let res = await getImagesDestination(route.params.id);
-    //   setImagesDes(res);
-    // } else {
-    //   let res = await getImagesDestination(1);
-    //   setImagesDes(res);
-    // }
 
+  const checkInDate = new Date(startDate);
+  const checkOutDate = new Date(endDate);
+  const timeDiff = checkOutDate - checkInDate; // Milliseconds
+  const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+
+  useEffect(() => {
+    setRefundCost(refund === "first" ? 0 : room.price * 0.15);
+    setExtraCost(extra === "first" ? 0 : 500000);
+    setTotal(room.price * dayDiff * numberRoom + extraCost + refundCost);
+  }, [room]);
+  const fetchImagesDestination = async () => {
     if (destination && destination.destination_id) {
       let res = await getImagesDestination(destination.destination_id);
       setImagesDes(res);
@@ -104,24 +124,91 @@ export default function Deserve() {
   useEffect(() => {
     fetchImagesDestination();
   }, [destination]);
-  // const [selectedOptions, setSelectedOptions] = useState({
-  //   payAtProperty: false,
-  //   VNPAY: false,
-  // });
-  // const handleToggle = (option) => {
-  //   setSelectedOptions((prev) => ({
-  //     ...prev,
-  //     [option]: !prev[option],
-  //   }));
-  // };
-  const [selectedOption, setSelectedOption] = useState("");
+
+  const [selectedOption, setSelectedOption] = useState("payAtProperty");
 
   const onChange = (e) => {
     console.log("radio checked", e.target.value);
     setSelectedOption(e.target.value);
   };
+  const onChangeFullName = (e) => {
+    setFullName(e.target.value);
+  };
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const onChangePhone = (e) => {
+    setPhone(e.target.value);
+  };
+
+  const handleBookNow = async () => {
+    try {
+      if (!phone) {
+        alert("Please fill in the phone number");
+        return;
+      }
+      const amount = total * 1.1 + refundCost + extraCost;
+      let res = await createBooking(
+        1,
+        desId,
+        roomId,
+        "pending",
+        selectedOption,
+        startDate,
+        endDate,
+        amount,
+        numberRoom,
+        fullName,
+        email,
+        phone
+      );
+      setBookingResponse(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    if (bookingResponse) {
+      if (bookingResponse.code === 200) {
+        if (selectedOption === "VNPAY") {
+          handleVNPay(bookingResponse.amount, "NCB", bookingResponse.result.id);
+        } else {
+          alert("Booking success");
+          navigate("/");
+        }
+      }
+    }
+  }, [bookingResponse, selectedOption, navigate]);
+
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
-    <div className="container">
+    <Form
+      name="phoneForm"
+      layout="vertical"
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      style={{ marginBottom: 20 }}
+    >
+      <Breadcrumb
+        items={[
+          {
+            title: <a href="/">Home</a>,
+          },
+          {
+            title: <a href={`/destination/${desId}`}>Destination details</a>,
+          },
+
+          {
+            title: "Booking",
+          },
+        ]}
+      />
       <div className="main-container">
         <div style={{ flex: 2 }}>
           {/* <Icon name="calendar" size={50} color="#FFD700"></Icon> */}
@@ -182,18 +269,22 @@ export default function Deserve() {
               </Text>
               <div style={{ gap: 10 }}>
                 <Text style={{ fontSize: 16 }}>{destination.description}</Text>
-                {/* <Text style={{ color: "#000" }}>
-                  <Text style={{ fontWeight: "bold", color: "#000" }}>
-                    Check in:
-                  </Text>{" "}
-                  {checkInDate.toLocaleDateString()}
-                </Text>
-                <Text style={{ color: "#000" }}>
-                  <Text style={{ fontWeight: "bold", color: "#000" }}>
-                    Check out:
-                  </Text>{" "}
-                  {checkOutDate.toLocaleDateString()}
-                </Text> */}
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 15 }}
+                >
+                  <Text style={{ color: "#000" }}>
+                    <Text style={{ fontWeight: "bold", color: "#000" }}>
+                      Check in:
+                    </Text>{" "}
+                    {formatDate(startDate)}
+                  </Text>
+                  <Text style={{ color: "#000" }}>
+                    <Text style={{ fontWeight: "bold", color: "#000" }}>
+                      Check out:
+                    </Text>{" "}
+                    {formatDate(endDate)}
+                  </Text>
+                </div>
               </div>
               <div
                 style={{
@@ -208,46 +299,60 @@ export default function Deserve() {
                   Great choice! Hurry and book now before the room runs out!
                 </Text>
               </div>
-              <Title level={4}>Confirm Information(*)</Title>
+              <Title style={{ margin: "10px 0px" }} level={4}>
+                Confirm Information(optional)
+              </Title>
               <div>
-                <form>
-                  <Row
-                    style={{
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <Col span={4}>
-                      <label htmlFor="name">Full name:</label>
-                    </Col>
-                    <Col span={20}>
-                      <Input placeholder="FullName: " />
-                    </Col>
-                  </Row>
-                  <Row
-                    style={{
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <Col span={4}>
-                      <label htmlFor="name">Email:</label>
-                    </Col>
-                    <Col span={20}>
-                      <Input placeholder="Email: " />
-                    </Col>
-                  </Row>
-                  <Row
-                    style={{
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <Col span={4}>
-                      <label htmlFor="name">Phone:</label>
-                    </Col>
-                    <Col span={20}>
-                      <Input placeholder="Phone: " />
-                    </Col>
-                  </Row>
-                </form>
+                <Row
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  <Col span={4}>
+                    <label htmlFor="name">Full name:</label>
+                  </Col>
+                  <Col span={20}>
+                    <Input
+                      placeholder="FullName: "
+                      onChange={onChangeFullName}
+                    />
+                  </Col>
+                </Row>
+                <Row
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  <Col span={4}>
+                    <label htmlFor="name">Email:</label>
+                  </Col>
+                  <Col span={20}>
+                    <Input placeholder="Email: " onChange={onChangeEmail} />
+                  </Col>
+                </Row>
+                <Row
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  <Col span={4}>
+                    <label htmlFor="name">Phone:</label>
+                  </Col>
+                  <Col span={20}>
+                    <Form.Item
+                      name="phone"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your phone number!",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Phone: " onChange={onChangePhone} />
+                      <span style={{ color: "red" }}>*</span>
+                    </Form.Item>
+                  </Col>
+                </Row>
               </div>
             </div>
           </div>
@@ -270,8 +375,9 @@ export default function Deserve() {
             </h2>
             <div>
               <p style={{ color: "#000" }}>
-                <span style={{ fontWeight: "bold" }}>10 Room: </span>
-                10 Guest, {room.beds}, no smokers, no pets
+                <span style={{ fontWeight: "bold" }}>{numberRoom} Room: </span>
+                <span style={{ fontWeight: "bold" }}>{numberGuest} </span>
+                Guest, {room.beds}, no smokers, no pets
               </p>
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
@@ -326,25 +432,6 @@ export default function Deserve() {
                 <span style={{ color: "green" }}>Free Wifi</span>
               </div>
             </div>
-
-            {/* {user?.id ? (
-              <div style={{ gap: "20px", marginTop: "20px" }}>
-                <div>
-                  <p style={{ color: "#fff" }}>Email:</p>
-                  <p style={{ color: "#fff", fontWeight: "bold" }}>
-                    {user.email}
-                  </p>
-                </div>
-                <div>
-                  <p style={{ color: "#fff" }}>Phone number:</p>
-                  <p style={{ color: "#fff", fontWeight: "bold" }}>
-                    {user.phone}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div></div>
-            )} */}
           </div>
 
           <div
@@ -407,6 +494,9 @@ export default function Deserve() {
               <Text style={{ color: "#000" }}>
                 Each room has {room.sleeps} guests
               </Text>
+              <Title level={5}>
+                Quantity : {numberRoom} Room, {numberGuest} Guest
+              </Title>
             </div>
           </div>
           <div
@@ -459,9 +549,18 @@ export default function Deserve() {
                 <span className="price-label">Room price: </span>
                 {formatCurrency(room.price)}
               </p>
+
+              <p className="price-detail">
+                <span className="price-label">Refund: </span>
+                {formatCurrency(refundCost)}
+              </p>
+              <p className="price-detail">
+                <span className="price-label">Extra: </span>
+                {formatCurrency(extraCost)}
+              </p>
               <p className="price-detail">
                 <span className="price-label">Total: </span>
-                {formatCurrency(room.price)}
+                {formatCurrency(total)}
               </p>
             </div>
           </div>
@@ -472,12 +571,23 @@ export default function Deserve() {
               justifyContent: "center",
             }}
           >
-            <Button type="primary" block>
+            <Button
+              type="primary"
+              style={{
+                width: "100%",
+                height: 50,
+                color: "#fff",
+                borderColor: "#000",
+                fontWeight: "bold",
+              }}
+              block
+              onClick={handleBookNow}
+            >
               Book now
             </Button>
           </div>
         </div>
       </div>
-    </div>
+    </Form>
   );
 }

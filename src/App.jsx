@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
 import FilterPage from "./page/Destination";
 import TravelDetail from "./page/Hotel_Details";
+import Deserve from "./page/Deserve";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,17 +23,17 @@ function App() {
           path: "/destination/:id",
           element: <TravelDetail />,
         },
-        // {
-        //   index: true,
-        //   path: "/deserve",
-        //   element: <Deserve />,
-        // },
+        {
+          index: true,
+          path: "/deserveHotel",
+          element: <Deserve />,
+        },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
         // { path: "/cart", element: <CartPage /> },
         // { path: "/cartManager", element: <CartManager /> },\
-        { path: "/destination/:value", element: <FilterPage /> },
+        { path: "/destination/filter/:value", element: <FilterPage /> },
       ],
     },
 

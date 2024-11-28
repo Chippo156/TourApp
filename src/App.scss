@@ -3,6 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+}
 body {
   font-family: "Roboto", sans-serif;
   background-color: #fff;
@@ -64,7 +67,7 @@ body,
     color: #fff;
     background-color: #157347;
     border-color: #146c43;
-}
+  }
 }
 .btn.btn_info {
   color: #000;

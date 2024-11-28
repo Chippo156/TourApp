@@ -152,11 +152,11 @@ function Home() {
   }, []);
 
   const handleCityDetail = (value) => {
-    navigate(`/destination/${value}`);
+    navigate(`/destination/filter/${value}`);
   };
 
-  const handleDetails = (id) => {
-    navigate.push(`/destination/${id}`);
+  const handleDetails = (des_id) => {
+    navigate(`/destination/${des_id}`);
   };
 
   const handlePageChange = (page) => {

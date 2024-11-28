@@ -9,7 +9,10 @@ export let createBooking = async (
   check_in_date,
   check_out_date,
   amount,
-  quantity
+  quantity,
+  full_name,
+  phone,
+  email
 ) => {
   try {
     const response = await axios.post("/bookings", {
@@ -22,45 +25,11 @@ export let createBooking = async (
       check_out_date,
       amount,
       quantity,
+      full_name,
+      phone,
+      email,
     });
     return response;
-
-    // } else if (payment_method === "VNPAY") {
-    //   Alert.alert("Confirmation", "You definitely pay via card?", [
-    //     {
-    //       text: "Cancel",
-    //       onPress: () => alert("You cancel payment"),
-    //       style: "cancel",
-    //     },
-    //     {
-    //       text: "OK",
-    //       onPress: async () => {
-    //         try {
-    //           const response = await axios.post("/bookings", {
-    //             user_id,
-    //             destination_id,
-    //             room_id,
-    //             payment_status,
-    //             payment_method,
-    //             check_in_date,
-    //             check_out_date,
-    //             amount,
-    //             quantity,
-    //           });
-    //           if (response.data && response.data.result) {
-    //             handleVNPay(amount, "NCB", response.data.result.id);
-    //             return response;
-    //           } else {
-    //             alert("Error: No result in response");
-    //           }
-    //         } catch (error) {
-    //           console.error("Error making the booking:", error);
-    //           alert("An error occurred while processing your payment.");
-    //         }
-    //       },
-    //     },
-    //   ]);
-    // }
   } catch (error) {
     console.error(error);
     return error;
@@ -71,10 +40,9 @@ export let handleVNPay = async (amount, bankCode, orderId) => {
     const response = await axios.get(
       `/payment/vn-pay?amount=${amount}&bankCode=${bankCode}&orderId=${orderId}`
     );
-    const paymentData = response.data;
-    if (paymentData?.code === "ok") {
+    if (response.code === "ok") {
       window
-        .open(paymentData.paymentUrl, "_blank")
+        .open(response.paymentUrl, "_blank")
         .catch((err) =>
           console.error("An error occurred while opening the URL", err)
         );

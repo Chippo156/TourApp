@@ -312,7 +312,6 @@ function FilterPage() {
               total={filteredResults.length}
               onChange={handlePageChange}
             />
-            
           </div>
         </Col>
       </Row>
