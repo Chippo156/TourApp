@@ -1,10 +1,15 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { Carousel, Image } from "antd";
-import carousel1 from "../../assets/images/carosel1.png";
-import carousel2 from "../../assets/images/carosel2.png";
-import "./home.scss"; // Import the custom SCSS file
-import { Row, Col, Card, Typography, Button, List } from "antd";
+import {
+  Carousel,
+  Image,
+  Row,
+  Col,
+  Card,
+  Typography,
+  Button,
+  List,
+  Pagination,
+} from "antd";
 import {
   SmileOutlined,
   PercentageOutlined,
@@ -18,11 +23,18 @@ import anhKhac from "../../assets/images/anh-khac.png";
 import anhHoChiMinh from "../../assets/images/anh-hcm.png";
 import { getCountReview } from "../../controller/DetailsController";
 import { handleGetDestination } from "../../controller/homeController";
+import carousel1 from "../../assets/images/carosel1.png";
+import carousel2 from "../../assets/images/carosel2.png";
+import "./home.scss"; // Import the custom SCSS file
+
 const { Title, Text } = Typography;
 
 function Home() {
   const navigate = useNavigate();
   const [dataLastWeekend, setDataLastWeekend] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
+
   const benefits = [
     {
       icon: <SmileOutlined style={{ fontSize: "24px", color: "#ff8a65" }} />,
@@ -51,6 +63,7 @@ function Home() {
         "Read reviews & get reliable customer support. We're with you at every step.",
     },
   ];
+
   const items = [
     {
       image: "https://via.placeholder.com/150", // Replace with actual image URL
@@ -85,6 +98,7 @@ function Home() {
       bookings: "500K+ booked",
     },
   ];
+
   const data = [
     {
       city: "Hồ Chí Minh",
@@ -111,6 +125,7 @@ function Home() {
       value: "Other",
     },
   ];
+
   const handleGetCountReview = async (des_id) => {
     let res = await getCountReview(des_id);
     if (res && res.code === 200) {
@@ -120,14 +135,15 @@ function Home() {
 
   const handleGetData = async () => {
     let res = await handleGetDestination();
+    console.log(res);
     if (res && res.code === 200) {
-      for (const item of res.result) {
+      for (const item of res.result.destinations) {
         let count = await handleGetCountReview(item.destination_id);
         item.count_review = count;
       }
       console.log(res);
 
-      setDataLastWeekend(res.result);
+      setDataLastWeekend(res.result.destinations);
     }
   };
 
@@ -136,12 +152,23 @@ function Home() {
   }, []);
 
   const handleCityDetail = (value) => {
-    navigate.push(`/destination/${value}`);
+    navigate(`/destination/${value}`);
   };
 
   const handleDetails = (id) => {
     navigate.push(`/destination/${id}`);
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const handleExploreClick = () => {
+    navigate('/filter', { state: { value: 'trending' } });
+  };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = dataLastWeekend.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <div className="home-container">
       <Carousel arrows infinite={false} draggable={true} autoplay>
@@ -161,13 +188,15 @@ function Home() {
                 <Card bordered={false}>
                   {benefit.icon}
                   <Title level={4}>{benefit.title}</Title>
-                  <Text>{benefit.description}</Text>
+                  <Text style={{ fontSize: 16, height: 60 }}>
+                    {benefit.description}
+                  </Text>
                 </Card>
               </Col>
             ))}
           </Row>
 
-          <Title level={2} style={{ marginTop: "40px" }}>
+          {/* <Title level={2} style={{ marginTop: "40px" }}>
             Travelers favorite choice
           </Title>
           <Row gutter={[16, 16]}>
@@ -221,7 +250,7 @@ function Home() {
             <Button type="primary" className="button" block="true">
               See more
             </Button>
-          </div>
+          </div> */}
           <div className="padding-container">
             <Title level={2} className="title-black">
               Explore stays in trending destinations
@@ -242,7 +271,16 @@ function Home() {
                     }
                     onClick={() => handleCityDetail(item.value)}
                   >
-                    <Card.Meta title={item.city} description={item.country} />
+                    <Card.Meta
+                      title={
+                        <Text className="card-meta-title">{item.city}</Text>
+                      }
+                      description={
+                        <Text className="card-meta-description">
+                          {item.country}
+                        </Text>
+                      }
+                    />
                   </Card>
                 </Col>
               ))}
@@ -250,12 +288,12 @@ function Home() {
             <div className="margin-top-bottom">
               <div className="flex-space-between">
                 <Title level={2} className="title-white">
-                  Last-minute weekend deals
+                  Travelers favorite choice
                 </Title>
               </div>
               <List
                 grid={{ gutter: 16, column: 4 }}
-                dataSource={dataLastWeekend}
+                dataSource={currentItems}
                 renderItem={(item) => (
                   <List.Item>
                     <Card
@@ -294,9 +332,12 @@ function Home() {
                 )}
               />
               <div className="centered-container">
-                <Button type="primary" className="button" block="true">
-                  See more
-                </Button>
+                <Pagination
+                  current={currentPage}
+                  pageSize={itemsPerPage}
+                  total={dataLastWeekend.length}
+                  onChange={handlePageChange}
+                />
               </div>
             </div>
           </div>
