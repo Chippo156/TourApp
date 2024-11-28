@@ -46,6 +46,10 @@ function App() {
       element: <Register />,
     },
     {
+      path: "/home",
+      element: <Home />, 
+    },
+    {
       path: "/admin",
       element: <LayoutAdmin />,
     },
