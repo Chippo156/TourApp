@@ -22,4 +22,7 @@ public class TourResponse {
     String duration;
     String departure;
     double price;
+    @JsonProperty("max_people")
+    int maxPeople;
+    double rating;
 }

@@ -43,7 +43,7 @@ public class TourImageController {
             List<String> urls = cloudinaryService.upload(files);
             for (String url : urls) {
               tourImage =   tourImageService.uploadImage(id, TourImageRequest.builder().imageUrl(url).build());
-                if (tour.getImageUrl().isEmpty()) {
+                if (tour.getImageUrl() == null) {
                     tourService.updateTourImage(tour.getId(), url);
                 }
             }

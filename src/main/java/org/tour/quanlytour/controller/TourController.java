@@ -1,6 +1,7 @@
 package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.request.TourRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
@@ -21,6 +22,7 @@ public class TourController {
     @PostMapping
     public ApiResponse<TourResponse> createTour(@RequestBody TourRequest request) {
         try{
+            System.out.println(request.getStartDate());
            return new ApiResponse<>(200,"success",tourMapper.toTourResponse(tourService.createTour(request)));
         }
         catch (Exception e) {
@@ -30,12 +32,13 @@ public class TourController {
     @GetMapping
     public ApiResponse<ListTourResponse> getAllTour(@RequestParam int page, @RequestParam int size) {
         try{
-            List<Tour> tours = tourService.getAllTour(page, size).getContent();
+            Page<Tour> toursPage = tourService.getAllTour(page-1, size);
+            List<Tour> tours = toursPage.getContent();
             List<TourResponse> tourResponses = tours.stream().map(tourMapper::toTourResponse).toList();
             ListTourResponse t = ListTourResponse.builder()
                     .tours(tourResponses)
-                    .totalPage(tourService.getAllTour(page, size).getTotalPages())
-                    .totalElement(tourService.getAllTour(page, size).getNumberOfElements())
+                    .totalPage(toursPage.getTotalPages())
+                    .totalElement(toursPage.getNumberOfElements())
                     .build();
             return new ApiResponse<>(200,"success",t);
         }

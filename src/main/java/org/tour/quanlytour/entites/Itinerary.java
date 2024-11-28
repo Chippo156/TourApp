@@ -18,6 +18,7 @@ public class Itinerary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String day;
+    @Column(length = 1000)
     String activities;
     String time;
     @JsonIgnore
