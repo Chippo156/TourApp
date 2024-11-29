@@ -7,6 +7,7 @@ import Register from "./page/Register";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
 import TravelDetail from "./page/Details";
+import TourDetails from "./page/TourDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -36,6 +37,10 @@ function App() {
     {
       path: "register",
       element: <Register />,
+    },
+    {
+      path: "/tour-details",
+      element: <TourDetails/>
     },
     {
       path: "/admin",
