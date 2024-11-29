@@ -23,8 +23,8 @@ public class TourImageController {
     private final CloudinaryService cloudinaryService;
     private final TourService tourService;
 
-    @GetMapping
-    public ApiResponse<List<TourImage>> getTourImages(Long tourId) {
+    @GetMapping(value = "/tour/{tourId}")
+    public ApiResponse<List<TourImage>> getTourImages(@PathVariable Long tourId) {
         try {
             return new ApiResponse<>(200, "success", tourImageService.get(tourId));
         } catch (Exception ex) {
