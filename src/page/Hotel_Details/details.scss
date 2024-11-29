@@ -1,11 +1,10 @@
-.container {
-  margin-top: 80px;
+.container-details {
+  .container-main {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }
-.container-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  margin: 10px 0px;
-}
+
 .imageContainer {
   display: flex;
   align-items: center;

@@ -319,19 +319,19 @@ export default function TravelDetail() {
     }, 2000);
   };
   return (
-    <div className="">
-      <Breadcrumb
-        items={[
-          {
-            title: <a href="/">Home</a>,
-          },
-
-          {
-            title: "Destination details",
-          },
-        ]}
-      />
+    <div className="container-details">
       <div className="container-main">
+        <Breadcrumb
+          items={[
+            {
+              title: <a href="/">Home</a>,
+            },
+
+            {
+              title: "Destination details",
+            },
+          ]}
+        />
         <div className="imageContainer">
           <div style={{ flexGrow: 1 }}>
             <Image
