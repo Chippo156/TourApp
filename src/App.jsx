@@ -32,7 +32,7 @@ function App() {
         },
         {
           index: true,
-          path: "/tour-details",
+          path: "/tour-details/:id",
           element: <TourDetails />
         },
         // {
