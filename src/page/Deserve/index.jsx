@@ -187,14 +187,7 @@ export default function Deserve() {
     console.log("Failed:", errorInfo);
   };
   return (
-    <Form
-      name="phoneForm"
-      layout="vertical"
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      style={{ marginBottom: 20 }}
-    >
+    <div>
       <Breadcrumb
         items={[
           {
@@ -461,9 +454,8 @@ export default function Deserve() {
         <div
           style={{
             borderColor: "#f5f5f5",
-
             borderRadius: 5,
-            marginTop: 20,
+            marginTop: 42,
             padding: 12,
             gap: 20,
             flex: 1,
@@ -472,12 +464,27 @@ export default function Deserve() {
           <Text style={{ color: "#000", fontWeight: "bold", fontSize: 20 }}>
             Room details
           </Text>
-          <div style={{ flexDirection: "row", gap: 20 }}>
+          <div
+            style={{
+              flexDirection: "row",
+              gap: 20,
+
+              border: "1px solid #000",
+              borderRadius: 5,
+            }}
+          >
             <Image
               src={room.image_url}
-              style={{ width: 400, height: 200, borderRadius: 20 }}
+              style={{ width: 400, height: 200, borderRadius: 5 }}
             />
-            <div style={{ gap: 10, flexDirection: "column", display: "flex" }}>
+            <div
+              style={{
+                gap: 10,
+                flexDirection: "column",
+                display: "flex",
+                padding: 10,
+              }}
+            >
               <Text
                 style={{
                   color: "#000",
@@ -588,6 +595,6 @@ export default function Deserve() {
           </div>
         </div>
       </div>
-    </Form>
+    </div>
   );
 }

@@ -1,6 +1,4 @@
-import { Form, Input } from "antd";
 import "./infor.scss";
-import FormItem from "antd/es/form/FormItem";
 export default function UserDetails() {
   return (
     <div>

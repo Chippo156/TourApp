@@ -31,7 +31,14 @@ import {
 } from "antd";
 import "./details.scss";
 import { useNavigate, useParams } from "react-router-dom";
-import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
+import Icon, {
+  MinusOutlined,
+  PlusOutlined,
+  StarFilled,
+  StarOutlined,
+  StarTwoTone,
+  TeamOutlined,
+} from "@ant-design/icons";
 import { FaCalendarAlt, FaUserAlt } from "react-icons/fa";
 import { message } from "antd";
 export default function TravelDetail() {
@@ -87,13 +94,11 @@ export default function TravelDetail() {
   };
   const handleGetData = async () => {
     let res = await handleGetDestination();
-    console.log(res);
     if (res && res.code === 200) {
       for (const item of res.result.destinations) {
         let count = await handleGetCountReview(item.destination_id);
         item.count_review = count;
       }
-      console.log(res);
 
       setListDestination(res.result.destinations);
     }
@@ -118,7 +123,6 @@ export default function TravelDetail() {
       return; // Nếu đã có ảnh trong state, không cần gọi lại API
     }
     let res = await getImageRoom(id);
-    console.log(res);
 
     setRoomImages((prev) => ({ ...prev, [id]: res })); // Lưu ảnh với ID tương ứng
   };
@@ -145,7 +149,6 @@ export default function TravelDetail() {
     if (destination && destination.destination_id) {
       let res = await getAmenities(destination.destination_id);
       setAmenities(res);
-      console.log(res);
     }
   };
   const getRoomsByDestination = async () => {
@@ -238,8 +241,8 @@ export default function TravelDetail() {
     try {
       let res = await getFilterRoom(
         numberGuest,
-        startDate.format("YYYY-MM-DD"),
-        endDate.format("YYYY-MM-DD"),
+        startDate,
+        endDate,
         numberRoom,
         destination.destination_id
       );
@@ -249,6 +252,9 @@ export default function TravelDetail() {
     }
   };
   useEffect(() => {
+    if (numberGuest === 1 || numberRoom === 1) {
+      return;
+    }
     fetchFilterRoom();
   }, [numberGuest, numberRoom, endDate]);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -389,7 +395,9 @@ export default function TravelDetail() {
             <p className="excellentText">Exceptional</p>
           </div>
         </div>
-        <Button onClick={showLoading}>See all {reviews?.length} reviews</Button>
+        <Button type="primary" onClick={showLoading}>
+          See all {reviews?.length} reviews
+        </Button>
         <Modal
           title={<p>Review {reviews?.length}</p>}
           loading={loading}
@@ -431,16 +439,13 @@ export default function TravelDetail() {
         </div>
         <div ref={datePickerRef}>
           <List
-            grid={{ gutter: 10, column: 2 }}
+            grid={{ gutter: 0, column: 2 }}
             dataSource={amenities}
             renderItem={(item) => (
               <Row gutter={8} align="middle" style={{ marginBottom: 4 }}>
-                {/* <Col>
-                  <IconBase
-                    component={item.amenityIcon}
-                    style={{ fontSize: 24, color: "#333" }}
-                  />
-                </Col> */}
+                <Col>
+                  <TeamOutlined />
+                </Col>
                 <Col>
                   <Text style={{ fontSize: 20, color: "#333" }}>
                     {item.amenityName}
@@ -453,14 +458,14 @@ export default function TravelDetail() {
 
         <Text className="sectionTitle">Choose your room</Text>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <button className="button-container">
+          <div className="button-container">
             <FaCalendarAlt size={30} color="green" className="icon" />
             <div className="button-text">
               <p>Ngày</p>
               <DatePicker.RangePicker onChange={handleChange} />
             </div>
-          </button>
-          <button className="button-container">
+          </div>
+          <div className="button-container">
             <FaUserAlt size={30} color="orange" className="icon" />
             <div
               className="button-text"
@@ -469,33 +474,36 @@ export default function TravelDetail() {
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <span>Guest: </span>
                 <Button
-                  type="primary"
-                  shape="circle"
                   onClick={handleRemoveGuest}
-                >
-                  -
-                </Button>
+                  type="dashed"
+                  icon={<MinusOutlined />}
+                ></Button>
                 <span>{numberGuest}</span>
-                <Button type="primary" shape="circle" onClick={handleAddGuest}>
-                  +
-                </Button>
+
+                <Button
+                  onClick={handleAddGuest}
+                  type="dashed"
+                  icon={<PlusOutlined />}
+                ></Button>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <span>Room: </span>
+
                 <Button
-                  type="primary"
-                  shape="circle"
                   onClick={handleRemoveRoom}
-                >
-                  -
-                </Button>
+                  type="dashed"
+                  icon={<MinusOutlined />}
+                ></Button>
                 <span>{numberRoom}</span>
-                <Button type="primary" shape="circle" onClick={handleAddRoom}>
-                  +
-                </Button>
+
+                <Button
+                  onClick={handleAddRoom}
+                  type="dashed"
+                  icon={<PlusOutlined />}
+                ></Button>
               </div>
             </div>
-          </button>
+          </div>
         </div>
         <div style={{ marginVertical: 20 }}>
           <List
@@ -625,7 +633,12 @@ export default function TravelDetail() {
                   <Radio.Group
                     onChange={(e) => setChecked(e.target.value)}
                     value={checked}
-                    style={{ width: "100%" }}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 5,
+                    }}
                   >
                     <Row style={{ marginBottom: 16 }}>
                       <Col span={16}>
@@ -637,7 +650,6 @@ export default function TravelDetail() {
                         <Text style={{ marginLeft: 40 }}>+ 0đ</Text>
                       </Col>
                     </Row>
-
                     <Row>
                       <Col span={16}>
                         <Radio value="second">
@@ -701,14 +713,14 @@ export default function TravelDetail() {
                         <Text className="room-left">
                           {item?.quantity} room left
                         </Text>
-                        <button
+                        <Button
+                          type="primary"
                           onClick={() =>
                             handleDeserve(destination.destination_id, item?.id)
                           }
-                          className="reserve-button"
                         >
                           Reserve {numberRoom} room
-                        </button>
+                        </Button>
                       </div>
                     )}
                   </div>

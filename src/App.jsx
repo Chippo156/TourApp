@@ -18,7 +18,7 @@ function App() {
       element: <LayoutUser />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <UserDetails /> },
+        { index: false, path: "/", element: <TravelDetail /> },
         {
           index: true,
           path: "/destination/:id",
@@ -29,11 +29,11 @@ function App() {
           path: "/deserveHotel",
           element: <Deserve />,
         },
-        // {
-        //   index: true,
-        //   path: "/user",
-        //   element: <UserDetails />,
-        // },
+        {
+          index: true,
+          path: "/user",
+          element: <UserDetails />,
+        },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
@@ -53,7 +53,7 @@ function App() {
     },
     {
       path: "/home",
-      element: <Home />, 
+      element: <Home />,
     },
     {
       path: "/admin",
