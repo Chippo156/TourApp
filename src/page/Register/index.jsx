@@ -5,7 +5,7 @@ import { Button, Input, DatePicker, Radio, Space } from 'antd';
 import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './register.scss';
-
+import { registerUser } from '../../controller/registerController';
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState('');
@@ -19,10 +19,59 @@ const Register = () => {
   const [last_name, setLastName] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = () => {
-    alert('Register success');
-    navigate('/login');
-  }
+  const checkAllNotNull = () => {
+    if (
+      username &&
+      email &&
+      password &&
+      phone &&
+      address &&
+      dob &&  
+      sex &&
+      first_name &&
+      last_name
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+
+
+  const handleRegister = async () => {
+    if (!checkAllNotNull()) {
+      alert('Please fill all fields');
+      return;
+    }
+    
+    try {
+      const response = await registerUser(
+        username,
+        password,
+        email,
+        phone,
+        address,
+        dob,
+        first_name,
+        last_name,
+        sex,
+      );
+     
+      if (response && response.code === 200) {
+        alert('Login success');
+        navigate('/login');
+      }else{
+        alert('Register fail: '+response.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+
+
+ 
 
 
   return (
