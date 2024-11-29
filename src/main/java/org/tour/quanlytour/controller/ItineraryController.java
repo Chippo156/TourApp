@@ -17,7 +17,7 @@ public class ItineraryController {
     private final ItineraryService itineraryService;
     private final ItineraryMapper itineraryMapper;
 
-    @GetMapping("tour/{id}")
+    @GetMapping("/tour/{id}")
     public ApiResponse<List<ItineraryResponse>> getListByTourId(@PathVariable Long id) {
         try {
             return new ApiResponse<>(200, "success", itineraryService.getItineraryByTour(id).stream().map(itineraryMapper::toItineraryResponse).toList());

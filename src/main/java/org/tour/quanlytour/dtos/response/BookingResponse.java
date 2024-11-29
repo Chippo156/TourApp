@@ -2,6 +2,7 @@ package org.tour.quanlytour.dtos.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -26,6 +27,8 @@ public class BookingResponse {
     @JsonProperty("room_id")
     Long roomId;
 
+    @JsonProperty("tour_id")
+    Long tourId;
     @JsonProperty("check_in_date")
     LocalDate checkInDate;
     @JsonProperty("check_out_date")
@@ -41,4 +44,8 @@ public class BookingResponse {
     LocalDate paymentDate;
     int quantity;
     double amount;
+    @JsonProperty("full_name")
+    String fullName;
+    String email;
+    String phone;
 }

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bookings {
+public class Bookings extends BaseEntity{
     @Id
     @Column(name = "booking_id")
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -27,6 +27,9 @@ public class Bookings {
     @ManyToOne
     @JoinColumn(name = "room_id")
     Room room;
+    @ManyToOne
+    @JoinColumn(name = "tour_id")
+    Tour tour;
     @Column(name = "check_in_date")
     LocalDate checkInDate;
     @Column(name = "check_out_date")
@@ -42,4 +45,8 @@ public class Bookings {
     @Column(name = "amount")
     double amount;
     int quantity;
+    @Column(name = "full_name")
+    String fullName;
+    String email;
+    String phone;
 }
