@@ -149,9 +149,7 @@ const HeaderPage = () => {
                 <Space className="header_right_space">
                   {user?.isAuth ? (
                     <p className="text">
-                      Xin chào,
-                      <br />
-                      {user.user?.lastName}
+                      Xin chào,{user.user?.first_name}
                     </p>
                   ) : (
                     <p className="text">Tài khoản</p>

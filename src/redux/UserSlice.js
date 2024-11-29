@@ -2,20 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: true,
   isAuth: false,
-  user: {
-    email: "",
-    lastName: "",
-    firstName: "",
-    image: "",
-    address: "",
-    phoneNumber: "",
-  },
+  user: {},
 };
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     login: (state, action) => {
+      console.log("action", action);
       state.isLoading = false;
       state.isAuth = true;
       state.user = action.payload.user;
@@ -33,4 +27,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, loginSuccess, loginFail, logout } = userSlice.actions;
+export const { login, loginFail, logout } = userSlice.actions;
