@@ -51,9 +51,10 @@ const Register = () => {
         phone,
         address,
         dob,
+        sex,
         first_name,
         last_name,
-        sex,
+        
       );
      
       if (response && response.code === 200) {
