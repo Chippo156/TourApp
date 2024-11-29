@@ -18,24 +18,20 @@ import {
   Typography,
   List,
   Image as AntImage,
-  Space,
   Row,
   Col,
   Image,
   Carousel,
   Radio,
   DatePicker,
-  theme,
   Button,
   Pagination,
   Breadcrumb,
   Modal,
 } from "antd";
 import "./details.scss";
-import { useNavigate, useNavigation, useParams } from "react-router-dom";
-import { IconBase } from "react-icons";
+import { useNavigate, useParams } from "react-router-dom";
 import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
-import { createReview } from "../../controller/BookingController";
 import { FaCalendarAlt, FaUserAlt } from "react-icons/fa";
 import { message } from "antd";
 export default function TravelDetail() {
@@ -49,7 +45,6 @@ export default function TravelDetail() {
   const [rooms, setRooms] = useState([]);
   const [checked, setChecked] = useState("first"); // State for radio button
   const [checkedExtra, setCheckedExtra] = useState("first"); // State for radio button
-  const [modalVisibleReview, setModalVisibleReview] = useState(false);
 
   const [imagesDes, setImagesDes] = useState([]);
   const [roomImages, setRoomImages] = useState({});
@@ -57,7 +52,6 @@ export default function TravelDetail() {
   const [numberGuest, setNumberGuest] = useState(1);
   const [numberRoom, setNumbeRoom] = useState(1);
   const [reviews, setReviews] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);

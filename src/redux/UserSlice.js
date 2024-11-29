@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: true,
   isAuth: false,
@@ -29,7 +29,7 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.isAuth = false;
       state.user = {};
-    }
+    },
   },
 });
 
