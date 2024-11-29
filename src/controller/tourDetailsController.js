@@ -22,7 +22,7 @@ export let getTourImages = async (id) => {
 
 export let getListByTourId = async (id) => {
     try {
-        const response = await axios.get(`/itineraries/tours/${id}`);
+        const response = await axios.get(`/itineraries/tour/${id}`);
         return response.result;
     } catch (error) {
         console.error(error);

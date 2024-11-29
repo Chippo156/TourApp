@@ -6,7 +6,10 @@ import Login from "./page/Login";
 import Register from "./page/Register";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
-import TravelDetail from "./page/Details";
+import FilterPage from "./page/Destination";
+import TravelDetail from "./page/Hotel_Details";
+import Deserve from "./page/Deserve";
+import UserDetails from "./page/UserInformation";
 import TourDetails from "./page/TourDetails";
 
 function App() {
@@ -16,17 +19,33 @@ function App() {
       element: <LayoutUser />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <TravelDetail /> },
+        { index: false, path: "/", element: <UserDetails /> },
+        {
+          index: true,
+          path: "/destination/:id",
+          element: <TravelDetail />,
+        },
+        {
+          index: true,
+          path: "/deserveHotel",
+          element: <Deserve />,
+        },
+        {
+          index: true,
+          path: "/tour-details",
+          element: <TourDetails />
+        },
         // {
         //   index: true,
-        //   path: "/travel/:id",
-        //   element: <TravelDetail />,
+        //   path: "/user",
+        //   element: <UserDetails />,
         // },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
         // { path: "/cart", element: <CartPage /> },
-        // { path: "/cartManager", element: <CartManager /> },
+        // { path: "/cartManager", element: <CartManager /> },\
+        { path: "/destination/filter/:value", element: <FilterPage /> },
       ],
     },
 
@@ -38,9 +57,13 @@ function App() {
       path: "register",
       element: <Register />,
     },
+    // {
+    //   path: "/tour-details",
+    //   element: <TourDetails />
+    // },
     {
-      path: "/tour-details",
-      element: <TourDetails/>
+      path: "/home",
+      element: <Home />,
     },
     {
       path: "/admin",
