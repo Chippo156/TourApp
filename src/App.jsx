@@ -10,6 +10,7 @@ import FilterPage from "./page/Destination";
 import TravelDetail from "./page/Hotel_Details";
 import Deserve from "./page/Deserve";
 import UserDetails from "./page/UserInformation";
+import TourDetails from "./page/TourDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,7 +19,7 @@ function App() {
       element: <LayoutUser />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <TravelDetail /> },
+        { index: false, path: "/", element: <Home /> },
         {
           index: true,
           path: "/destination/:id",
@@ -31,9 +32,14 @@ function App() {
         },
         {
           index: true,
-          path: "/user",
-          element: <UserDetails />,
+          path: "/tour-details",
+          element: <TourDetails />
         },
+        // {
+        //   index: true,
+        //   path: "/user",
+        //   element: <UserDetails />,
+        // },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
@@ -51,6 +57,10 @@ function App() {
       path: "register",
       element: <Register />,
     },
+    // {
+    //   path: "/tour-details",
+    //   element: <TourDetails />
+    // },
     {
       path: "/home",
       element: <Home />,

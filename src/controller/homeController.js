@@ -9,3 +9,12 @@ export const handleGetDestination = async () => {
     return error;
   }
 };
+export const handleGetFavoriteDestination = async () => {
+  try {
+    const response = await axios.get(`/tours?page=1&size=10`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+}

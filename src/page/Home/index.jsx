@@ -22,7 +22,7 @@ import anhDaNang from "../../assets/images/anh-da-nang.png";
 import anhKhac from "../../assets/images/anh-khac.png";
 import anhHoChiMinh from "../../assets/images/anh-hcm.png";
 import { getCountReview } from "../../controller/DetailsController";
-import { handleGetDestination } from "../../controller/homeController";
+import { handleGetDestination, handleGetFavoriteDestination } from "../../controller/homeController";
 import carousel1 from "../../assets/images/carosel1.png";
 import carousel2 from "../../assets/images/carosel2.png";
 import "./home.scss"; // Import the custom SCSS file
@@ -34,7 +34,7 @@ function Home() {
   const [dataLastWeekend, setDataLastWeekend] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
-
+  const [items, setItem] = useState([]);
   const benefits = [
     {
       icon: <SmileOutlined style={{ fontSize: "24px", color: "#ff8a65" }} />,
@@ -64,40 +64,6 @@ function Home() {
     },
   ];
 
-  const items = [
-    {
-      image: "https://via.placeholder.com/150", // Replace with actual image URL
-      title: "Tokyo Disneyland Ticket",
-      location: "Theme parks • Tokyo",
-      price: "US$ 52.85",
-      rating: "4.8",
-      bookings: "3M+ booked",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      title: "JR Whole Japan Rail Pass",
-      location: "Rail passes • Tokyo",
-      price: "From US$ 334.35",
-      rating: "4.8",
-      bookings: "600K+ booked",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      title: "Mount Fuji sightseeing tour",
-      location: "Tours • Yamanashi",
-      price: "US$ 50.39",
-      rating: "4.8",
-      bookings: "30K+ booked",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      title: "TeamLab Planets TOKYO Ticket",
-      location: "Museums • Tokyo",
-      price: "From US$ 24.30",
-      rating: "4.8",
-      bookings: "500K+ booked",
-    },
-  ];
 
   const data = [
     {
@@ -146,10 +112,13 @@ function Home() {
       setDataLastWeekend(res.result.destinations);
     }
   };
+  const handleGetFavorite = async () => {
+    let res = await handleGetFavoriteDestination();
+    if (res && res.code === 200) {
+      setItem(res.result.tours);
+    }
+  }
 
-  useEffect(() => {
-    handleGetData();
-  }, []);
 
   const handleCityDetail = (value) => {
     navigate(`/destination/filter/${value}`);
@@ -169,6 +138,10 @@ function Home() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = dataLastWeekend.slice(indexOfFirstItem, indexOfLastItem);
 
+  useEffect(() => {
+    handleGetData();
+    handleGetFavorite();
+  }, []);
   return (
     <div className="home-container">
       <Carousel arrows infinite={false} draggable={true} autoplay>
@@ -196,61 +169,55 @@ function Home() {
             ))}
           </Row>
 
-          {/* <Title level={2} style={{ marginTop: "40px" }}>
+          <Title level={2} style={{ marginTop: "40px" }}>
             Travelers favorite choice
           </Title>
           <Row gutter={[16, 16]}>
             {items.map((item, index) => (
-              <Col key={index} xs={24} sm={12} lg={6}>
+              <Col key={index} span={6}>
                 <Card
                   hoverable
                   cover={
                     <Image
-                      preview={false}
-                      src={item.image}
-                      alt={item.title}
-                      style={{ height: "200px" }}
+                      src={item.image_url}
+                      alt={item.name}
+                      style={{
+                        height: "200px",
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
                     />
                   }
                 >
                   <div>
-                    <Text className="title">{item.title}</Text>
+                    <Text className="title_card">{item.name}</Text>
                   </div>
-                  <div>
-                    <Text type="secondary" block="true" className="location">
-                      {item.location}
+                  <div className="info-row">
+                    <Text className="duration_card">{item.duration}</Text>
+                    <Text className="departure_card">{item.departure}</Text>
+                  </div>
+                  <div className="info-row">
+                    <Text className="price" style={{ color: "#ff4d4f" }}>
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(item.price)}
                     </Text>
+                    <Text className="rating">{item.rating}⭐</Text>
                   </div>
-                  <div>
-                    <Text style={{ color: "#ff4d4f" }}>{item.price}</Text>
-                  </div>
-                  <div>
-                    <Text>⭐ {item.rating}</Text>
-                    <Text style={{ marginLeft: "8px" }}>{item.bookings}</Text>
-                  </div>
-                  {item.badge && (
-                    <div>
-                      <Text
-                        style={{
-                          color: "#52c41a",
-                          marginTop: "8px",
-                          display: "block",
-                        }}
-                      >
-                        {item.badge}
-                      </Text>
-                    </div>
-                  )}
                 </Card>
               </Col>
             ))}
           </Row>
 
-          <div className="centered-container">
-            <Button type="primary" className="button" block="true">
+          <div style={{ textAlign: "center", marginTop: "40px",display:"flex",alignItems:"center",justifyContent:"center" }}>
+            <Button
+              type="primary"
+              className="button"
+            >
               See more
             </Button>
-          </div> */}
+          </div>
           <div className="padding-container">
             <Title level={2} className="title-black">
               Explore stays in trending destinations
