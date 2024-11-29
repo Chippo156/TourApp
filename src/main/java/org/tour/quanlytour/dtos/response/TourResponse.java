@@ -25,4 +25,6 @@ public class TourResponse {
     @JsonProperty("max_people")
     int maxPeople;
     double rating;
+    @JsonProperty("image_url")
+    String imageUrl;
 }
