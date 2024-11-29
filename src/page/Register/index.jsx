@@ -23,8 +23,6 @@ const Register = () => {
     alert('Register success');
     navigate('/login');
   }
-
-
   return (
     <div className="register-container">
       <h2>Register</h2>

@@ -187,7 +187,7 @@ export default function Deserve() {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div>
+    <div className="container-deserve">
       <Breadcrumb
         items={[
           {

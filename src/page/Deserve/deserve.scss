@@ -5,11 +5,13 @@ $text-light: #000;
 $text-muted: #ced4da;
 $text-dark: #6c757d;
 
-.main-container {
+.container-deserve {
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  margin-bottom: 30px;
+  .main-container {
+    display: flex;
+    margin-bottom: 30px;
+  }
 }
 
 .open-button {
