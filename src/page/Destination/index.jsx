@@ -17,6 +17,8 @@ import {
 import { getFullAmenities } from "../../controller/DetailsController";
 import "./destination.scss";
 import { getFilterDestination } from "../../controller/filterController";
+import { Spin } from "antd"; // Import Spin
+import { ReloadOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
 
 function FilterPage() {
@@ -33,6 +35,7 @@ function FilterPage() {
   const [selectedLastDayOfMonth, setSelectedLastDayOfMonth] = useState(null);
   const [city, setCity] = useState(value || "Hồ Chí Minh");
   const [selectAllAmenities, setSelectAllAmenities] = useState(false);
+  const [loading, setLoading] = useState(false);
   const itemsPerPage = 10;
 
   const categories = [
@@ -110,6 +113,7 @@ function FilterPage() {
   }, []);
 
   const handleGetFilterDestination = async () => {
+    setLoading(true); // Bắt đầu loading
     let param = "";
     if (activeAmenities.length > 0) {
       param += `&amenityIds=${activeAmenities.join(",")}`;
@@ -132,29 +136,60 @@ function FilterPage() {
     if (selectedLastDayOfMonth) {
       param += `&endDate=${selectedLastDayOfMonth.format("YYYY-MM-DD")}`;
     }
-    console.log(param);
-    let res = await getFilterDestination(value, param);
-    if (res && res.code === 200) {
-      console.log(res);
-      setFilteredResults(res.result); // Update data after receiving
-      return res.result;
+    try {
+      let res = await getFilterDestination(value, param);
+      if (res && res.code === 200) {
+        console.log(res);
+        setFilteredResults(res.result); // Update data after receiving
+      }
+    } catch (error) {
+      console.error("Failed to fetch destinations", error);
+    } finally {
+      setLoading(false); // Kết thúc loading
     }
-    return [];
+  };
+  const handleRefresh = () => {
+    // Reset các bộ lọc về trạng thái mặc định
+    setPriceRange({ min: 0, max: 20000000 });
+    setSelectedCategories([]);
+    setSelectedRating(null);
+    setActiveAmenities([]);
+    setNumberGuest(1);
+    setSelectedSecondLastDay(null);
+    setSelectedLastDayOfMonth(null);
+    setSelectAllAmenities(false);
+
+    // Gọi lại API để lấy dữ liệu ban đầu
+    handleGetFilterDestination();
   };
 
   useEffect(() => {
-    console.log(1);
     handleGetFilterDestination();
-  }, []);
+  }, [activeAmenities, priceRange, selectedRating, selectedCategories, numberGuest, selectedSecondLastDay, selectedLastDayOfMonth]);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
   return (
-    <div className="container">
+    <div className="container_filter">
       <Row gutter={16}>
         <Col span={6}>
           <div className="filter-section">
-            <h2>Bộ lọc tour</h2>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h2 style={{ margin: 0, padding: 0 }}>Bộ lọc tour</h2>
+              <Button
+                type="default"
+                icon={<ReloadOutlined />}
+                onClick={() => {
+                  handleRefresh();
+                }}
+              />
+            </div>
             <div>
               <h2>Guests</h2>
               <InputNumber
@@ -255,57 +290,55 @@ function FilterPage() {
                 ))}
               </Row>
             </div>
-
-            <Button type="primary" onClick={handleGetFilterDestination}>
-              Apply Filters
-            </Button>
           </div>
         </Col>
         <Col span={18}>
           <div className="results-section">
             <h2>Danh sách các tour</h2>
-            <List
-              grid={{ gutter: 16, column: 2 }}
-              dataSource={currentItems}
-              renderItem={(item) => {
-                return (
-                  <List.Item>
-                    <Card
-                      hoverable
-                      cover={
-                        <Image
-                          src={item.image_url}
-                          alt={item.name}
-                          style={{ height: 200 }}
-                        />
-                      }
-                      //   onClick={() => handleDetails(item.destination_id)}
-                    >
-                      <Card.Meta
-                        title={
-                          <Text className="card-meta-title">{item.name}</Text>
+            <Spin spinning={loading} tip="Loading...">
+              <List
+                grid={{ gutter: 16, column: 2 }}
+                dataSource={currentItems}
+                renderItem={(item) => {
+                  return (
+                    <List.Item>
+                      <Card
+                        hoverable
+                        cover={
+                          <Image
+                            src={item.image_url}
+                            alt={item.name}
+                            style={{ height: 200 }}
+                          />
                         }
-                        description={
-                          <>
-                            <Text className="card-meta-description">
-                              {item.description}
-                            </Text>
-                            <div className="flex-align-center">
-                              <Text className="rating">
-                                {item.average_rating}
+                      >
+                        <Card.Meta
+                          title={
+                            <Text className="card-meta-title">{item.name}</Text>
+                          }
+                          description={
+                            <>
+                              <Text className="card-meta-description">
+                                {item.description}
                               </Text>
-                            </div>
-                            <Text className="card-meta-location">
-                              {item.location}
-                            </Text>
-                          </>
-                        }
-                      />
-                    </Card>
-                  </List.Item>
-                );
-              }}
-            />
+                              <div className="flex-align-center">
+                                <Text className="rating">
+                                  {item.average_rating}
+                                </Text>
+                              </div>
+                              <Text className="card-meta-location">
+                                {item.location}
+                              </Text>
+                            </>
+                          }
+                        />
+                      </Card>
+                    </List.Item>
+                  );
+                }}
+              />
+            </Spin>
+
             <Pagination
               current={currentPage}
               pageSize={itemsPerPage}

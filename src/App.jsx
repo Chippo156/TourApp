@@ -19,7 +19,7 @@ function App() {
       element: <LayoutUser />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <UserDetails /> },
+        { index: false, path: "/", element: <Home /> },
         {
           index: true,
           path: "/destination/:id",
