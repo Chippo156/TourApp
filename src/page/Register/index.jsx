@@ -3,7 +3,6 @@ import { UserOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Button, Input, DatePicker, Radio, Space } from 'antd';
 import { Link,useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './register.scss';
 import { registerUser } from '../../controller/registerController';
 const Register = () => {

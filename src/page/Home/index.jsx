@@ -22,7 +22,10 @@ import anhDaNang from "../../assets/images/anh-da-nang.png";
 import anhKhac from "../../assets/images/anh-khac.png";
 import anhHoChiMinh from "../../assets/images/anh-hcm.png";
 import { getCountReview } from "../../controller/DetailsController";
-import { handleGetDestination, handleGetFavoriteDestination } from "../../controller/homeController";
+import {
+  handleGetDestination,
+  handleGetFavoriteDestination,
+} from "../../controller/homeController";
 import carousel1 from "../../assets/images/carosel1.png";
 import carousel2 from "../../assets/images/carosel2.png";
 import "./home.scss"; // Import the custom SCSS file
@@ -63,7 +66,6 @@ function Home() {
         "Read reviews & get reliable customer support. We're with you at every step.",
     },
   ];
-
 
   const data = [
     {
@@ -214,11 +216,16 @@ function Home() {
             ))}
           </Row>
 
-          <div style={{ textAlign: "center", marginTop: "40px",display:"flex",alignItems:"center",justifyContent:"center" }}>
-            <Button
-              type="primary"
-              className="button"
-            >
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "40px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Button type="primary" className="button">
               See more
             </Button>
           </div>
