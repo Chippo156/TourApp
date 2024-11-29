@@ -7,6 +7,7 @@ import {
 } from '../../controller/tourDetailsController'
 import { ArrowRightOutlined, CalendarOutlined, ClockCircleOutlined, StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import './tourdetails.scss'
+import { useParams } from 'react-router-dom';
 
 const { Title, Text } = Typography
 const { Panel } = Collapse;
@@ -17,7 +18,7 @@ const TourDetails = () => {
   const [itinerary, setItinerary] = useState([])
   // const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const tour_id = 1
+  const tour_id = useParams().id;
 
   const fetchTour = async () => {
     const response = await getTourById(tour_id)
@@ -67,7 +68,6 @@ const TourDetails = () => {
     );
   };
 
-
   useEffect(() => {
     fetchTour()
     fetchTourImages()
@@ -116,12 +116,16 @@ const TourDetails = () => {
           </div>
           <div style={{ width: "100%", justifyContent: "flex-end", display: "flex", gap: 10, padding: 10 }}>
             <Text className='text'>Giá từ:</Text>
-            <Text className='text' style={{ color: "#b20000", fontWeight: "bold" }}>{tour.price}đ</Text>
+            <Text className='text' style={{ color: "#b20000", fontWeight: "bold" }}>
+              {new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(tour.price)}</Text>
           </div>
           <Button type='primary' className='button'
-            onClick={() => setIsModalVisible(true)}
+          // onClick={() => setIsModalVisible(true)}
           >Gửi yêu cầu</Button>
-          <Button type='text' className='text' style={{ height: 45, marginTop: 10, width: "100%" }}>Xem lịch khởi hành</Button>
+          {/* <Button type='text' className='text' style={{ height: 45, marginTop: 10, width: "100%" }}>Xem lịch khởi hành</Button> */}
         </Card>
       </div>
       <div style={{ marginTop: 70 }}>
@@ -133,8 +137,10 @@ const TourDetails = () => {
           <Title level={3}>Lịch trình tour</Title>
           <Collapse defaultActiveKey={['1']}>
             {itinerary.map((item, index) => (
-              <Panel header={item.day} key={index}>
-                <p>{item.activities}</p>
+              <Panel style={{ fontSize: 18, fontWeight: "bold" }} header={item.day} key={index}>
+                {item.activities.split('.').filter(sentence => sentence.trim() !== '').map((sentence, i) => (
+                  <p style={{ marginLeft: 30, marginRight: 20, lineHeight: 2, fontSize: 16, fontWeight: "normal" }} key={i}>{sentence.trim()}.</p>
+                ))}
               </Panel>
             ))}
           </Collapse>

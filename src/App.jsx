@@ -11,12 +11,29 @@ import TravelDetail from "./page/Hotel_Details";
 import Deserve from "./page/Deserve";
 import UserDetails from "./page/UserInformation";
 import TourDetails from "./page/TourDetails";
-
+import { useDispatch, useSelector } from "react-redux";
+import { reloadUser } from "./controller/loginController";
+import { useEffect } from "react";
+import {login, logout} from "./redux/UserSlice";
 function App() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  const handleGetUser = async () => {
+    let res = await reloadUser(localStorage.getItem("token"));
+    console.log("res", res);
+    if (res && res.code === 200) {
+      dispatch(login(res.result));
+    }
+  }
+  useEffect(() => {
+    handleGetUser();
+  }, []);
   const router = createBrowserRouter([
     {
       path: "/",
       element: <LayoutUser />,
+      // element: <Login />,
       errorElement: <Error />,
       children: [
         { index: false, path: "/", element: <Home /> },
@@ -32,7 +49,7 @@ function App() {
         },
         {
           index: true,
-          path: "/tour-details",
+          path: "/tour-details/:id",
           element: <TourDetails />
         },
         // {

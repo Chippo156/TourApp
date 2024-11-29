@@ -119,7 +119,11 @@ function Home() {
     if (res && res.code === 200) {
       setItem(res.result.tours);
     }
-  };
+  }
+
+  const handleTourDetails = (tour_id) => {
+    navigate(`/tour-details/${tour_id}`);
+  }
 
   const handleCityDetail = (value) => {
     navigate(`/destination/filter/${value}`);
@@ -189,6 +193,7 @@ function Home() {
                       }}
                     />
                   }
+                  onClick={() => handleTourDetails(item.id)}
                 >
                   <div>
                     <Text className="title_card">{item.name}</Text>
