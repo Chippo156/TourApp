@@ -9,7 +9,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      console.log("action", action);
       state.isLoading = false;
       state.isAuth = true;
       state.user = action.payload.user;

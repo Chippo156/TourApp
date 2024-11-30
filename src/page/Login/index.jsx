@@ -5,7 +5,8 @@ import { Button, Input, Space,notification } from "antd";
 import "./login.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../controller/loginController";
+import {login, logout} from "../../redux/UserSlice";
+import { loginUser, reloadUser } from "../../controller/loginController";
 const Login = () => {
   const dispatch = useDispatch();
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -20,13 +21,14 @@ const Login = () => {
     });
   };
   const handleLogin = async () => {
-    console.log("username", username);
-    console.log("password,", password);
     let res = await loginUser(username, password);
-    console.log("ressss", res);
     if (res && res.code === 1000) {
       // openNotification('topRight')
       localStorage.setItem("token", res.result.token);
+      let ress = await reloadUser(res.result.token);
+      if (ress && ress.code === 200) {
+        dispatch(login(ress.result));
+      }
       navigate("/");
     } else {
       console.log("Login fail");
