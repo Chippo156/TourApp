@@ -10,6 +10,8 @@ import {
   DatePicker,
   Select,
   Input,
+  Row,
+  Col,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -30,6 +32,7 @@ import {
 } from "@ant-design/icons";
 import "./tourdetails.scss";
 import { useNavigate, useParams } from "react-router-dom";
+import { handleGetFavoriteDestination } from "../../controller/homeController";
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -39,16 +42,16 @@ const TourDetails = () => {
   const [tour, setTour] = useState({});
   const [tourImages, setTourImages] = useState([]);
   const [itinerary, setItinerary] = useState([]);
+  const [items, setItem] = useState([]);
+
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [departure, setDeparture] = useState("");
+  const [departure, setDeparture] = useState("Hà Nội");
   const [departureDate, setDepartureDate] = useState("");
-  const [people, setPeople] = useState("");
-
+  const [people, setPeople] = useState(1);
   const tour_id = useParams().id;
   const showModal = () => {
     setIsModalOpen(true);
@@ -135,7 +138,14 @@ const TourDetails = () => {
     console.log(`selected ${value}`);
     setPeople(value);
   };
+  const handleGetFavorite = async () => {
+    let res = await handleGetFavoriteDestination();
+    if (res && res.code === 200) {
+      setItem(res.result.tours);
+    }
+  };
   useEffect(() => {
+    handleGetFavorite();
     fetchTour();
     fetchTourImages();
     fetchItinerary();
@@ -144,6 +154,8 @@ const TourDetails = () => {
   const handleBookingTour = () => {
     if (!name || !email || !phone || !departure || !departureDate || !people) {
       alert("Vui lòng điền đầy đủ thông tin");
+      console.log(name, email, phone, departure, departureDate, people);
+
       return;
     }
     navigate("/bookingTour", {
@@ -158,7 +170,9 @@ const TourDetails = () => {
       },
     });
   };
-
+  const handleTourDetails = (tour_id) => {
+    navigate(`/tour-details/${tour_id}`);
+  };
   return (
     <div className="container-tour">
       <div className="main-container">
@@ -358,7 +372,7 @@ const TourDetails = () => {
             <Title level={3}>Mô tả tour</Title>
             <Text className="text">{tour.description}</Text>
           </div>
-          <div>
+          <div ref={itineraryRef}>
             <Title level={3}>Điểm nổi bật</Title>
             {tour.highlight &&
               tour.highlight.split(".").map((sentence, index) => (
@@ -367,7 +381,7 @@ const TourDetails = () => {
                 </Title>
               ))}
           </div>
-          <div style={{ marginTop: 50 }} ref={itineraryRef}>
+          <div style={{ marginTop: 50 }}>
             <Title level={3}>Lịch trình tour</Title>
             <Collapse defaultActiveKey={["1"]}>
               {itinerary.map((item, index) => (
@@ -399,15 +413,48 @@ const TourDetails = () => {
             </Collapse>
           </div>
         </div>
+        <Title level={2} style={{ margin: "20px 0px" }} className="title-white">
+          Other Tour
+        </Title>
+        <Row gutter={[16, 16]} style={{ marginTop: 20 }}>
+          {items.map((item, index) => (
+            <Col key={index} span={6}>
+              <Card
+                hoverable
+                cover={
+                  <Image
+                    src={item.image_url}
+                    alt={item.name}
+                    style={{
+                      height: "200px",
+                      width: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                }
+                onClick={() => handleTourDetails(item.id)}
+              >
+                <div>
+                  <Text className="title_card">{item.name}</Text>
+                </div>
+                <div className="info-row">
+                  <Text className="duration_card">{item.duration}</Text>
+                  <Text className="departure_card">{item.departure}</Text>
+                </div>
+                <div className="info-row">
+                  <Text className="price" style={{ color: "#ff4d4f" }}>
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(item.price)}
+                  </Text>
+                  <Text className="rating">{item.rating}⭐</Text>
+                </div>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </div>
-      {/* <Modal
-        title={<div><p>GỬI YÊU CẦU</p><p>{tour.name}</p></div>}
-        visible={isModalVisible}
-        width={800}
-        footer={null}
-      >
-        <Form></Form>
-      </Modal> */}
     </div>
   );
 };

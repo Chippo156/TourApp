@@ -59,3 +59,47 @@
   width: 30%;
   border-color: rgb(47, 118, 210);
 }
+.title_card {
+  font-size: 20px;
+  line-height: 30px;
+  height: 90px;
+  font-weight: bold;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.duration_card {
+  font-size: 1rem;
+}
+
+.highlight {
+  font-size: 1rem;
+  color: #52c41a;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.price {
+  color: #ff4d4f;
+  font-size: 1rem;
+}
+
+.duration,
+.departure {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}

@@ -12,7 +12,8 @@ export let createBooking = async (
   quantity,
   full_name,
   phone,
-  email
+  email,
+  tour_id
 ) => {
   try {
     const response = await axios.post("/bookings", {
@@ -28,6 +29,40 @@ export let createBooking = async (
       full_name,
       phone,
       email,
+      tour_id,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+export let createBookingTour = async (
+  user_id,
+  payment_status,
+  payment_method,
+  check_in_date,
+  amount,
+  quantity,
+  full_name,
+  phone,
+  email,
+  tour_id
+) => {
+  try {
+    const response = await axios.post("/bookings/tour", {
+      user_id,
+
+      payment_status,
+      payment_method,
+      check_in_date,
+
+      amount,
+      quantity,
+      full_name,
+      phone,
+      email,
+      tour_id,
     });
     return response;
   } catch (error) {

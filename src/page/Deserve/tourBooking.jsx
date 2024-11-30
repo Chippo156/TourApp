@@ -1,16 +1,24 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./deserve.scss";
 import { Breadcrumb, Button, Col, Image, Radio, Row, Typography } from "antd";
 import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import {
+  createBooking,
+  createBookingTour,
+  handleVNPay,
+} from "../../controller/BookingController";
+import { useSelector } from "react-redux";
 export default function TourBooking() {
   const location = useLocation();
   const { Title, Text } = Typography;
   const [total, setTotal] = useState(0);
-
+  const navigate = useNavigate();
   const { tour, name, email, phone, departure, departureDate, people } =
     location.state || {};
   const [selectedOption, setSelectedOption] = useState("payAtProperty");
+  const [bookingResponse, setBookingResponse] = useState(null);
+  const user = useSelector((state) => state.user.user);
 
   const currentDate = new Date();
   const refundDate = new Date(currentDate);
@@ -70,6 +78,64 @@ export default function TourBooking() {
       </div>
     );
   };
+  const handleDepartureDate = (date) => {
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+  const convertDateFormat = (dateString) => {
+    const [day, month, year] = dateString.split("/");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Example usage
+
+  const handleBookNow = async () => {
+    try {
+      if (!phone) {
+        alert("Please fill in the phone number");
+        return;
+      }
+      const amount = total;
+      let res = await createBookingTour(
+        user.id,
+        "pending",
+        selectedOption,
+        convertDateFormat(departureDate),
+        amount,
+        people,
+        name,
+        email,
+        phone,
+        tour.id
+      );
+      console.log(res);
+      setBookingResponse(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    if (bookingResponse) {
+      if (bookingResponse.code === 200) {
+        if (selectedOption === "VNPAY") {
+          handleVNPay(
+            bookingResponse.result.amount,
+            "NCB",
+            bookingResponse.result.id
+          );
+        } else {
+          alert("Booking success");
+          navigate("/");
+        }
+      }
+    }
+  }, [bookingResponse, selectedOption, navigate]);
+
   return (
     <div className="container-deserve">
       <div className="main-container">
@@ -342,7 +408,7 @@ export default function TourBooking() {
                   fontWeight: "bold",
                 }}
                 block
-                // onClick={handleBookNow}
+                onClick={handleBookNow}
               >
                 Book now
               </Button>
