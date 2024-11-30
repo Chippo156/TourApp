@@ -151,7 +151,7 @@ const HeaderPage = () => {
           </Col>
           <Col span={4} className="" offset={2}>
             {isAuth ? (
-              <Popover defaultOpen={true} content={content} trigger="hover" title={title}>
+              <Popover content={content} trigger="hover" title={title}>
                 <Space className="header_right_space">
                   {user?.isAuth ? (
                     <p className="text">Xin chào,{user.user?.username}</p>

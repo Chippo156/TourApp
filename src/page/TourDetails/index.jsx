@@ -75,7 +75,7 @@ const TourDetails = () => {
   }, [])
 
   return (
-    <div className='container'>
+    <div className='container_tour'>
       <div>
         <Title level={3}>{tour.name}</Title>
       </div>

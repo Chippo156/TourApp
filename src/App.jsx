@@ -15,13 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
 import {login, logout} from "./redux/UserSlice";
+import FilterTour from "./page/FilterTour";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const handleGetUser = async () => {
     let res = await reloadUser(localStorage.getItem("token"));
-    console.log("res", res);
     if (res && res.code === 200) {
       dispatch(login(res.result));
     }
@@ -36,7 +36,7 @@ function App() {
       // element: <Login />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <Home /> },
+        { index: false, path: "/", element: <FilterTour /> },
         {
           index: true,
           path: "/destination/:id",
@@ -51,6 +51,11 @@ function App() {
           index: true,
           path: "/tour-details/:id",
           element: <TourDetails />
+        },
+        {
+          index: true,
+          path:"/tour-filter",
+          element:<FilterTour />
         },
         // {
         //   index: true,
