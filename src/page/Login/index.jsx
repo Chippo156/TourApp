@@ -69,7 +69,7 @@ const Login = () => {
           Login
         </Button>
         <div className="login-links">
-          <a href="/forgot-password" className="forgot-password">
+          <a href="/forgot" className="forgot-password">
             Forgot Password?
           </a>
           <a href="/Register">Register</a>

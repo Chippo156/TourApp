@@ -16,6 +16,8 @@ import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
 import { login, logout } from "./redux/UserSlice";
 import TourBooking from "./page/Deserve/tourBooking";
+import Forgot from "./page/Forgot";
+import Payment from "./page/Payment";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -56,8 +58,19 @@ function App() {
         {
           index: true,
           path: "/user",
-          element: <UserDetails />,
+          element: <UserDetails />,          
         },
+        {
+          index: true,
+          path: "/forgot",
+          element: <Forgot/>,
+        },
+        {
+          index: true,
+          path: "/payment/:id",
+          element: <Payment/>,
+        },
+
         {
           index: true,
           path: "/bookingTour",
