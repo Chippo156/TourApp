@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.tour.quanlytour.dtos.request.TourRequest;
 import org.tour.quanlytour.entites.Tour;
+import org.tour.quanlytour.entites.TourType;
 import org.tour.quanlytour.mapper.TourMapper;
 import org.tour.quanlytour.repository.TourRepository;
+import org.tour.quanlytour.repository.TourTypeRepository;
 import org.tour.quanlytour.services.service.TourService;
 
 @Service
@@ -16,6 +18,7 @@ import org.tour.quanlytour.services.service.TourService;
 public class TourServiceImpl implements TourService {
     private final TourRepository tourRepository;
     private final TourMapper tourMapper;
+    private final TourTypeRepository tourTypeRepository;
     @Override
     public Page<Tour> getAllTour(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -32,7 +35,9 @@ public class TourServiceImpl implements TourService {
     public Tour createTour(TourRequest request) {
         try{
             Tour tour = tourMapper.toTour(request);
-            return tourRepository.save(tour);
+            TourType tourType = tourTypeRepository.findById(request.getTourTypeId()).orElseThrow(() -> new RuntimeException("Tour type not found"));
+            tour.setTourType(tourType);
+              return tourRepository.save(tour);
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -52,12 +57,7 @@ public class TourServiceImpl implements TourService {
                 if(request.getHighlight() != null) {
                     tour.setHighlight(request.getHighlight());
                 }
-                if(request.getStartDate() != null) {
-                    tour.setStartDate(request.getStartDate());
-                }
-                if(request.getEndDate() != null) {
-                    tour.setEndDate(request.getEndDate());
-                }
+
                 if(request.getDuration() != null) {
                     tour.setDuration(request.getDuration());
                 }
@@ -90,6 +90,16 @@ public class TourServiceImpl implements TourService {
             Tour tour = tourRepository.findById(id).orElseThrow();
             tour.setImageUrl(url);
             tourRepository.save(tour);
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Page<Tour> filterTour(Double minPrice, Double maxPrice, Double rating, String duration,Long tourTypeId, int page, int size) {
+        try{
+            Pageable pageable = PageRequest.of(page, size);
+            return tourRepository.filterTour(minPrice, maxPrice, rating, duration,tourTypeId, pageable);
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

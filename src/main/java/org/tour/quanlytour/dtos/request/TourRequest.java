@@ -18,15 +18,12 @@ public class TourRequest {
     String name;
     String description;
     String highlight;
-    @JsonProperty("start_date")
-    LocalDate startDate;
-    @JsonProperty("end_date")
-    LocalDate endDate;
+    String schedule;
     String duration;
     String departure;
     double price;
-    @JsonProperty("max_people")
-    int maxPeople;
     double rating;
+    @JsonProperty("tour_type_id")
+    Long tourTypeId;
 
 }

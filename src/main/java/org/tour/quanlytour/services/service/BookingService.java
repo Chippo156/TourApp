@@ -19,5 +19,7 @@ public interface BookingService {
 
     List<BookingResponse> getBookingsByUserId(Long userId);
 
+    BookingResponse createBookingTour(BookingRequest bookingRequest) throws Exception;
+
 
 }

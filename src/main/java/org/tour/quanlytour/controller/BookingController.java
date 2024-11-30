@@ -34,6 +34,15 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PostMapping("/tour")
+    public ApiResponse<BookingResponse> createBookingTour(@RequestBody BookingRequest bookingRequest){
+        try{
+            return new ApiResponse<>(200, "success", bookingService.createBookingTour(bookingRequest));
+        }
+        catch (Exception e){
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
     @GetMapping("/{id}")
     public ApiResponse<BookingResponse> getBooking(@PathVariable Long id){
         try{

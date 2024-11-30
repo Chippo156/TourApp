@@ -3,15 +3,9 @@ package org.tour.quanlytour.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.tour.quanlytour.dtos.request.BookingRequest;
 import org.tour.quanlytour.dtos.response.BookingResponse;
-import org.tour.quanlytour.entites.Bookings;
-import org.tour.quanlytour.entites.Destination;
-import org.tour.quanlytour.entites.Room;
-import org.tour.quanlytour.entites.User;
+import org.tour.quanlytour.entites.*;
 import org.tour.quanlytour.mapper.BookingMapper;
-import org.tour.quanlytour.repository.BookingRepository;
-import org.tour.quanlytour.repository.DestinationRepository;
-import org.tour.quanlytour.repository.RoomRepository;
-import org.tour.quanlytour.repository.UserRepository;
+import org.tour.quanlytour.repository.*;
 import org.tour.quanlytour.services.service.BookingService;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +21,7 @@ public class BookingServiceImpl implements BookingService {
     private  final DestinationRepository destinationRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final TourRepository tourRepository;
     @Override
     public BookingResponse createBooking(BookingRequest bookingRequest) throws Exception {
         try{
@@ -52,6 +47,7 @@ public class BookingServiceImpl implements BookingService {
             throw new Exception(ex.getMessage());
         }
     }
+
 
     @Override
     public Bookings getBooking(Long id) {
@@ -110,5 +106,28 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingResponse> getBookingsByUserId(Long userId) {
         return bookingRepository.findByUserId(userId).stream().map(bookingMapper::toBookingResponse).toList();
+    }
+
+    @Override
+    public BookingResponse createBookingTour(BookingRequest bookingRequest) throws Exception {
+        try{
+            Tour tour = tourRepository.findById(bookingRequest.getTourId()).orElseThrow(()->new RuntimeException("Tour not found"));
+            User user = userRepository.findById(bookingRequest.getUserId()).orElseThrow(()->new RuntimeException("User not found"));
+
+            Bookings bookings = bookingMapper.toBooking(bookingRequest);
+            bookings.setTour(tour);
+            bookings.setUser(user);
+            if(bookingRequest.getPaymentStatus().equals("NO_PAID")){
+                bookings.setPaymentDate(null);
+            }else if(bookingRequest.getPaymentStatus().equals("PAID")){
+                bookings.setPaymentDate(LocalDate.now());
+            }
+            bookings.setBookingStatus("BOOKED");
+            bookings.setQuantity(bookingRequest.getQuantity());
+            bookings = bookingRepository.save(bookings);
+            return bookingMapper.toBookingResponse(bookings);
+        }catch (Exception ex){
+            throw new Exception(ex.getMessage());
+        }
     }
 }

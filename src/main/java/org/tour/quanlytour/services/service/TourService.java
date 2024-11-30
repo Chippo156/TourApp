@@ -11,5 +11,6 @@ public interface TourService {
     Tour updateTour(Long id, TourRequest tourRequest);
     void deleteTour(Long id);
     void updateTourImage(Long id, String url);
+    Page<Tour> filterTour(Double minPrice, Double maxPrice, Double rating, String duration,Long tourTypeId, int page, int size);
 
 }

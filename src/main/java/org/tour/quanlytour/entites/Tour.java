@@ -25,22 +25,17 @@ public class Tour {
     String description;
     @Column(length = 500)
     String highlight;
-    @Column(name = "start_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    LocalDate startDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "end_date")
-    LocalDate endDate;
+    @Column(name = "schedule")
+    String schedule;
     @Column(name = "image_url")
     String imageUrl;
     String duration;
     double rating;
-    @Column(name = "max_people")
-    int maxPeople;
     String departure;
     double price;
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
     List<Itinerary> itineraries;
-
-
+    @ManyToOne
+    @JoinColumn(name = "tour_type_id")
+    TourType tourType;
 }

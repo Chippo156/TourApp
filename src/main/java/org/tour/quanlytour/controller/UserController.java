@@ -25,5 +25,4 @@ public class UserController {
             return new ApiResponse<>(400,ex.getMessage(),null);
         }
     }
-
 }

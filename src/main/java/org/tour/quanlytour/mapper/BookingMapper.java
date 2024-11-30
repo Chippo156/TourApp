@@ -18,7 +18,8 @@ public interface BookingMapper {
     @Mappings({
             @org.mapstruct.Mapping(target = "userId", source = "bookings.user.id"),
             @org.mapstruct.Mapping(target = "destinationId", source = "bookings.destination.id"),
-            @org.mapstruct.Mapping(target = "roomId", source = "bookings.room.id")
+            @org.mapstruct.Mapping(target = "roomId", source = "bookings.room.id"),
+            @org.mapstruct.Mapping(target = "tourId", source = "bookings.tour.id")
     })
     BookingResponse toBookingResponse(Bookings bookings);
 }

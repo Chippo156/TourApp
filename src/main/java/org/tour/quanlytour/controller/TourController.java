@@ -22,7 +22,6 @@ public class TourController {
     @PostMapping
     public ApiResponse<TourResponse> createTour(@RequestBody TourRequest request) {
         try{
-            System.out.println(request.getStartDate());
            return new ApiResponse<>(200,"success",tourMapper.toTourResponse(tourService.createTour(request)));
         }
         catch (Exception e) {
@@ -69,6 +68,30 @@ public class TourController {
     public ApiResponse<TourResponse> updateTour(@PathVariable Long id, @RequestBody TourRequest request) {
         try{
             return new ApiResponse<>(200,"success",tourMapper.toTourResponse(tourService.updateTour(id,request)));
+        }
+        catch (Exception e) {
+            return new ApiResponse<>(400,e.getMessage(),null);
+        }
+    }
+    @GetMapping("/filter")
+    public ApiResponse<ListTourResponse> filterTour(
+
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false)  Double rating,
+            @RequestParam(required = false) String duration,
+            @RequestParam(required = false) Long tourTypeId,
+            @RequestParam int page, @RequestParam int size) {
+        try{
+            Page<Tour> toursPage = tourService.filterTour(minPrice, maxPrice, rating, duration,tourTypeId, page-1, size);
+            List<Tour> tours = toursPage.getContent();
+            List<TourResponse> tourResponses = tours.stream().map(tourMapper::toTourResponse).toList();
+            ListTourResponse t = ListTourResponse.builder()
+                    .tours(tourResponses)
+                    .totalPage(toursPage.getTotalPages())
+                    .totalElement(toursPage.getNumberOfElements())
+                    .build();
+            return new ApiResponse<>(200,"success",t);
         }
         catch (Exception e) {
             return new ApiResponse<>(400,e.getMessage(),null);
