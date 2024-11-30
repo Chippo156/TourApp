@@ -200,13 +200,18 @@ export default function Deserve() {
             },
           ]}
         />
-        <div style={{ display: "flex", gap: 5 }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 5,
+          }}
+        >
           <div
             style={{
               flex: 2,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              gap: 20,
             }}
           >
             {/* <Icon name="calendar" size={50} color="#FFD700"></Icon> */}
@@ -225,11 +230,15 @@ export default function Deserve() {
             <div
               style={{
                 marginVertical: 10,
-                border: "1px solid #000",
-                borderRadius: 5,
+                borderRadius: "10px",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
               }}
             >
-              <div style={{ width: 800 }}>
+              <div
+                style={{
+                  width: 800,
+                }}
+              >
                 <Carousel
                   arrows
                   infinite={true}
@@ -292,11 +301,8 @@ export default function Deserve() {
                 </div>
                 <div
                   style={{
-                    backgroundColor: "#",
-
                     borderWidth: 1,
                     borderRadius: 5,
-                    marginTop: 20,
                   }}
                 >
                   <Text style={{ color: "green" }}>
@@ -362,10 +368,9 @@ export default function Deserve() {
             </div>
             <div
               style={{
-                borderWidth: "1px",
-                borderStyle: "solid",
-                borderRadius: "5px",
-                marginTop: "20px",
+                borderRadius: "10px",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+
                 padding: "10px",
                 gap: "20px",
                 borderColor: "#000",
@@ -379,7 +384,14 @@ export default function Deserve() {
               >
                 Who&apos;s checking in?
               </h2>
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 15,
+
+                  flexDirection: "column",
+                }}
+              >
                 <p style={{ color: "#000" }}>
                   <span style={{ fontWeight: "bold" }}>
                     {numberRoom} Room:{" "}
@@ -389,15 +401,15 @@ export default function Deserve() {
                 </p>
                 <p>
                   <span style={{ fontWeight: "bold" }}>Fullname: </span>
-                  {}
+                  {user.first_name} {user.last_name}
                 </p>
                 <p>
                   <span style={{ fontWeight: "bold" }}>Email: </span>
-                  {formatDate(endDate)}
+                  {user.email}
                 </p>
                 <p>
                   <span style={{ fontWeight: "bold" }}>Phone: </span>
-                  {formatDate(endDate)}
+                  {user.phone}
                 </p>
               </div>
               <div
@@ -455,31 +467,6 @@ export default function Deserve() {
                 </div>
               </div>
             </div>
-
-            <div
-              style={{
-                border: "1px solid #000",
-                borderRadius: 5,
-                marginTop: 20,
-                padding: 10,
-                gap: 20,
-              }}
-            >
-              <Text style={{ fontWeight: "bold", color: "#000" }}>
-                Policy Cancel
-              </Text>
-              <div>
-                <Text style={{ color: "green" }}>
-                  Full refund in advance {formatDate(refundDate)}
-                </Text>
-                <Text style={{ color: "#000" }}>
-                  Changes or cancellations made after 6:00 PM (local time) on{" "}
-                  {formatDate(refundDate)} or no-shows will be charged a
-                  property fee equal to 100% of the total price paid for the
-                  reservation.
-                </Text>
-              </div>
-            </div>
           </div>
           <div
             style={{
@@ -500,8 +487,8 @@ export default function Deserve() {
                 flexDirection: "row",
                 gap: 20,
 
-                border: "1px solid #000",
-                borderRadius: 5,
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
               }}
             >
               <Image
@@ -526,28 +513,52 @@ export default function Deserve() {
                 >
                   {room.room_type} {room.description}
                 </Text>
-                <Text style={{ color: "#000", width: 200 }}>{room.beds}</Text>
-                <Text style={{ color: "#000" }}>{room.features}</Text>
-                <Text style={{ color: "#000" }}>{room.area} sq m</Text>
+                <Text style={{ color: "#000", width: 200 }}>
+                  Beds: {room.beds}
+                </Text>
+                <Text style={{ color: "#000" }}>Feature: {room.features}</Text>
+                <Text style={{ color: "#000" }}>Area: {room.area} sq m</Text>
                 <Text style={{ color: "#000" }}>
                   Each room has {room.sleeps} guests
                 </Text>
-                <Title level={5}>
-                  Quantity : {numberRoom} Room, {numberGuest} Guest
-                </Title>
               </div>
             </div>
             <div
               style={{
-                border: "1px solid #000",
-                borderRadius: "5px",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
+                padding: 10,
+                gap: 20,
+              }}
+            >
+              <Text style={{ fontWeight: "bold", color: "#000", fontSize: 20 }}>
+                Policy Cancel
+              </Text>
+              <div>
+                <Text style={{ color: "green", display: "block" }}>
+                  Full refund in advance {formatDate(refundDate)}
+                </Text>
+                <Text style={{ color: "#000" }}>
+                  Changes or cancellations made after 6:00 PM (local time) on{" "}
+                  {formatDate(refundDate)} or no-shows will be charged a
+                  property fee equal to 100% of the total price paid for the
+                  reservation.
+                </Text>
+              </div>
+            </div>
+            <div
+              style={{
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
                 padding: "10px",
                 gap: "20px",
                 backgroundColor: "#fff",
                 color: "#000",
               }}
             >
-              <h2 style={{ fontWeight: "bold" }}>Payment method</h2>
+              <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+                Payment method
+              </Text>
               <Radio.Group
                 onChange={onChange}
                 value={selectedOption}
@@ -557,7 +568,7 @@ export default function Deserve() {
                   gap: "20px",
                 }}
               >
-                <Radio value={"payAtProperty"}>
+                <Radio style={{ textAlign: "left" }} value={"payAtProperty"}>
                   <span style={{ fontWeight: "bold" }}> Pay At Property</span> (
                   Your credit card is required to secure your booking. You will
                   pay for your stay at the property)
@@ -569,10 +580,11 @@ export default function Deserve() {
                 </Radio>
               </Radio.Group>
             </div>
+
             <div
               style={{
-                border: "1px solid #000",
-                borderRadius: "5px",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
                 padding: "10px",
                 gap: "20px",
                 backgroundColor: "#fff",
@@ -582,21 +594,39 @@ export default function Deserve() {
               <h2 className="price-details-title">Price details</h2>
               <div className="price-details-container">
                 <p className="price-detail">
-                  <span className="price-label">Room price: </span>
-                  {formatCurrency(room.price)}
+                  Room price:
+                  <span className="price-label">
+                    {" "}
+                    {formatCurrency(room.price)}
+                  </span>
+                </p>
+                <p>
+                  <p className="price-detail">
+                    Quantity:
+                    <span className="price-label">
+                      {" "}
+                      {numberRoom} Room, {numberGuest} Guest
+                    </span>
+                  </p>
+                  <Title level={5}></Title>
                 </p>
 
                 <p className="price-detail">
-                  <span className="price-label">Refund: </span>
-                  {formatCurrency(refundCost)}
+                  Refund:
+                  <span className="price-label">
+                    {formatCurrency(refundCost)}{" "}
+                  </span>
                 </p>
                 <p className="price-detail">
-                  <span className="price-label">Extra: </span>
-                  {formatCurrency(extraCost)}
+                  Extra:
+                  <span className="price-label">
+                    {" "}
+                    {formatCurrency(extraCost)}
+                  </span>
                 </p>
                 <p className="price-detail">
-                  <span className="price-label">Total: </span>
-                  {formatCurrency(total)}
+                  Total:
+                  <span className="price-label"> {formatCurrency(total)}</span>
                 </p>
               </div>
             </div>
@@ -612,13 +642,13 @@ export default function Deserve() {
                   width: "100%",
                   height: 50,
                   color: "#fff",
-                  borderColor: "#000",
+
                   fontWeight: "bold",
                 }}
                 block
                 onClick={handleBookNow}
               >
-                Book now
+                BOOK NOW
               </Button>
             </div>
           </div>

@@ -63,6 +63,16 @@ function App() {
           path: "/bookingTour",
           element: <TourBooking />,
         },
+        {
+          index: true,
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          index: true,
+          path: "/register",
+          element: <Register />,
+        },
 
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },

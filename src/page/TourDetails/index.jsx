@@ -139,8 +139,13 @@ const TourDetails = () => {
     fetchTour();
     fetchTourImages();
     fetchItinerary();
+    window.scrollTo(0, 0);
   }, []);
   const handleBookingTour = () => {
+    if (!name || !email || !phone || !departure || !departureDate || !people) {
+      alert("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
     navigate("/bookingTour", {
       state: {
         tour: tour,
@@ -158,7 +163,7 @@ const TourDetails = () => {
     <div className="container-tour">
       <div className="main-container">
         <div>
-          <Title level={3}>{tour.name}</Title>
+          <Title level={2}>{tour.name}</Title>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
           <StarRating rating={tour.rating} />
@@ -176,7 +181,12 @@ const TourDetails = () => {
               <div key={image.id}>
                 <Image
                   preview={false}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: 10,
+                  }}
                   src={image.imageUrl}
                 />
               </div>

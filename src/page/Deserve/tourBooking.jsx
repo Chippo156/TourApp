@@ -1,15 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./deserve.scss";
-import {
-  Breadcrumb,
-  Button,
-  Carousel,
-  Col,
-  Image,
-  Radio,
-  Row,
-  Typography,
-} from "antd";
+import { Breadcrumb, Button, Col, Image, Radio, Row, Typography } from "antd";
+import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 export default function TourBooking() {
   const location = useLocation();
@@ -49,6 +41,35 @@ export default function TourBooking() {
     console.log("radio checked", e.target.value);
     setSelectedOption(e.target.value);
   };
+  const StarRating = ({ rating = 0 }) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 !== 0;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    return (
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        {[...Array(fullStars)].map((_, index) => (
+          <StarFilled
+            key={`full-${index}`}
+            style={{ color: "#FFD700", fontSize: "20px" }}
+          />
+        ))}
+        {halfStar && (
+          <StarTwoTone
+            twoToneColor="#FFD700"
+            key="half"
+            style={{ fontSize: "20px" }}
+          />
+        )}
+        {[...Array(emptyStars)].map((_, index) => (
+          <StarOutlined
+            key={`empty-${index}`}
+            style={{ color: "#FFD700", fontSize: "20px" }}
+          />
+        ))}
+      </div>
+    );
+  };
   return (
     <div className="container-deserve">
       <div className="main-container">
@@ -58,7 +79,7 @@ export default function TourBooking() {
               title: <a href="/">Home</a>,
             },
             {
-              //   title: <a href={`/destination/${desId}`}>Destination details</a>,
+              title: <a href={`/tour-details/${tour.id}`}>Tour details</a>,
             },
 
             {
@@ -91,35 +112,11 @@ export default function TourBooking() {
             <div
               style={{
                 marginVertical: 10,
-                border: "1px solid #000",
-                borderRadius: 5,
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: 10,
               }}
             >
-              <div style={{ width: 800 }}>
-                {/* <Carousel
-                  arrows
-                  infinite={true}
-                  style={{ width: "100%", marginBottom: "20px", height: 300 }} // Adjust the width for the carousel
-                >
-                  {imagesDes.map((image, index) => (
-                    <div
-                      key={index}
-                      style={{ display: "flex", justifyContent: "center" }}
-                    >
-                      <Image
-                        src={image.imageUrl}
-                        alt={`Room image ${index}`}
-                        style={{
-                          width: "800px", // Ensures the images take full width of the container
-                          height: "300px", // Fixed height for all images
-                          objectFit: "cover", // Maintains the aspect ratio while covering the area
-                          borderRadius: "10px", // Optional: Add rounded corners for aesthetics
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Carousel>{" "} */}
-              </div>
+              <div style={{ width: 800 }}></div>
 
               <div style={{ padding: 10 }}>
                 <Title style={{ margin: "10px 0px" }} level={4}>
@@ -189,8 +186,8 @@ export default function TourBooking() {
             </div>
             <div
               style={{
-                border: "1px solid #000",
-                borderRadius: 5,
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: 10,
                 padding: 10,
                 gap: 20,
               }}
@@ -212,8 +209,8 @@ export default function TourBooking() {
             </div>
             <div
               style={{
-                border: "1px solid #000",
-                borderRadius: "5px",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
                 padding: "10px",
                 gap: "20px",
                 backgroundColor: "#fff",
@@ -264,8 +261,8 @@ export default function TourBooking() {
                 flexDirection: "row",
                 gap: 20,
 
-                border: "1px solid #000",
-                borderRadius: 5,
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: 10,
               }}
             >
               <Image
@@ -296,13 +293,14 @@ export default function TourBooking() {
                 <Text style={{ color: "#000" }}>
                   Departure: {tour.departure}
                 </Text>
+                <StarRating rating={tour.rating} />
               </div>
             </div>
 
             <div
               style={{
-                border: "1px solid #000",
-                borderRadius: "5px",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                borderRadius: "10px",
                 padding: "10px",
                 gap: "20px",
                 backgroundColor: "#fff",
@@ -312,16 +310,18 @@ export default function TourBooking() {
               <h2 className="price-details-title">Price details</h2>
               <div className="price-details-container">
                 <p className="price-detail">
-                  <span className="price-label">Tour price: </span>
-                  {formatCurrency(tour.price)}
+                  Tour price:
+                  <span className="price-label">
+                    {formatCurrency(tour.price)}{" "}
+                  </span>
                 </p>
                 <p className="price-detail">
-                  <span className="price-label">Quantity: </span>
-                  {people} people
+                  Quantity:
+                  <span className="price-label"> {people} people </span>
                 </p>
                 <p className="price-detail">
-                  <span className="price-label">Total: </span>
-                  {formatCurrency(total)}
+                  Total:
+                  <span className="price-label"> {formatCurrency(total)}</span>
                 </p>
               </div>
             </div>
@@ -337,7 +337,8 @@ export default function TourBooking() {
                   width: "100%",
                   height: 50,
                   color: "#fff",
-                  borderColor: "#000",
+                  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+
                   fontWeight: "bold",
                 }}
                 block
