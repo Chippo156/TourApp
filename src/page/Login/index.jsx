@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { Button, Input, Space,notification } from "antd";
+import { Button, Input, Space, notification } from "antd";
 import "./login.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

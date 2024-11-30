@@ -6,11 +6,12 @@ $text-muted: #ced4da;
 $text-dark: #6c757d;
 
 .container-deserve {
-  max-width: 1200px;
-  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 50px;
+
   .main-container {
-    display: flex;
-    margin-bottom: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 }
 
