@@ -113,8 +113,11 @@ export default function TourBooking() {
         phone,
         tour.id
       );
-      console.log(res);
-      setBookingResponse(res);
+      if (res.code === 200) {
+        setBookingResponse(res);
+      } else if (res.code === 1007) {
+        alert("Admin can't book tour");
+      }
     } catch (error) {
       console.error(error);
     }

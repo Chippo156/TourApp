@@ -630,27 +630,36 @@ export default function Deserve() {
                 </p>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                type="primary"
+            {user && user.user_id ? (
+              <div
                 style={{
-                  width: "100%",
-                  height: 50,
-                  color: "#fff",
-
-                  fontWeight: "bold",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
-                block
-                onClick={handleBookNow}
               >
-                BOOK NOW
-              </Button>
-            </div>
+                <Button
+                  type="primary"
+                  style={{
+                    width: "100%",
+                    height: 50,
+                    color: "#fff",
+
+                    fontWeight: "bold",
+                  }}
+                  block
+                  onClick={handleBookNow}
+                >
+                  BOOK NOW
+                </Button>
+              </div>
+            ) : (
+              <Alert
+                message="Please login to book"
+                type="warning"
+                showIcon
+                style={{ marginTop: 20 }}
+              />
+            )}
           </div>
         </div>
       </div>

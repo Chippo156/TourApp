@@ -47,6 +47,7 @@ const HeaderPage = () => {
     let res = await logoutUser(localStorage.getItem("token"));
     if (res.code === 200) {
       message.success("Đăng xuất thành công");
+      localStorage.removeItem("token");
       dispatch(logout());
       navigate("/");
     } else {
