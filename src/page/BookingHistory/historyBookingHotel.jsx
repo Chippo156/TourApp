@@ -122,6 +122,26 @@ const BookingHotel = () => {
       render: (text) => formatDate(text),
     },
     {
+      title: "Booking Status",
+      dataIndex: "booking_status",
+      key: "booking_status",
+      render: (text, record) => {
+        let color;
+        if (record.booking_status === "CANCELLED") {
+          color = "red";
+        } else if (record.booking_status === "BOOKED") {
+          color = "green";
+        } else {
+          color = "black"; // Default color for other statuses
+        }
+        return (
+          <Button disabled style={{ color, width: 100 }}>
+            {record.booking_status}
+          </Button>
+        );
+      },
+    },
+    {
       title: "Payment Status",
       dataIndex: "payment_status",
       key: "payment_status",

@@ -16,10 +16,9 @@ const BookingHistory = () => {
   const [bookingHistory, setBookingHistory] = useState([]);
   const [tour, setTour] = useState([]);
   const [destination, setDestination] = useState([]);
-
   const user = useSelector((state) => state.user);
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedKey, setSelectedKey] = useState("1");
+  const [selectedKey, setSelectedKey] = useState("");
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -34,6 +33,8 @@ const BookingHistory = () => {
         return <Bookingtour />;
       case "1":
         return <BookingHotel />;
+      default:
+        return null;
     }
   };
   const fetchBookingHistory = async (user_id) => {
@@ -64,11 +65,8 @@ const BookingHistory = () => {
   };
 
   useEffect(() => {
-    if (user.isAuth && user.user.id) {
-      fetchBookingHistory(user.user.id);
-      console.log(bookingHistory);
-    }
-  }, [user]);
+    renderContent();
+  }, [selectedKey]);
 
   return (
     <div className="container-history">
