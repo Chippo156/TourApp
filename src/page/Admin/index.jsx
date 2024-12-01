@@ -11,6 +11,7 @@ import TourAdmin from './tour';
 import BookingtourAdmin from './bookingTour';
 import BookingHotelAdmin from './bookingHotel';
 import HotelAdmin from './hotel';
+import UsersInfor from './usersInfor';
 
 const { Header, Sider, Content } = Layout;
 
@@ -33,8 +34,10 @@ const Admin = () => {
         return <HotelAdmin />;
       case '3':
         return <BookingtourAdmin/>;
-      default:
+      case '4':
         return <BookingHotelAdmin/>;
+      default:
+        return <UsersInfor/>
     }
   };
 
@@ -63,6 +66,10 @@ const Admin = () => {
             {
                 key: '4',
                 label: 'Booking destination',
+              },
+              {
+                key: '5',
+                label: 'User information',
               },
            
           ]}
