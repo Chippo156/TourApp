@@ -1,6 +1,7 @@
 package org.tour.quanlytour.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.tour.quanlytour.dtos.request.UserRequest;
@@ -98,6 +99,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(()->new RuntimeException("User not found"));
+    }
+
+    @Override
+    public Page<User> getAllUser(int page, int size) {
+        return userRepository.findAll(org.springframework.data.domain.PageRequest.of(page,size));
     }
 
 }

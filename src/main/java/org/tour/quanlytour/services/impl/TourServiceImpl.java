@@ -14,6 +14,8 @@ import org.tour.quanlytour.repository.TourRepository;
 import org.tour.quanlytour.repository.TourTypeRepository;
 import org.tour.quanlytour.services.service.TourService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TourServiceImpl implements TourService {
@@ -100,10 +102,10 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public Page<Tour> filterTour(Double minPrice, Double maxPrice, Double rating, String duration, Long tourTypeId, int page, int size) {
+    public Page<Tour> filterTour(Double minPrice, Double maxPrice, Double rating, String duration, List<Long> tourTypeIds, int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            return tourRepository.filterTour(minPrice, maxPrice, rating, duration, tourTypeId, pageable);
+            return tourRepository.filterTour(minPrice, maxPrice, rating, duration, tourTypeIds, pageable);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

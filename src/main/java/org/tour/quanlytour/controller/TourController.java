@@ -84,10 +84,10 @@ public class TourController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false)  Double rating,
             @RequestParam(required = false) String duration,
-            @RequestParam(required = false) Long tourTypeId,
+            @RequestParam(required = false)   List<Long> tourTypeIds,
             @RequestParam int page, @RequestParam int size) {
         try{
-            Page<Tour> toursPage = tourService.filterTour(minPrice, maxPrice, rating, duration,tourTypeId, page-1, size);
+            Page<Tour> toursPage = tourService.filterTour(minPrice, maxPrice, rating, duration,tourTypeIds, page-1, size);
             List<Tour> tours = toursPage.getContent();
             List<TourResponse> tourResponses = tours.stream().map(tourMapper::toTourResponse).toList();
             ListTourResponse t = ListTourResponse.builder()

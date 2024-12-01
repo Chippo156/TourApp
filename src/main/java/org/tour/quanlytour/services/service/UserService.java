@@ -1,5 +1,6 @@
 package org.tour.quanlytour.services.service;
 
+import org.springframework.data.domain.Page;
 import org.tour.quanlytour.dtos.request.UserRequest;
 import org.tour.quanlytour.entites.User;
 
@@ -12,4 +13,5 @@ public interface UserService {
     void deleteUser(Long id);
     Optional<User> getUserByEmail(String email);
     User getUserByUsername(String username);
+    Page<User> getAllUser(int page, int size);
 }

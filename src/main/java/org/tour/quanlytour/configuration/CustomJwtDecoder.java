@@ -22,5 +22,4 @@ public class CustomJwtDecoder implements JwtDecoder {
             throw new RuntimeException(e);
         }
     }
-
 }

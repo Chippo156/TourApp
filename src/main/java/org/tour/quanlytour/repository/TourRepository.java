@@ -7,12 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.tour.quanlytour.entites.Tour;
 
+import java.util.List;
+
 public interface TourRepository extends JpaRepository<Tour, Long> {
 
 
 
     @Query("select t from Tour t where " +
-            "(:tourTypeId is NULL OR t.tourType.id = :tourTypeId) "+
+            "(:tourTypeIds is NULL OR t.tourType.id IN :tourTypeIds) "+
             "and (:minPrice is NULL OR t.price >= :minPrice )" +
             "and (:maxPrice is NULL OR t.price <= :maxPrice )" +
             "and (:rating is NULL OR t.rating >= :rating) " +
@@ -22,6 +24,6 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
            @Param("maxPrice") Double maxPrice,
            @Param("rating") Double rating,
            @Param("duration") String duration,
-            @Param("tourTypeId") Long tourTypeId
+            @Param("tourTypeIds") List<Long> tourTypeIds
             , Pageable pageable);
 }

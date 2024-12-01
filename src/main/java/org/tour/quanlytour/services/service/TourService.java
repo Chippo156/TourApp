@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.tour.quanlytour.dtos.request.TourRequest;
 import org.tour.quanlytour.entites.Tour;
 
+import java.util.List;
+
 public interface TourService {
     Page<Tour> getAllTour(int page, int size);
     Tour getTourById(Long id);
@@ -11,8 +13,7 @@ public interface TourService {
     Tour updateTour(Long id, TourRequest tourRequest);
     void deleteTour(Long id);
     void updateTourImage(Long id, String url);
-    Page<Tour> filterTour(Double minPrice, Double maxPrice, Double rating, String duration,Long tourTypeId, int page, int size);
-
+    Page<Tour> filterTour(Double minPrice, Double maxPrice, Double rating, String duration, List<Long> tourTypeIds, int page, int size);
     void fakeData();
 
 }
