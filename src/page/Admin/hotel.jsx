@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Space, Modal, Form, Input, Select, message } from 'antd';
 
-import { createDestination, deleteDestination, getAllDestination } from '../../controller/destinationController';
+import { createDestination, deleteDestination, getAllDestination, updateDestination } from '../../controller/destinationController';
 import { getAllCategory } from '../../controller/categoryController';
+
+
 
 const { Option } = Select;
 
@@ -61,6 +63,7 @@ const HotelAdmin = () => {
     if (type === 'update') {
       form.setFieldsValue(record);
       setCurrentRecord(record);
+      console.log('Record:', record);
     } else {
       form.resetFields();
       setCurrentRecord(null);
@@ -98,9 +101,9 @@ const HotelAdmin = () => {
   };
 
   const handleUpdate = async (record) => {
-    console.log('Update:', record.id);
+
     try {
-      const response = await updateTour(record.id, record);
+      const response = await updateDestination(record.destination_id, record);
       if (response.code === 200) {
         message.success('Update successful');
         getdata();
@@ -192,35 +195,54 @@ const HotelAdmin = () => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        width={600}
       >
         <Form form={form} layout="vertical">
           {modalType === 'update' && (
-            <Form.Item name="id" label="ID">
-              <Input disabled />
-            </Form.Item>
-          )}
-          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="location" label="Location" rules={[{ required: true, message: 'Please input the location!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="average_rating" label="Average Rating" rules={[{ required: true, message: 'Please input the average rating!' }]}>
-            <Input />
-          </Form.Item>
+            <div style={{ display: 'flex', width: '100%',  }}>
 
-          <Form.Item name="category_id" label="Category" rules={[{ required: true, message: 'Please select the category!' }]}>
-            <Select>
-              {category.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.categoryName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item name="destination_id" style={{ width: '100%' }} label="ID">
+                <Input disabled />
+              </Form.Item>
+            </div>
+          )}
+          <div style={{ display: 'flex', width: '100%',  }}>
+
+            <Form.Item name="name" style={{ width: '100%' }} label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
+              <Input />
+            </Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+
+            <Form.Item name="location" style={{ width: '100%' }} label="Location" rules={[{ required: true, message: 'Please input the location!' }]}>
+              <Input />
+
+            </Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+
+            <Form.Item name="description" style={{ width: '100%' }} label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
+              <Input />
+            </Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+
+            <Form.Item name="average_rating" style={{ width: '100%' }} label="Average Rating" rules={[{ required: true, message: 'Please input the average rating!' }]}>
+              <Input />
+            </Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+
+            <Form.Item name="category_id" style={{ width: '100%' }} label="Category" rules={[{ required: true, message: 'Please select the category!' }]}>
+            <Select  selected={currentRecord?.category_id} style={{ width: '100%' }}>
+                {category.map((item) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.categoryName}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </div>
         </Form>
       </Modal>
     </>

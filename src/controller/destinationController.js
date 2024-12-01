@@ -22,13 +22,14 @@ export const createDestination = async (data) => {
 
 export const updateDestination = async (id, data) => {
     try {
-        const response = await axios.put(`/destinations/${id}`, data);
+        const response = await axios.put(`/destinations/update/${id}`, data);
         return response;
     } catch (error) {
         console.error(error);
         return error;
     }
 }
+
 
 
 export const deleteDestination = async (id) => {
@@ -40,3 +41,4 @@ export const deleteDestination = async (id) => {
         return error;
     }
 }
+

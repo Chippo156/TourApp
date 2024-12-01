@@ -13,6 +13,7 @@ const BookingtourAdmin = () => {
     setLoading(true);
     try {
       const response = await getAllBookingTour(currentPage, itemsPerPage);
+      console.log('response:', response);
       if (response.code === 200) {
         setData(response.result.bookingResponses.map((item) => ({ ...item, key: item.id })));
         setTotalElements(response.result.totalElements);
