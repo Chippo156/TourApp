@@ -229,10 +229,12 @@ export default function TravelDetail() {
   };
   const handleAddRoom = () => {
     setNumbeRoom(numberRoom + 1);
+    console.log(numberRoom);
   };
   const handleRemoveRoom = () => {
     if (numberRoom > 1) {
       setNumbeRoom(numberRoom - 1);
+      console.log(numberRoom);
     }
   };
   const { Text, Title } = Typography;
@@ -252,9 +254,10 @@ export default function TravelDetail() {
     }
   };
   useEffect(() => {
-    if (numberGuest === 1 || numberRoom === 1) {
+    if (numberGuest === 1 && numberRoom === 1) {
       return;
     }
+
     fetchFilterRoom();
   }, [numberGuest, numberRoom, endDate]);
   const indexOfLastItem = currentPage * itemsPerPage;

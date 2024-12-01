@@ -13,7 +13,6 @@ import {
 import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import {
-  createBooking,
   createBookingTour,
   handleVNPay,
 } from "../../controller/BookingController";
@@ -29,7 +28,9 @@ export default function TourBooking() {
   const [bookingResponse, setBookingResponse] = useState(null);
   const user = useSelector((state) => state.user.user);
 
-  const [alert, setAlert] = useState({
+  console.log(user);
+
+  const [alertt, setAlertt] = useState({
     visible: false,
     message: "",
     description: "",
@@ -131,7 +132,8 @@ export default function TourBooking() {
       if (res.code === 200) {
         setBookingResponse(res);
       } else if (res.code === 1007) {
-        setAlert({
+        window.scrollTo(0, 0);
+        setAlertt({
           visible: true,
           message: "Admin not booking",
           description: "Please login with your account user to book",
@@ -162,13 +164,13 @@ export default function TourBooking() {
     <div className="container-deserve">
       <div className="main-container">
         <div style={{ margin: "20px 0px" }}>
-          {alert.visible && (
+          {alertt.visible && (
             <Alert
-              message={alert.message}
-              description={alert.description}
+              message={alertt.message}
+              description={alertt.description}
               type="error"
               closable
-              onClose={() => setAlert({ ...alert, visible: false })}
+              onClose={() => setAlert({ ...alertt, visible: false })}
             />
           )}
           {/* Your other component content */}

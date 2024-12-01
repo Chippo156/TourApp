@@ -131,11 +131,9 @@ const TourDetails = () => {
     itineraryRef.current.scrollIntoView({ behavior: "smooth" });
   };
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     setDeparture(value);
   };
   const handleChangePeople = (value) => {
-    console.log(`selected ${value}`);
     setPeople(value);
   };
   const handleGetFavorite = async () => {

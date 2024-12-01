@@ -38,7 +38,6 @@ export default function Deserve() {
     refund,
     extra,
   } = location.state || {};
-  console.log(location.state);
   const [refundCost, setRefundCost] = useState(0);
   const [extraCost, setExtraCost] = useState(0);
   const [total, setTotal] = useState(0);
@@ -47,8 +46,11 @@ export default function Deserve() {
   const [phone, setPhone] = useState("");
   const [bookingResponse, setBookingResponse] = useState(null);
   const user = useSelector((state) => state.user.user);
-  console.log(user);
-
+  const [alertt, setAlertt] = useState({
+    visible: false,
+    message: "",
+    description: "",
+  });
   const currentDate = new Date();
   const refundDate = new Date(currentDate);
   refundDate.setDate(currentDate.getDate() + 7);
@@ -94,7 +96,6 @@ export default function Deserve() {
     try {
       let res = await getRoomById(roomId);
       setRoom(res);
-      console.log(res);
     } catch (error) {
       console.error(error);
       return error;
@@ -131,7 +132,6 @@ export default function Deserve() {
   const [selectedOption, setSelectedOption] = useState("payAtProperty");
 
   const onChange = (e) => {
-    console.log("radio checked", e.target.value);
     setSelectedOption(e.target.value);
   };
   const onChangeFullName = (e) => {
@@ -147,7 +147,11 @@ export default function Deserve() {
   const handleBookNow = async () => {
     try {
       if (!phone) {
-        alert("Please fill in the phone number");
+        window.scrollTo(0, 0);
+        setAlertt({
+          visible: true,
+          message: "Please enter phone number confirm",
+        });
         return;
       }
       const amount = total * 1.1 + refundCost + extraCost;
@@ -168,7 +172,8 @@ export default function Deserve() {
       if (res.code === 200) {
         setBookingResponse(res);
       } else if (res.code === 1007) {
-        setAlert({
+        window.scrollTo(0, 0);
+        setAlertt({
           visible: true,
           message: "Admin not booking",
           description: "Please login with your account user to book",
@@ -195,13 +200,13 @@ export default function Deserve() {
     <div className="container-deserve">
       <div className="main-container">
         <div style={{ margin: "20px 0px" }}>
-          {alert.visible && (
+          {alertt.visible && (
             <Alert
-              message={alert.message}
-              description={alert.description}
+              message={alertt.message}
+              description={alertt.description}
               type="error"
               closable
-              onClose={() => setAlert({ ...alert, visible: false })}
+              onClose={() => setAlert({ ...alertt, visible: false })}
             />
           )}
           {/* Your other component content */}
@@ -673,12 +678,21 @@ export default function Deserve() {
                 </Button>
               </div>
             ) : (
-              <Alert
-                message="Please login to book"
-                type="warning"
-                showIcon
-                style={{ marginTop: 20 }}
-              />
+              <Button
+                type="primary"
+                style={{
+                  width: "100%",
+                  height: 50,
+                  color: "#fff",
+                  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+
+                  fontWeight: "bold",
+                }}
+                block
+                onClick={() => navigate("/login")}
+              >
+                Login to book
+              </Button>
             )}
           </div>
         </div>

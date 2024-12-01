@@ -165,7 +165,15 @@ function FilterPage() {
 
   useEffect(() => {
     handleGetFilterDestination();
-  }, [activeAmenities, priceRange, selectedRating, selectedCategories, numberGuest, selectedSecondLastDay, selectedLastDayOfMonth]);
+  }, [
+    activeAmenities,
+    priceRange,
+    selectedRating,
+    selectedCategories,
+    numberGuest,
+    selectedSecondLastDay,
+    selectedLastDayOfMonth,
+  ]);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
@@ -181,7 +189,7 @@ function FilterPage() {
                 alignItems: "center",
               }}
             >
-              <h2 style={{ margin: 0, padding: 0 }}>Bộ lọc tour</h2>
+              <h2 style={{ margin: 0, padding: 0 }}>Filter tour</h2>
               <Button
                 type="default"
                 icon={<ReloadOutlined />}
@@ -294,7 +302,7 @@ function FilterPage() {
         </Col>
         <Col span={18}>
           <div className="results-section">
-            <h2>Danh sách các tour</h2>
+            <h2>List of tours</h2>
             <Spin spinning={loading} tip="Loading...">
               <List
                 grid={{ gutter: 16, column: 2 }}

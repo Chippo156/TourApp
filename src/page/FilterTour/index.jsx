@@ -156,7 +156,7 @@ function FilterTour() {
                 alignItems: "center",
               }}
             >
-              <h2 style={{ margin: 0, padding: 0 }}>Bộ lọc tour</h2>
+              <h2 style={{ margin: 0, padding: 0 }}>Filter tour</h2>
               <Button
                 type="default"
                 icon={<ReloadOutlined />}
@@ -248,7 +248,7 @@ function FilterTour() {
         </Col>
         <Col span={18}>
           <div className="results-section">
-            <h2>Danh sách các tour</h2>
+            <h2>List of tours</h2>
             <Spin spinning={loading} tip="Loading...">
               <List
                 grid={{ gutter: 16, column: 2 }}

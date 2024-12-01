@@ -5,9 +5,7 @@ const instance = axios.create({
   baseURL: baseURL,
   // withCredentials: true,
 });
-instance.defaults.headers.common = {
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
-};
+
 const NO_RETRY_HEADER = "x-no-retry";
 // const handleRefeshToken = async () => {
 //   let res = await instance.get("/api/v1/auth/refresh");
@@ -19,12 +17,16 @@ const NO_RETRY_HEADER = "x-no-retry";
 
 // Add a request interceptor
 instance.interceptors.request.use(
-  function (config) {
-    // Do something before request is sent
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete config.headers["Authorization"];
+    }
     return config;
   },
-  function (error) {
-    // Do something with request error
+  (error) => {
     return Promise.reject(error);
   }
 );
