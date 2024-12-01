@@ -101,7 +101,7 @@ function FilterTour() {
       param += `&rating=${selectedRating}`;
     }
     if (selectedTourType.length > 0) {
-      param += `&tourTypeId=${selectedTourType.join(",")}`;
+      param += `&tourTypeIds=${selectedTourType.join(",")}`;
     }
     if (activeDuration.length > 0) {
       param += `&duration=${activeDuration.join(",")}`;
