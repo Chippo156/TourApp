@@ -8,7 +8,7 @@ function LayoutAdmin() {
     <div>
       <Header />
       <Admin />
-      <Footer />
+     
     </div>
   );
 }
