@@ -173,24 +173,45 @@ const TourAdmin = () => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        width={800}
       >
         <Form form={form} layout="vertical">
-          {modalType === 'update' && <Form.Item name="id" label="ID"><Input disabled /></Form.Item>}
-          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}><Input /></Form.Item>
-          <Form.Item name="departure" label="Departure" rules={[{ required: true, message: 'Please input the departure!' }]}><Input /></Form.Item>
-          <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}><Input /></Form.Item>
-          <Form.Item name="duration" label="Duration" rules={[{ required: true, message: 'Please input the duration!' }]}><Input /></Form.Item>
-          <Form.Item name="highlight" label="Highlight" rules={[{ required: true, message: 'Please input the highlight!' }]}><Input /></Form.Item>
-          <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}><Input /></Form.Item>
-          <Form.Item name="rating" label="Rating" rules={[{ required: true, message: 'Please input the rating!' }]}><Input /></Form.Item>
-          <Form.Item name="schedule" label="Schedule" rules={[{ required: true, message: 'Please input the schedule!' }]}><Input /></Form.Item>
-          <Form.Item name="tour_type_id" label="Tour Type" rules={[{ required: true, message: 'Please select the tour type!' }]}>
+          {modalType === 'update' && <Form.Item name="id" style={{ width: '100%' }} label="ID"><Input disabled /></Form.Item>}
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="name" label="Name" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the name!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="departure" label="Departure" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the departure!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          
+          <Form.Item name="description" label="Description" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the description!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="duration" label="Duration" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the duration!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="highlight" label="Highlight" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the highlight!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="price" label="Price"  style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the price!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="rating" label="Rating" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the rating!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="schedule" label="Schedule" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the schedule!' }]}><Input /></Form.Item>
+          </div>
+          <div style={{ display: 'flex', width: '100%',  }}>
+          <Form.Item name="tour_type_id" label="Tour Type" style={{ width: '100%' }} rules={[{ required: true, message: 'Please select the tour type!' }]}>
             <Select>
               {tourTypes.map(type => (
                 <Option key={type.id} value={type.id}>{type.name}</Option>
               ))}
             </Select>
           </Form.Item>
+          </div>
+         
         </Form>
       </Modal>
     </>

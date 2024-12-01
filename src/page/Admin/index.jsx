@@ -62,7 +62,7 @@ const Admin = () => {
             },
             {
                 key: '4',
-                label: 'Booking hotel',
+                label: 'Booking destination',
               },
            
           ]}
