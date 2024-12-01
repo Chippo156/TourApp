@@ -43,7 +43,20 @@ const BookingHotelAdmin = () => {
     { title: 'Check-in Date', dataIndex: 'check_in_date' },
     { title: 'Check-out Date', dataIndex: 'check_out_date' },
     { title: 'Booking Status', dataIndex: 'booking_status' },
-    { title: 'Payment Status', dataIndex: 'payment_status' },
+    { 
+      title: 'Payment Status', 
+      dataIndex: 'payment_status',
+      render: (text) => (
+        <span
+          style={{ 
+            color: text === 'pending' ? 'red' : 'green',
+            fontWeight: 'bold',
+          }}
+        >
+          {text}
+        </span>
+      ),
+    },
     { title: 'Payment Method', dataIndex: 'payment_method' },
     { title: 'Payment Date', dataIndex: 'payment_date' },
     { title: 'Full Name', dataIndex: 'full_name' },
