@@ -76,11 +76,7 @@ export let handleVNPay = async (amount, bankCode, orderId) => {
       `/payment/vn-pay?amount=${amount}&bankCode=${bankCode}&orderId=${orderId}`
     );
     if (response.code === "ok") {
-      window
-        .open(response.paymentUrl, "_blank")
-        .catch((err) =>
-          console.error("An error occurred while opening the URL", err)
-        );
+      window.open(response.paymentUrl, "_blank");
     }
 
     return "success";

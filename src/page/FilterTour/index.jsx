@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Row,
   Col,
@@ -43,6 +43,7 @@ function FilterTour() {
     { id: 3, categoryName: "Historical tour" },
     { id: 4, categoryName: "Eco-tour" },
   ];
+  const navigate = useNavigate();
 
   const duration = [
     "2 days 1 night",
@@ -63,8 +64,7 @@ function FilterTour() {
   };
 
   const handleCategoryChange = (id) => {
-    setSelectedTourType([id]
-    );
+    setSelectedTourType([id]);
   };
 
   const handleRatingChange = (rating) => {
@@ -133,6 +133,9 @@ function FilterTour() {
     setItemsPerPage(2); // Reset items per page to default
     setCurrentPage(1);
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     handleGetFilterDestination();
@@ -144,6 +147,9 @@ function FilterTour() {
     currentPage,
     itemsPerPage,
   ]);
+  const handleTourDetails = (id) => {
+    navigate(`/tour-details/${id}`);
+  };
 
   return (
     <div className="container_filter_tour">
@@ -255,7 +261,7 @@ function FilterTour() {
                 grid={{ gutter: 16, column: 2 }}
                 dataSource={filteredResults}
                 renderItem={(item) => (
-                  <List.Item>
+                  <List.Item onClick={() => handleTourDetails(item.id)}>
                     <Card
                       hoverable
                       cover={

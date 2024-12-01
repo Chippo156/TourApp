@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Row,
   Col,
@@ -41,6 +41,11 @@ function FilterPage() {
   const [totalElements, setTotalElements] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [selectedLocation, setSelectedLocation] = useState("");
+  const navigate = useNavigate();
+  const handleDetails = (id) => {
+    navigate(`/destination/${id}`);
+  };
+
   const categories = [
     { id: 1, categoryName: "Villa" },
     { id: 2, categoryName: "Resort" },
@@ -150,9 +155,9 @@ function FilterPage() {
       var res;
       if (value === "Other") {
         if (selectedLocation) {
-          res = await getFilterDestination("Other", param,selectedLocation);
+          res = await getFilterDestination("Other", param, selectedLocation);
         } else {
-          res = await getFilterDestination("Other", param,value);
+          res = await getFilterDestination("Other", param, value);
         }
       } else {
         res = await getFilterDestination(value, param);
@@ -358,7 +363,9 @@ function FilterPage() {
                 dataSource={filteredResults}
                 renderItem={(item) => {
                   return (
-                    <List.Item>
+                    <List.Item
+                      onClick={() => handleDetails(item.destination_id)}
+                    >
                       <Card
                         hoverable
                         cover={
