@@ -14,17 +14,14 @@ import TourDetails from "./page/TourDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
-import { login, logout } from "./redux/UserSlice";
-import TourBooking from "./page/Deserve/tourBooking";
-import Forgot from "./page/Forgot";
-import Payment from "./page/Payment";
+import {login, logout} from "./redux/UserSlice";
+import FilterTour from "./page/FilterTour";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const handleGetUser = async () => {
     let res = await reloadUser(localStorage.getItem("token"));
-    console.log("res", res);
     if (res && res.code === 200) {
       dispatch(login(res.result));
     }
@@ -39,7 +36,7 @@ function App() {
       // element: <Login />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <Home /> },
+        { index: false, path: "/", element: <FilterTour /> },
         {
           index: true,
           path: "/destination/:id",
@@ -87,6 +84,13 @@ function App() {
           element: <Register />,
         },
 
+          element: <TourDetails />
+        },
+        // {
+        //   index: true,
+        //   path: "/user",
+        //   element: <UserDetails />,
+        // },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
