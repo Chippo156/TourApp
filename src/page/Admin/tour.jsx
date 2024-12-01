@@ -17,29 +17,35 @@ const TourAdmin = () => {
   const [currentRecord, setCurrentRecord] = useState(null);
   const [tourTypes, setTourTypes] = useState([]);
 
-  const getdata = async () => {
+  const getData = async () => {
     setLoading(true);
-    const response = await getFilterTour(`&page=${currentPage}&size=${itemsPerPage}`);
-    setData(response.result.tours);
-    setTotalElements(response.result.totalElements); // Assuming response.result.totalElements contains the total number of elements
-    console.log(response.result.tours);
-    setLoading(false);
+    try {
+      const response = await getFilterTour(`&page=${currentPage}&size=${itemsPerPage}`);
+      setData(response.result.tours);
+      setTotalElements(response.result.totalElements);
+    } catch (error) {
+      message.error('Failed to fetch data');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchTourTypes = async () => {
-    const response = await getTourType();
-    if (response.code === 200) {
-      console.log('Tour types:', response);
-      setTourTypes(response.result);
-    } else {
+    try {
+      const response = await getTourType();
+      if (response.code === 200) {
+        setTourTypes(response.result);
+      } else {
+        message.error('Failed to fetch tour types');
+      }
+    } catch (error) {
       message.error('Failed to fetch tour types');
     }
   };
 
   useEffect(() => {
-    getdata();
+    getData();
     fetchTourTypes();
-    console.log('Tour types:', tourTypes);
   }, [currentPage, itemsPerPage]);
 
   const showModal = (type, record = {}) => {
@@ -47,10 +53,10 @@ const TourAdmin = () => {
     setIsModalVisible(true);
     if (type === 'update') {
       form.setFieldsValue(record);
-      setCurrentRecord(record); // Store the current record
+      setCurrentRecord(record);
     } else {
       form.resetFields();
-      setCurrentRecord(null); // Reset the current record
+      setCurrentRecord(null);
     }
   };
 
@@ -59,7 +65,7 @@ const TourAdmin = () => {
       if (modalType === 'create') {
         handleCreate(values);
       } else if (modalType === 'update') {
-        handleUpdate({ ...currentRecord, ...values }); // Include the id in the values
+        handleUpdate({ ...currentRecord, ...values });
       }
       setIsModalVisible(false);
     });
@@ -70,144 +76,96 @@ const TourAdmin = () => {
   };
 
   const handleCreate = async (record) => {
-    console.log('Create', record);
     try {
       const response = await createTour(record);
       if (response.code === 200) {
-        console.log('Create successful');
-        getdata();
+        message.success('Create successful');
+        getData();
       } else {
-        console.log('Failed to create', response);
         message.error('Create failed');
       }
     } catch (error) {
-      console.error('Failed to create', error);
       message.error('Create failed');
     }
   };
 
   const handleUpdate = async (record) => {
-    console.log('Update', record.id);
     try {
       const response = await updateTour(record.id, record);
       if (response.code === 200) {
-        console.log('Update successful');
-        getdata();
+        message.success('Update successful');
+        getData();
       } else {
-        message.error('Failed to update tour');
+        message.error('Update failed');
       }
     } catch (error) {
-      message.error('Failed to update tour');
-      console.error('Update error:', error);
+      message.error('Update failed');
     }
   };
 
   const handleDelete = async (record) => {
-    console.log('Delete', record.id);
     try {
-      const response = await deleteTour(record.id); // Await the deleteTour function
+      const response = await deleteTour(record.id);
       if (response.code === 200) {
-        console.log('Response:', response);
-        console.log('Delete successful');
-        getdata(); // Refresh the data
+        message.success('Delete successful');
+        getData();
       } else {
-        console.log('Failed to delete', response);
         message.error('Delete failed');
       }
     } catch (error) {
-      console.error('Failed to delete', error);
       message.error('Delete failed');
     }
   };
 
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
-  };
-
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      sorter: (a, b) => a.id - b.id,
+    { title: 'ID', dataIndex: 'id', sorter: (a, b) => a.id - b.id },
+    { 
+      title: 'Name', 
+      dataIndex: 'name', 
+      sorter: (a, b) => a.name.length - b.name.length, 
+      render: text => (text.length > 10 ? `${text.substring(0, 10)}...` : text) 
     },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortDirections: ['descend', 'ascend'],
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
-    },
-    {
-      title: 'Departure',
-      dataIndex: 'departure',
-      filters: [
-        {
-          text: 'Hanoi',
-          value: 'Hanoi',
-        },
-        // Add more filters as needed
-      ],
+    { 
+      title: 'Departure', 
+      dataIndex: 'departure', 
+      filters: [{ text: 'Hanoi', value: 'Hanoi' }],
       onFilter: (value, record) => record.departure.indexOf(value) === 0,
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
+      render: text => (text.length > 10 ? `${text.substring(0, 10)}...` : text) 
     },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
-    },
-    {
-      title: 'Duration',
-      dataIndex: 'duration',
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
-    },
-    {
-      title: 'Highlight',
-      dataIndex: 'highlight',
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      sorter: (a, b) => a.price - b.price,
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
-    },
-    {
-      title: 'Rating',
-      dataIndex: 'rating',
-      sorter: (a, b) => a.rating - b.rating,
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
-    },
-    {
-      title: 'Schedule',
-      dataIndex: 'schedule',
-      render: (text) => text.length > 10 ? `${text.substring(0, 10)}...` : text,
-    },
+    { title: 'Description', dataIndex: 'description', render: text => (text.length > 10 ? `${text.substring(0, 10)}...` : text) },
+    { title: 'Duration', dataIndex: 'duration', render: text => (text.length > 10 ? `${text.substring(0, 10)}...` : text) },
+    { title: 'Highlight', dataIndex: 'highlight', render: text => (text.length > 10 ? `${text.substring(0, 10)}...` : text) },
+    { title: 'Price', dataIndex: 'price', sorter: (a, b) => a.price - b.price },
+    { title: 'Rating', dataIndex: 'rating', sorter: (a, b) => a.rating - b.rating },
+    { title: 'Schedule', dataIndex: 'schedule' },
     {
       title: 'Action',
-      dataIndex: 'action',
       render: (_, record) => (
         <Space size="middle">
-         
           <Button type="link" onClick={() => showModal('update', record)}>Update</Button>
-          <Button type="link" onClick={() => handleDelete(record)}>Delete</Button>
+          <Button type="link" danger onClick={() => handleDelete(record)}>Delete</Button>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 
   return (
-    <> 
-        <Button type="primary" onClick={() => showModal('create')}>Create Tour</Button>
+    <>
+      <Button type="primary" onClick={() => showModal('create')}>Create Tour</Button>
       <Table
         columns={columns}
         dataSource={data}
-        onChange={onChange}
         loading={loading}
         pagination={{
           current: currentPage,
           pageSize: itemsPerPage,
           total: totalElements,
-          onChange: (page) => setCurrentPage(page),
+          showSizeChanger: true,
+          pageSizeOptions: ['5', '10', '20', '50'],
+          onChange: (page, pageSize) => {
+            setCurrentPage(page);
+            setItemsPerPage(pageSize);
+          }
         }}
       />
       <Modal
@@ -217,35 +175,15 @@ const TourAdmin = () => {
         onCancel={handleCancel}
       >
         <Form form={form} layout="vertical">
-          {modalType === 'update' && (
-            <Form.Item name="id" label="ID">
-              <Input disabled />
-            </Form.Item>
-          )}
-          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="departure" label="Departure" rules={[{ required: true, message: 'Please input the departure!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="duration" label="Duration" rules={[{ required: true, message: 'Please input the duration!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="highlight" label="Highlight" rules={[{ required: true, message: 'Please input the highlight!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="rating" label="Rating" rules={[{ required: true, message: 'Please input the rating!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="schedule" label="Schedule" rules={[{ required: true, message: 'Please input the schedule!' }]}>
-            <Input />
-          </Form.Item>
+          {modalType === 'update' && <Form.Item name="id" label="ID"><Input disabled /></Form.Item>}
+          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}><Input /></Form.Item>
+          <Form.Item name="departure" label="Departure" rules={[{ required: true, message: 'Please input the departure!' }]}><Input /></Form.Item>
+          <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}><Input /></Form.Item>
+          <Form.Item name="duration" label="Duration" rules={[{ required: true, message: 'Please input the duration!' }]}><Input /></Form.Item>
+          <Form.Item name="highlight" label="Highlight" rules={[{ required: true, message: 'Please input the highlight!' }]}><Input /></Form.Item>
+          <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please input the price!' }]}><Input /></Form.Item>
+          <Form.Item name="rating" label="Rating" rules={[{ required: true, message: 'Please input the rating!' }]}><Input /></Form.Item>
+          <Form.Item name="schedule" label="Schedule" rules={[{ required: true, message: 'Please input the schedule!' }]}><Input /></Form.Item>
           <Form.Item name="tour_type_id" label="Tour Type" rules={[{ required: true, message: 'Please select the tour type!' }]}>
             <Select>
               {tourTypes.map(type => (

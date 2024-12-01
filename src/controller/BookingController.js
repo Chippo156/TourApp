@@ -137,3 +137,33 @@ export let createReview = async (
     return error;
   }
 };
+
+export const getAllBookingTour = async (page,size) => {
+  try {
+    const response = await axios.get(`/bookings/bookingTour?page=${page}&size=${size}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+export const getAllBookingHotel = async (page,size) => {
+  try {
+    const response = await axios.get(`/bookings/bookingDestination?page=${page}&size=${size}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+export const deleteBooking = async (id) => {
+  try {
+    const response = await axios.delete(`/bookings/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+}

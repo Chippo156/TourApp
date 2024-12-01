@@ -8,6 +8,9 @@ import {
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
 import TourAdmin from './tour';
+import BookingtourAdmin from './bookingTour';
+import BookingHotelAdmin from './bookingHotel';
+import HotelAdmin from './hotel';
 
 const { Header, Sider, Content } = Layout;
 
@@ -27,11 +30,11 @@ const Admin = () => {
       case '1':
         return <TourAdmin />;
       case '2':
-        return 'Content for nav 2';
+        return <HotelAdmin />;
       case '3':
-        return 'Content for nav 3';
+        return <BookingtourAdmin/>;
       default:
-        return 'Content for nav 1';
+        return <BookingHotelAdmin/>;
     }
   };
 
@@ -52,23 +55,23 @@ const Admin = () => {
             },
             {
               key: '2',
-              label: 'User',
-            },
-            {
-              key: '3',
-              label: 'Booking',
+              label: 'Destination',
+            }, {
+                key: '3',
+                label: 'Booking tour',
             },
             {
                 key: '4',
-                label: 'Destination',
-            }
+                label: 'Booking hotel',
+              },
+           
           ]}
         />
       </Sider>
       <Layout>
         <Header
           style={{
-            padding: 0,
+            padding: 0, 
             background: colorBgContainer,
           }}
         >
