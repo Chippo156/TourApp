@@ -165,7 +165,15 @@ export default function Deserve() {
         email,
         phone
       );
-      setBookingResponse(res);
+      if (res.code === 200) {
+        setBookingResponse(res);
+      } else if (res.code === 1007) {
+        setAlert({
+          visible: true,
+          message: "Admin not booking",
+          description: "Please login with your account user to book",
+        });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -186,6 +194,18 @@ export default function Deserve() {
   return (
     <div className="container-deserve">
       <div className="main-container">
+        <div style={{ margin: "20px 0px" }}>
+          {alert.visible && (
+            <Alert
+              message={alert.message}
+              description={alert.description}
+              type="error"
+              closable
+              onClose={() => setAlert({ ...alert, visible: false })}
+            />
+          )}
+          {/* Your other component content */}
+        </div>
         <Breadcrumb
           items={[
             {
@@ -630,7 +650,7 @@ export default function Deserve() {
                 </p>
               </div>
             </div>
-            {user && user.user_id ? (
+            {user.role_id ? (
               <div
                 style={{
                   display: "flex",

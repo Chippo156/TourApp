@@ -1,6 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./deserve.scss";
-import { Breadcrumb, Button, Col, Image, Radio, Row, Typography } from "antd";
+import {
+  Alert,
+  Breadcrumb,
+  Button,
+  Col,
+  Image,
+  Radio,
+  Row,
+  Typography,
+} from "antd";
 import { StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import {
@@ -19,6 +28,12 @@ export default function TourBooking() {
   const [selectedOption, setSelectedOption] = useState("payAtProperty");
   const [bookingResponse, setBookingResponse] = useState(null);
   const user = useSelector((state) => state.user.user);
+
+  const [alert, setAlert] = useState({
+    visible: false,
+    message: "",
+    description: "",
+  });
 
   const currentDate = new Date();
   const refundDate = new Date(currentDate);
@@ -116,7 +131,11 @@ export default function TourBooking() {
       if (res.code === 200) {
         setBookingResponse(res);
       } else if (res.code === 1007) {
-        alert("Admin can't book tour");
+        setAlert({
+          visible: true,
+          message: "Admin not booking",
+          description: "Please login with your account user to book",
+        });
       }
     } catch (error) {
       console.error(error);
@@ -142,6 +161,18 @@ export default function TourBooking() {
   return (
     <div className="container-deserve">
       <div className="main-container">
+        <div style={{ margin: "20px 0px" }}>
+          {alert.visible && (
+            <Alert
+              message={alert.message}
+              description={alert.description}
+              type="error"
+              closable
+              onClose={() => setAlert({ ...alert, visible: false })}
+            />
+          )}
+          {/* Your other component content */}
+        </div>
         <Breadcrumb
           items={[
             {
@@ -394,28 +425,53 @@ export default function TourBooking() {
                 </p>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                type="primary"
+            {user.role_id ? (
+              <div
                 style={{
-                  width: "100%",
-                  height: 50,
-                  color: "#fff",
-                  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
-
-                  fontWeight: "bold",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
-                block
-                onClick={handleBookNow}
               >
-                Book now
-              </Button>
-            </div>
+                <Button
+                  type="primary"
+                  style={{
+                    width: "100%",
+                    height: 50,
+                    color: "#fff",
+                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+
+                    fontWeight: "bold",
+                  }}
+                  block
+                  onClick={handleBookNow}
+                >
+                  Book now
+                </Button>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Button
+                  type="primary"
+                  style={{
+                    width: "100%",
+                    height: 50,
+                    color: "#fff",
+                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+
+                    fontWeight: "bold",
+                  }}
+                  block
+                  onClick={() => navigate("/login")}
+                >
+                  Login to book
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

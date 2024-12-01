@@ -1,12 +1,13 @@
 import axios from "axios";
-const baseURL = import.meta.env.VITE_APP_BE_API_URL || "http://localhost:8080/api/v1";
+const baseURL =
+  import.meta.env.VITE_APP_BE_API_URL || "http://localhost:8080/api/v1";
 const instance = axios.create({
   baseURL: baseURL,
   // withCredentials: true,
 });
-// instance.defaults.headers.common = {
-//   Authorization: `Bearer ${localStorage.getItem("token")}`,
-// };
+instance.defaults.headers.common = {
+  Authorization: `Bearer ${localStorage.getItem("token")}`,
+};
 const NO_RETRY_HEADER = "x-no-retry";
 // const handleRefeshToken = async () => {
 //   let res = await instance.get("/api/v1/auth/refresh");
