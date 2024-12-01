@@ -138,9 +138,11 @@ export let createReview = async (
   }
 };
 
-export const getAllBookingTour = async (page,size) => {
+export const getAllBookingTour = async (page, size) => {
   try {
-    const response = await axios.get(`/bookings/bookingTour?page=${page}&size=${size}`);
+    const response = await axios.get(
+      `/bookings/bookingTour?page=${page}&size=${size}`
+    );
     return response;
   } catch (error) {
     console.error(error);
@@ -148,9 +150,11 @@ export const getAllBookingTour = async (page,size) => {
   }
 };
 
-export const getAllBookingHotel = async (page,size) => {
+export const getAllBookingHotel = async (page, size) => {
   try {
-    const response = await axios.get(`/bookings/bookingDestination?page=${page}&size=${size}`);
+    const response = await axios.get(
+      `/bookings/bookingDestination?page=${page}&size=${size}`
+    );
     return response;
   } catch (error) {
     console.error(error);
@@ -166,4 +170,46 @@ export const deleteBooking = async (id) => {
     console.error(error);
     return error;
   }
-}
+};
+export const deleteBookingTour = async (id) => {
+  try {
+    const response = await axios.delete(`/bookings/tour/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+export const getBookingCancel = async (id, page, size) => {
+  try {
+    const response = await axios.get(
+      `/bookings/bookingCancel/${id}?page=${page}&size=${size}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+export const getBookingTourByUserId = async (id, page, size) => {
+  try {
+    const response = await axios.get(
+      `/bookings/userTour/${id}?page=${page}&size=${size}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+export const getBookingHotelByUserId = async (id, page, size) => {
+  try {
+    const response = await axios.get(
+      `/bookings/userDestination/${id}?page=${page}&size=${size}`
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

@@ -159,7 +159,7 @@ export default function Deserve() {
         1,
         desId,
         roomId,
-        "pending",
+        "PENDING",
         selectedOption,
         startDate,
         endDate,

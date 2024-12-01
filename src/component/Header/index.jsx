@@ -80,13 +80,10 @@ const HeaderPage = () => {
         <FaRegUserCircle />
         <span>Thông tin cá nhân</span>
       </NavLink>
-      <div
-        onClick={() => handleNavigation("/profile", "Đơn hàng của tôi")}
-        className="content_item"
-      >
+      <NavLink to="/historyBooking" className="content_item">
         <FaRegCalendarCheck />
         <span>Quản lý đơn hàng</span>
-      </div>
+      </NavLink>
       <button className="btn btn_primary" onClick={handleLogout}>
         Đăng xuất
       </button>
@@ -105,13 +102,10 @@ const HeaderPage = () => {
             <FaRegUserCircle />
             <span>Thông tin cá nhân</span>
           </NavLink>
-          <div
-            onClick={() => handleNavigation("/profile", "Đơn hàng của tôi")}
-            className="content_item"
-          >
+          <NavLink to="/historyBooking" className="content_item">
             <FaRegCalendarCheck />
             <span>Quản lý đơn hàng</span>
-          </div>
+          </NavLink>
           <button className="btn btn_primary" onClick={handleLogout}>
             Đăng xuất
           </button>

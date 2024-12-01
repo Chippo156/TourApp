@@ -86,12 +86,12 @@ function App() {
           path: "/register",
           element: <Register />,
         },
+        {
+          index: true,
+          path: "/historyBooking",
+          element: <BookingHistory />,
+        },
 
-        // { path: "/product/:id", element: <Product /> },
-        // { path: "/profile", element: <Profile /> },
-        // { path: "/category/:id", element: <CategoryPage /> },
-        // { path: "/cart", element: <CartPage /> },
-        // { path: "/cartManager", element: <CartManager /> },\
         { path: "/destination/filter/:value", element: <FilterPage /> },
       ],
     },
