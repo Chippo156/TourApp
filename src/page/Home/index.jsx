@@ -119,11 +119,11 @@ function Home() {
     if (res && res.code === 200) {
       setItem(res.result.tours);
     }
-  }
+  };
 
   const handleTourDetails = (tour_id) => {
     navigate(`/tour-details/${tour_id}`);
-  }
+  };
 
   const handleCityDetail = (value) => {
     navigate(`/destination/filter/${value}`);
@@ -265,8 +265,8 @@ function Home() {
             </Row>
             <div className="margin-top-bottom">
               <div className="flex-space-between">
-                <Title level={2} className="title-white">
-                  Travelers favorite choice
+                <Title level={2} className="">
+                  Last weekend's top destinations
                 </Title>
               </div>
               <List
@@ -296,7 +296,7 @@ function Home() {
                             </Text>
                             <div className="flex-align-center">
                               <Text className="rating">
-                                {item.average_rating}
+                                {item.average_rating}⭐
                               </Text>
                               <Text className="reviews">
                                 ({item.count_review.toFixed(1)} reviews)

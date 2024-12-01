@@ -29,3 +29,12 @@ export const getImageDestination = async (id) => {
     return error;
   }
 };
+export const getFilterTour = async (param) => {
+  try {
+    const res = await axios(`/tours/filter?${param}`);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}

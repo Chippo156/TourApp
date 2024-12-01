@@ -8,25 +8,27 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
 import FilterPage from "./page/Destination";
 import TravelDetail from "./page/Hotel_Details";
-import Deserve from "./page/Deserve";
+import Deserve from "./page/Deserve/hotelBooking";
 import UserDetails from "./page/UserInformation";
 import TourDetails from "./page/TourDetails";
 import BookingHistory from "./page/BookingHistory";
 import { useDispatch, useSelector } from "react-redux";
 import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
-import {login, logout} from "./redux/UserSlice";
+import { login, logout } from "./redux/UserSlice";
+import FilterTour from "./page/FilterTour";
+import TourBooking from "./page/Deserve/tourBooking";
+import ResetWithEmail from "./page/Forgot";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const handleGetUser = async () => {
     let res = await reloadUser(localStorage.getItem("token"));
-    console.log("res", res);
     if (res && res.code === 200) {
       dispatch(login(res.result));
     }
-  }
+  };
   useEffect(() => {
     handleGetUser();
   }, []);
@@ -51,18 +53,40 @@ function App() {
         {
           index: true,
           path: "/tour-details/:id",
-          element: <TourDetails />
+          element: <TourDetails />,
+        },
+        {
+          index: true,
+          path: "/profile",
+          element: <UserDetails />,
+        },
+        {
+          index: true,
+          path: "/forgot",
+          element: <ResetWithEmail />,
+        },
+
+        {
+          index: true,
+          path: "/bookingTour",
+          element: <TourBooking />,
         },
         {
           index: true,
           path: "/booking-history",
-          element: <BookingHistory />
+          element: <Register />,
         },
-        // {
-        //   index: true,
-        //   path: "/user",
-        //   element: <UserDetails />,
-        // },
+        {
+          index: true,
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          index: true,
+          path: "/register",
+          element: <Register />,
+        },
+
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },

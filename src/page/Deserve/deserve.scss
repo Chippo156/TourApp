@@ -6,11 +6,12 @@ $text-muted: #ced4da;
 $text-dark: #6c757d;
 
 .container-deserve {
-  max-width: 1200px;
-  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 50px;
+
   .main-container {
-    display: flex;
-    margin-bottom: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 }
 
@@ -119,14 +120,15 @@ $text-dark: #6c757d;
 }
 
 .price-details-container {
-  background-color: #adc7e0; // Light background for better readability
+  box-shadow: "0 4px 15px rgba(0, 0, 0, 0.2)";
+  background-color: #248ff2; // Light background for better readability
   border-radius: 8px;
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Subtle shadow for a modern look
-  color: #000;
+  color: #fff;
 }
 
 .price-detail {
+  color: #fff;
   font-weight: 500;
   font-size: 20px;
   margin: 10px 0; // Space between the rows
@@ -136,5 +138,5 @@ $text-dark: #6c757d;
 
 .price-label {
   font-weight: bold;
-  color: #555; // Slightly darker text for labels
+  color: #fff; // Slightly darker text for labels
 }

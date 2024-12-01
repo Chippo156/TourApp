@@ -1,43 +1,102 @@
-.container {
+.container_tour {
   margin: auto;
   margin-top: 100px;
   margin-bottom: 30px;
-    width: 80%;
-    .main-container {
-      max-width: 1200px;
-      .title {
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 20px;
-      }
-      .location {
-        font-size: 18px;
-        font-weight: 400;
-        margin-bottom: 20px;
-      }
+  width: 80%;
+  .main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .location {
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 20px;
     }
   }
+}
+.text {
+  font-size: 20px;
+}
 
-  .text{
-    font-size: 20px;
-  }
+.button {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  border-radius: 8px;
+  font-size: 22px; /* Increased from 20px to 22px */
+  line-height: 22px; /* Increased from 20px to 22px */
+  min-width: 72px;
+  padding: 7px 12px;
+  color: #fff;
+  background: #e9680c;
+  font-weight: bold;
+  min-width: 320px;
+  width: 30%;
+}
+.button-check {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  border-radius: 8px;
+  font-size: 22px; /* Increased from 20px to 22px */
+  line-height: 22px; /* Increased from 20px to 22px */
+  min-width: 72px;
+  padding: 7px 12px;
+  color: #fff;
+  background: #1890ff;
+  font-weight: bold;
+  min-width: 320px;
+  width: 30%;
+}
+.title_card {
+  font-size: 20px;
+  line-height: 30px;
+  height: 90px;
+  font-weight: bold;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .button {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 45px;
-    border-radius: 8px;
-    font-size: 22px; /* Increased from 20px to 22px */
-    line-height: 22px; /* Increased from 20px to 22px */
-    min-width: 72px;
-    padding: 7px 12px;
-    color: #fff;
-    background: #e9680c;
-    font-weight: bold;
-    min-width: 320px;
-    width: 30%;
-  }
+.duration_card {
+  font-size: 1rem;
+}
 
-  
+.highlight {
+  font-size: 1rem;
+  color: #52c41a;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.price {
+  color: #ff4d4f;
+  font-size: 1rem;
+}
+
+.duration,
+.departure {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
