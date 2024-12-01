@@ -25,8 +25,8 @@ import {
 } from "react-icons/fa";
 import "./header.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser, } from "../../controller/loginController";
-import {login, logout} from "../../redux/UserSlice";
+import { logoutUser } from "../../controller/loginController";
+import { login, logout } from "../../redux/UserSlice";
 import { GrUserManager } from "react-icons/gr";
 
 const menu = (
@@ -43,13 +43,13 @@ const HeaderPage = () => {
   const handleMenuClick = () => {
     setDrawerVisible(true);
   };
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     let res = await logoutUser(localStorage.getItem("token"));
-    if(res.code === 200){
+    if (res.code === 200) {
       message.success("Đăng xuất thành công");
       dispatch(logout());
       navigate("/");
-    }else{
+    } else {
       message.error("Đăng xuất thất bại");
     }
   };
@@ -119,9 +119,17 @@ const HeaderPage = () => {
     }
   }, [user]);
   const title = (
-    <div className="title" style={{display:"flex",alignItems:"center",width:"100%"}}>
-      <div className="title_info" style={{display:"flex",alignItems:"center",width:"100%"}}>
-        <p className="title_name" style={{fontSize:10}}>{user.user?.lastName}</p>
+    <div
+      className="title"
+      style={{ display: "flex", alignItems: "center", width: "100%" }}
+    >
+      <div
+        className="title_info"
+        style={{ display: "flex", alignItems: "center", width: "100%" }}
+      >
+        <p className="title_name" style={{ fontSize: 10 }}>
+          {user.user?.lastName}
+        </p>
         <p className="title_email">{user.user?.email}</p>
       </div>
     </div>
@@ -151,7 +159,12 @@ const HeaderPage = () => {
           </Col>
           <Col span={4} className="" offset={2}>
             {isAuth ? (
-              <Popover defaultOpen={true} content={content} trigger="hover" title={title}>
+              <Popover
+                defaultOpen={true}
+                content={content}
+                trigger="hover"
+                title={title}
+              >
                 <Space className="header_right_space">
                   {user?.isAuth ? (
                     <p className="text">Xin chào,{user.user?.username}</p>

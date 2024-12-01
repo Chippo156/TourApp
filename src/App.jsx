@@ -57,18 +57,18 @@ function App() {
         },
         {
           index: true,
-          path: "/user",
-          element: <UserDetails />,          
+          path: "/profile",
+          element: <UserDetails />,
         },
         {
           index: true,
           path: "/forgot",
-          element: <Forgot/>,
+          element: <Forgot />,
         },
         {
           index: true,
           path: "/payment/:id",
-          element: <Payment/>,
+          element: <Payment />,
         },
 
         {

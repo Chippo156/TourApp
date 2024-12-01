@@ -1,11 +1,20 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
-    getTourById,
-    getTourImages,
-    getListByTourId
-  } from '../../controller/tourDetailsController';
-import { Navigate, useParams } from 'react-router-dom';
-import { Button, Card, Carousel, Image, Typography, Collapse, Modal, Form } from 'antd';
+  getTourById,
+  getTourImages,
+  getListByTourId,
+} from "../../controller/tourDetailsController";
+import { Navigate, useParams } from "react-router-dom";
+import {
+  Button,
+  Card,
+  Carousel,
+  Image,
+  Typography,
+  Collapse,
+  Modal,
+  Form,
+} from "antd";
 function PackageOptions() {
   const [tourDate, setTourDate] = useState("30 Nov 2024");
   const [departingFrom, setDepartingFrom] = useState("Ho Chi Minh City Center");
@@ -13,28 +22,28 @@ function PackageOptions() {
   const [guideOption, setGuideOption] = useState("English Guide");
   const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
-  const [tour, setTour] = useState({})
-  const [tourImages, setTourImages] = useState([])
-  const [itinerary, setItinerary] = useState([])
+  const [tour, setTour] = useState({});
+  const [tourImages, setTourImages] = useState([]);
+  const [itinerary, setItinerary] = useState([]);
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const tour_id = useParams().id;
   const fetchTour = async () => {
-    const response = await getTourById(tour_id)
-    setTour(response.result)
-  }
+    const response = await getTourById(tour_id);
+    setTour(response.result);
+  };
   const handlePayment = () => {
     alert(`PaymentComplete!`);
   };
 
   const fetchTourImages = async () => {
-    const response = await getTourImages(tour_id)
-    setTourImages(response)
-  }
+    const response = await getTourImages(tour_id);
+    setTourImages(response);
+  };
 
   const fetchItinerary = async () => {
-    const response = await getListByTourId(tour_id)
-    setItinerary(response)
-  }
+    const response = await getListByTourId(tour_id);
+    setItinerary(response);
+  };
 
   const handleOptionChange = (setter, value) => {
     setter(value);
@@ -48,26 +57,30 @@ function PackageOptions() {
     if (count > 0) setter(count - 1);
   };
   useEffect(() => {
-    fetchTour()
-    fetchTourImages()
-    fetchItinerary()
-  }, [])
+    fetchTour();
+    fetchTourImages();
+    fetchItinerary();
+  }, []);
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Package options</h2>
       <div style={styles.optionsContainer}>
-        <h4>{tour.name}</h4>      
+        <h4>{tour.name}</h4>
         <p>Tour date</p>
         <div style={styles.row}>
           <button style={styles.dateButton}>{tour.start_date}</button>
         </div>
 
-        <div style={styles.row}>
-        </div>
-        
+        <div style={styles.row}></div>
+
         <h5>Guide options</h5>
         <div style={styles.row}>
-          {["English Guide", "Japanese Guide", "Chinese Guide", "Korean Guide"].map((guide) => (
+          {[
+            "English Guide",
+            "Japanese Guide",
+            "Chinese Guide",
+            "Korean Guide",
+          ].map((guide) => (
             <button
               key={guide}
               style={
@@ -81,11 +94,7 @@ function PackageOptions() {
         </div>
         <h5>Payment Method</h5>
         <div style={styles.row}>
-          {[
-            "Visa Card",
-            "Master Card",
-            "Momo",
-          ].map((type) => (
+          {["Visa Card", "Master Card", "Momo"].map((type) => (
             <button
               key={type}
               style={tourType === type ? styles.selectedButton : styles.button}
@@ -95,12 +104,11 @@ function PackageOptions() {
             </button>
           ))}
         </div>
-        <div style={styles.quantityRow}>
-        </div>
+        <div style={styles.quantityRow}></div>
 
         <h4>Total:{tour.price} VND</h4>
         <br></br>
-        <h5>Contact Phone Number: 0999999999 - MR Hau</h5>   
+        <h5>Contact Phone Number: 0999999999 - MR Hau</h5>
         <br></br>
         <div style={styles.row}>
           <button style={styles.bookNowButton}>Book now</button>
