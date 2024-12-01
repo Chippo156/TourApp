@@ -40,15 +40,42 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UserRequest userRequest) {
-        if(userRepository.existsByUsername(userRequest.getUsername())){
-            User user = userRepository.findByUsername(userRequest.getUsername()).orElseThrow(()->new RuntimeException("User not found"));
-            user.setUsername(userRequest.getUsername());
-            user.setPhone(userRequest.getPhone());
-            user.setEmail(userRequest.getEmail());
-            user.setPassword(userRequest.getPassword());
+    public User updateUser(Long id,UserRequest userRequest) {
+        try{
+
+            User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+            if(userRequest.getUsername()!=null){
+                user.setUsername(userRequest.getUsername());
+            }
+            if(userRequest.getEmail()!=null){
+                user.setEmail(userRequest.getEmail());
+            }
+            if(userRequest.getFirstName()!=null){
+                user.setFirstName(userRequest.getFirstName());
+            }
+            if(userRequest.getLastName()!=null){
+                user.setLastName(userRequest.getLastName());
+            }
+            if(userRequest.getPhone()!=null){
+                user.setPhone(userRequest.getPhone());
+            }
+            if(userRequest.getAddress()!=null){
+                user.setAddress(userRequest.getAddress());
+            }
+            if(userRequest.getDob()!=null){
+                user.setDob(userRequest.getDob());
+            }
+            if(userRequest.getSex()!=null){
+                user.setSex(userRequest.getSex());
+            }
+            if(userRequest.getPassword()!=null){
+                user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            }
+            if(userRequest.getInformationAgent()!=null){
+                user.setInformationAgent(userRequest.getInformationAgent());
+            }
             return userRepository.save(user);
-        }else{
+        }catch (Exception e) {
             throw new RuntimeException("User not found");
         }
 

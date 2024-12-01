@@ -1,10 +1,7 @@
 package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.request.UserRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
 import org.tour.quanlytour.dtos.response.UserResponse;
@@ -26,4 +23,13 @@ public class UserController {
             return new ApiResponse<>(400,ex.getMessage(),null);
         }
     }
+    @PutMapping("/{id}")
+    public ApiResponse<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest){
+        try{
+            return new ApiResponse<>(200,"success",mapper.toUserResponse(userService.updateUser(id,userRequest)));
+        }catch (Exception ex){
+            return new ApiResponse<>(400,ex.getMessage(),null);
+        }
+    }
+
 }
