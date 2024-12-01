@@ -22,6 +22,7 @@ const Login = () => {
   };
   const handleLogin = async () => {
     let res = await loginUser(username, password);
+    console.log(res);
     if (res && res.code === 1000) {
       // openNotification('topRight')
       localStorage.setItem("token", res.result.token);

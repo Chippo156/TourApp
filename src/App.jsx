@@ -86,12 +86,11 @@ function App() {
           path: "/register",
           element: <Register />,
         },
-
-        // { path: "/product/:id", element: <Product /> },
-        // { path: "/profile", element: <Profile /> },
-        // { path: "/category/:id", element: <CategoryPage /> },
-        // { path: "/cart", element: <CartPage /> },
-        // { path: "/cartManager", element: <CartManager /> },\
+        {
+          index: true,
+          path: "/filterTour",
+          element: <FilterTour />,
+        },
         { path: "/destination/filter/:value", element: <FilterPage /> },
       ],
     },
@@ -108,10 +107,6 @@ function App() {
     //   path: "/tour-details",
     //   element: <TourDetails />
     // },
-    {
-      path: "/home",
-      element: <Home />,
-    },
     {
       path: "/admin",
       element: <LayoutAdmin />,

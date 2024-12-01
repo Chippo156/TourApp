@@ -1,10 +1,15 @@
 import axios from "../until/customize-axios";
 
-export const getFilterDestination = async (city, param) => {
+export const getFilterDestination = async (city, param,location) => {
   try {
     if (city === "Other") {
       if (param) {
-        const res = await axios(`/destinations/filter?${param}`);
+        let res;
+        if(location){
+          res = await axios(`/destinations/filter?location=${location}${param ? `${param}` : ""}`);
+        }else{
+          res = await axios(`/destinations/filter?${param}`);
+        }
         return res;
       } else {
         const res = await axios(`/destinations/filter?page=1&size=10`);

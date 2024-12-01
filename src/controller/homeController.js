@@ -9,9 +9,9 @@ export const handleGetDestination = async () => {
     return error;
   }
 };
-export const handleGetFavoriteDestination = async () => {
+export const handleGetFavoriteDestination = async (itemPerpageTour) => {
   try {
-    const response = await axios.get(`/tours?page=1&size=10`);
+    const response = await axios.get(`/tours?page=1&size=${itemPerpageTour}`);
     return response;
   } catch (error) {
     console.error(error);

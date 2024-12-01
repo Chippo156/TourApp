@@ -1,4 +1,4 @@
-.container_filter {
+.container_filter_tour {
   max-width: 1200px;
   margin: 0 auto;
   padding-top: 80px;
@@ -109,4 +109,50 @@
     margin-top: 20px;
     text-align: center;
   }
+}
+.ant-card-meta-title{
+  min-height: 60px;
+
+}
+.card-meta-title {
+  font-size: 20px;
+  font-weight: bold;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 24px;
+  color: #333;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.card-meta-departure,
+.card-meta-schedule,
+.card-meta-price,
+.card-meta-duration {
+  font-size: 16px;
+  color: #555;
+}
+
+.card-meta-departure,
+.card-meta-schedule {
+  padding-right: 10px;
+}
+
+.card-meta-price {
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.card-meta-duration {
+  color: #3498db;
 }

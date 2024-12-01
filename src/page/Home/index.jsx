@@ -9,6 +9,7 @@ import {
   Button,
   List,
   Pagination,
+  Spin,
 } from "antd";
 import {
   SmileOutlined,
@@ -38,6 +39,9 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
   const [items, setItem] = useState([]);
+  const [itemPerpageTour, setItemPerpageTour] = useState(4);
+  const [loading, setLoading] = useState(true); // Add loading state
+
   const benefits = [
     {
       icon: <SmileOutlined style={{ fontSize: "24px", color: "#ff8a65" }} />,
@@ -113,9 +117,11 @@ function Home() {
 
       setDataLastWeekend(res.result.destinations);
     }
+    setLoading(false); // Set loading to false after data is fetched
   };
+
   const handleGetFavorite = async () => {
-    let res = await handleGetFavoriteDestination();
+    let res = await handleGetFavoriteDestination(itemPerpageTour);
     if (res && res.code === 200) {
       setItem(res.result.tours);
     }
@@ -136,8 +142,10 @@ function Home() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const handleExploreClick = () => {
-    navigate("/filter", { state: { value: "trending" } });
+
+  const handleSeeMore = () => {
+    navigate("/filterTour");
+
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -147,181 +155,184 @@ function Home() {
     handleGetData();
     handleGetFavorite();
   }, []);
+
   return (
-    <div className="home-container">
-      <Carousel arrows infinite={false} draggable={true} autoplay>
-        <div>
-          <Image preview={false} style={{ width: "100%" }} src={carousel1} />
-        </div>
-        <div>
-          <Image preview={false} style={{ width: "100%" }} src={carousel2} />
-        </div>
-      </Carousel>
-      <div className="home-main-container">
-        <div style={{ padding: "20px" }}>
-          <Title level={2}>Why choose Klook</Title>
-          <Row gutter={[16, 16]}>
-            {benefits.map((benefit, index) => (
-              <Col key={index} xs={24} sm={12} lg={6}>
-                <Card bordered={false}>
-                  {benefit.icon}
-                  <Title level={4}>{benefit.title}</Title>
-                  <Text style={{ fontSize: 16, height: 60 }}>
-                    {benefit.description}
-                  </Text>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-
-          <Title level={2} style={{ marginTop: "40px" }}>
-            Travelers favorite choice
-          </Title>
-          <Row gutter={[16, 16]}>
-            {items.map((item, index) => (
-              <Col key={index} span={6}>
-                <Card
-                  hoverable
-                  cover={
-                    <Image
-                      src={item.image_url}
-                      alt={item.name}
-                      style={{
-                        height: "200px",
-                        width: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  }
-                  onClick={() => handleTourDetails(item.id)}
-                >
-                  <div>
-                    <Text className="title_card">{item.name}</Text>
-                  </div>
-                  <div className="info-row">
-                    <Text className="duration_card">{item.duration}</Text>
-                    <Text className="departure_card">{item.departure}</Text>
-                  </div>
-                  <div className="info-row">
-                    <Text className="price" style={{ color: "#ff4d4f" }}>
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(item.price)}
-                    </Text>
-                    <Text className="rating">{item.rating}⭐</Text>
-                  </div>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: "40px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Button type="primary" className="button">
-              See more
-            </Button>
+    <Spin spinning={loading}> {/* Wrap content with Spin component */}
+      <div className="home-container">
+        <Carousel arrows infinite={false} draggable={true} autoplay>
+          <div>
+            <Image preview={false} style={{ width: "100%" }} src={carousel1} />
           </div>
-          <div className="padding-container">
-            <Title level={2} className="title-black">
-              Explore stays in trending destinations
+          <div>
+            <Image preview={false} style={{ width: "100%" }} src={carousel2} />
+          </div>
+        </Carousel>
+        <div className="home-main-container">
+          <div style={{ padding: "20px" }}>
+            <Title level={2}>Why choose Klook</Title>
+            <Row gutter={[16, 16]}>
+              {benefits.map((benefit, index) => (
+                <Col key={index} xs={24} sm={12} lg={6}>
+                  <Card bordered={false}>
+                    {benefit.icon}
+                    <Title level={4}>{benefit.title}</Title>
+                    <Text style={{ fontSize: 16, height: 60 }}>
+                      {benefit.description}
+                    </Text>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+
+            <Title level={2} style={{ marginTop: "40px" }}>
+              Travelers favorite choice
             </Title>
             <Row gutter={[16, 16]}>
-              {data.map((item, index) => (
+              {items.map((item, index) => (
                 <Col key={index} span={6}>
                   <Card
                     hoverable
                     cover={
                       <Image
-                        preview={false}
-                        src={item.uri}
-                        alt={item.city}
-                        className="image-cover"
-                        height={200}
+                        src={item.image_url}
+                        alt={item.name}
+                        style={{
+                          height: "200px",
+                          width: "100%",
+                          objectFit: "cover",
+                        }}
                       />
                     }
-                    onClick={() => handleCityDetail(item.value)}
+                    onClick={() => handleTourDetails(item.id)}
                   >
-                    <Card.Meta
-                      title={
-                        <Text className="card-meta-title">{item.city}</Text>
-                      }
-                      description={
-                        <Text className="card-meta-description">
-                          {item.country}
-                        </Text>
-                      }
-                    />
+                    <div>
+                      <Text className="title_card">{item.name}</Text>
+                    </div>
+                    <div className="info-row">
+                      <Text className="duration_card">{item.duration}</Text>
+                      <Text className="departure_card">{item.departure}</Text>
+                    </div>
+                    <div className="info-row">
+                      <Text className="price" style={{ color: "#ff4d4f" }}>
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(item.price)}
+                      </Text>
+                      <Text className="rating">{item.rating}⭐</Text>
+                    </div>
                   </Card>
                 </Col>
               ))}
             </Row>
-            <div className="margin-top-bottom">
-              <div className="flex-space-between">
-                <Title level={2} className="">
-                  Last weekend's top destinations
-                </Title>
-              </div>
-              <List
-                grid={{ gutter: 16, column: 4 }}
-                dataSource={currentItems}
-                renderItem={(item) => (
-                  <List.Item>
+
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Button type="primary" className="button" onClick={handleSeeMore}>
+                See more
+              </Button>
+            </div>
+            <div className="padding-container">
+              <Title level={2} className="title-black">
+                Explore stays in trending destinations
+              </Title>
+              <Row gutter={[16, 16]}>
+                {data.map((item, index) => (
+                  <Col key={index} span={6}>
                     <Card
                       hoverable
                       cover={
                         <Image
-                          src={item.image_url}
-                          alt={item.name}
-                          style={{ height: 200 }}
+                          preview={false}
+                          src={item.uri}
+                          alt={item.city}
+                          className="image-cover"
+                          height={200}
                         />
                       }
-                      onClick={() => handleDetails(item.destination_id)}
+                      onClick={() => handleCityDetail(item.value)}
                     >
                       <Card.Meta
                         title={
-                          <Text className="card-meta-title">{item.name}</Text>
+                          <Text className="card-meta-title">{item.city}</Text>
                         }
                         description={
-                          <>
-                            <Text className="card-meta-description">
-                              {item.description}
-                            </Text>
-                            <div className="flex-align-center">
-                              <Text className="rating">
-                                {item.average_rating}⭐
-                              </Text>
-                              <Text className="reviews">
-                                ({item.count_review.toFixed(1)} reviews)
-                              </Text>
-                            </div>
-                          </>
+                          <Text className="card-meta-description">
+                            {item.country}
+                          </Text>
                         }
                       />
                     </Card>
-                  </List.Item>
-                )}
-              />
-              <div className="centered-container">
-                <Pagination
-                  current={currentPage}
-                  pageSize={itemsPerPage}
-                  total={dataLastWeekend.length}
-                  onChange={handlePageChange}
+                  </Col>
+                ))}
+              </Row>
+              <div className="margin-top-bottom">
+                <div className="flex-space-between">
+                  <Title level={2} className="">
+                    Last weekend's top destinations
+                  </Title>
+                </div>
+                <List
+                  grid={{ gutter: 16, column: 4 }}
+                  dataSource={currentItems}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <Card
+                        hoverable
+                        cover={
+                          <Image
+                            src={item.image_url}
+                            alt={item.name}
+                            style={{ height: 200 }}
+                          />
+                        }
+                        onClick={() => handleDetails(item.destination_id)}
+                      >
+                        <Card.Meta
+                          title={
+                            <Text className="card-meta-title">{item.name}</Text>
+                          }
+                          description={
+                            <>
+                              <Text className="card-meta-description">
+                                {item.description}
+                              </Text>
+                              <div className="flex-align-center">
+                                <Text className="rating">
+                                  {item.average_rating}⭐
+                                </Text>
+                                <Text className="reviews">
+                                  ({item.count_review.toFixed(1)} reviews)
+                                </Text>
+                              </div>
+                            </>
+                          }
+                        />
+                      </Card>
+                    </List.Item>
+                  )}
                 />
+                <div className="centered-container">
+                  <Pagination
+                    current={currentPage}
+                    pageSize={itemsPerPage}
+                    total={dataLastWeekend.length}
+                    onChange={handlePageChange}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Spin>
   );
 }
 

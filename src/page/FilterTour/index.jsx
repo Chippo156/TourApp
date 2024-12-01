@@ -22,7 +22,7 @@ import {
   getFilterTour,
 } from "../../controller/filterController";
 import { ReloadOutlined } from "@ant-design/icons";
-
+import { Rate } from "antd";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -36,7 +36,7 @@ function FilterTour() {
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(2);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const tours_type = [
     { id: 1, categoryName: "Cultural tour" },
     { id: 2, categoryName: "Sightseeing tour" },
@@ -63,8 +63,7 @@ function FilterTour() {
   };
 
   const handleCategoryChange = (id) => {
-    setSelectedTourType((prev) =>
-      prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]
+    setSelectedTourType([id]
     );
   };
 
@@ -131,6 +130,8 @@ function FilterTour() {
     setSelectedRating(null);
     setActiveDuration([]);
     handleGetFilterDestination();
+    setItemsPerPage(2); // Reset items per page to default
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -145,7 +146,7 @@ function FilterTour() {
   ]);
 
   return (
-    <div className="container_filter">
+    <div className="container_filter_tour">
       <Row gutter={16}>
         <Col span={6}>
           <div className="filter-section">
@@ -271,17 +272,25 @@ function FilterTour() {
                         }
                         description={
                           <>
-                            <Text className="card-meta-description">
-                              {item.description}
-                            </Text>
                             <div className="flex-align-center">
-                              <Text className="rating">
-                                {item.average_rating}
+                              <Rate disabled allowHalf value={item.rating} />;
+                            </div>
+                            <div className="flex-row">
+                              <Text className="card-meta-departure">
+                                Departure: {item.departure}
+                              </Text>
+                              <Text className="card-meta-schedule">
+                                Schedule: {item.schedule}
                               </Text>
                             </div>
-                            <Text className="card-meta-location">
-                              {item.location}
-                            </Text>
+                            <div className="flex-row">
+                              <Text className="card-meta-price">
+                                Price: {formatPriceVND(item.price)} VND
+                              </Text>
+                              <Text className="card-meta-duration">
+                                Duration: {item.duration}
+                              </Text>
+                            </div>
                           </>
                         }
                       />
