@@ -174,7 +174,6 @@ const TourDetails = () => {
     navigate(`/tour-details/${tour_id}`);
   };
   return (
-<<<<<<< HEAD
     <div className='container_tour'>
       <div>
         <Title level={3}>{tour.name}</Title>
@@ -229,10 +228,6 @@ const TourDetails = () => {
         </Card>
       </div>
       <div style={{ marginTop: 70 }}>
-=======
-    <div className="container-tour">
-      <div className="main-container">
->>>>>>> 2e2c11662a7f2dc2d7a3f75d950dc213e31af964
         <div>
           <Title level={2}>{tour.name}</Title>
         </div>

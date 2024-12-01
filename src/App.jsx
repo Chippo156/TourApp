@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
 import {login, logout} from "./redux/UserSlice";
+import FilterTour from "./page/FilterTour";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
