@@ -74,10 +74,10 @@ function App() {
       path: "register",
       element: <Register />,
     },
-    {
-      path: "/tour-details",
-      element: <TourDetails />
-    },
+    // {
+    //   path: "/tour-details",
+    //   element: <TourDetails />
+    // },
     {
       path: "/home",
       element: <Home />,
