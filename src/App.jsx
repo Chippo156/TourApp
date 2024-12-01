@@ -11,6 +11,7 @@ import TravelDetail from "./page/Hotel_Details";
 import Deserve from "./page/Deserve";
 import UserDetails from "./page/UserInformation";
 import TourDetails from "./page/TourDetails";
+import BookingHistory from "./page/BookingHistory";
 import { useDispatch, useSelector } from "react-redux";
 import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
@@ -51,6 +52,11 @@ function App() {
           index: true,
           path: "/tour-details/:id",
           element: <TourDetails />
+        },
+        {
+          index: true,
+          path: "/booking-history",
+          element: <BookingHistory />
         },
         // {
         //   index: true,

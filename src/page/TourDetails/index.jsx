@@ -8,6 +8,7 @@ import {
 import { ArrowRightOutlined, CalendarOutlined, ClockCircleOutlined, StarFilled, StarOutlined, StarTwoTone } from "@ant-design/icons";
 import './tourdetails.scss'
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const { Title, Text } = Typography
 const { Panel } = Collapse;
@@ -17,6 +18,8 @@ const TourDetails = () => {
   const [tourImages, setTourImages] = useState([])
   const [itinerary, setItinerary] = useState([])
   // const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const isAuth = useSelector((state) => state.user.isAuth);
 
   const tour_id = useParams().id;
 
@@ -72,6 +75,7 @@ const TourDetails = () => {
     fetchTour()
     fetchTourImages()
     fetchItinerary()
+    console.log(isAuth);
   }, [])
 
   return (
