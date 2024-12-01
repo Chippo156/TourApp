@@ -13,6 +13,7 @@ import {
   Card,
   Image,
   Typography,
+  Rate,
 } from "antd";
 import { getFullAmenities } from "../../controller/DetailsController";
 import "./destination.scss";
@@ -33,24 +34,33 @@ function FilterPage() {
   const [numberGuest, setNumberGuest] = useState(1);
   const [selectedSecondLastDay, setSelectedSecondLastDay] = useState(null);
   const [selectedLastDayOfMonth, setSelectedLastDayOfMonth] = useState(null);
-  const [city, setCity] = useState(value || "Hồ Chí Minh");
+  const [city, setCity] = useState("");
   const [selectAllAmenities, setSelectAllAmenities] = useState(false);
   const [loading, setLoading] = useState(false);
-  const itemsPerPage = 10;
-
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [selectedLocation, setSelectedLocation] = useState("");
   const categories = [
     { id: 1, categoryName: "Villa" },
     { id: 2, categoryName: "Resort" },
     { id: 3, categoryName: "Hotel" },
     { id: 4, categoryName: "Apartment" },
   ];
-
-  useEffect(() => {
-    console.log(value);
-    // Fetch amenities/services from API
-    // setAmenities(fetchedAmenities);
-  }, [value]);
-
+  const cityData = [
+    {
+      city: "Hồ Chí Minh",
+      value: "Hồ Chí Minh",
+    },
+    {
+      city: "Hà Nội",
+      value: "Hanoi",
+    },
+    {
+      city: "Đà Nẵng",
+      value: "Da nang",
+    },
+  ];
   const handlePriceChange = (value) => {
     setPriceRange({ min: value[0], max: value[1] });
   };
@@ -114,7 +124,7 @@ function FilterPage() {
 
   const handleGetFilterDestination = async () => {
     setLoading(true); // Bắt đầu loading
-    let param = "";
+    let param = `&page=${currentPage}&size=${itemsPerPage}`;
     if (activeAmenities.length > 0) {
       param += `&amenityIds=${activeAmenities.join(",")}`;
     }
@@ -137,7 +147,17 @@ function FilterPage() {
       param += `&endDate=${selectedLastDayOfMonth.format("YYYY-MM-DD")}`;
     }
     try {
-      let res = await getFilterDestination(value, param);
+      var res;
+      if (value === "Other") {
+        if (selectedLocation) {
+          res = await getFilterDestination("Other", param,selectedLocation);
+        } else {
+          res = await getFilterDestination("Other", param,value);
+        }
+      } else {
+        res = await getFilterDestination(value, param);
+      }
+      console.log(param);
       if (res && res.code === 200) {
         console.log(res);
         setFilteredResults(res.result); // Update data after receiving
@@ -147,6 +167,15 @@ function FilterPage() {
     } finally {
       setLoading(false); // Kết thúc loading
     }
+  };
+  const handleLocationChange = (value) => {
+    setSelectedLocation((prevSelectedLocation) =>
+      prevSelectedLocation === value ? "" : value
+    );
+  };
+  const handleItemsPerPageChange = (current, size) => {
+    setItemsPerPage(size);
+    setCurrentPage(1); // Reset to first page
   };
   const handleRefresh = () => {
     // Reset các bộ lọc về trạng thái mặc định
@@ -158,7 +187,11 @@ function FilterPage() {
     setSelectedSecondLastDay(null);
     setSelectedLastDayOfMonth(null);
     setSelectAllAmenities(false);
-
+    setItemsPerPage(2); // Reset items per page to default
+    setCurrentPage(1);
+    if (value === "Other") {
+      setSelectedLocation("");
+    }
     // Gọi lại API để lấy dữ liệu ban đầu
     handleGetFilterDestination();
   };
@@ -173,10 +206,9 @@ function FilterPage() {
     numberGuest,
     selectedSecondLastDay,
     selectedLastDayOfMonth,
+    selectedLocation,
   ]);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <div className="container_filter">
       <Row gutter={16}>
@@ -198,6 +230,23 @@ function FilterPage() {
                 }}
               />
             </div>
+            {value === "Other" && (
+              <div>
+                <h2>Location</h2>
+                <Row gutter={8}>
+                  {cityData.map((city) => (
+                    <Col key={city.value} span={24}>
+                      <Checkbox
+                        checked={selectedLocation === city.value}
+                        onChange={() => handleLocationChange(city.value)}
+                      >
+                        {city.city}
+                      </Checkbox>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            )}
             <div>
               <h2>Guests</h2>
               <InputNumber
@@ -306,7 +355,7 @@ function FilterPage() {
             <Spin spinning={loading} tip="Loading...">
               <List
                 grid={{ gutter: 16, column: 2 }}
-                dataSource={currentItems}
+                dataSource={filteredResults}
                 renderItem={(item) => {
                   return (
                     <List.Item>
@@ -330,9 +379,11 @@ function FilterPage() {
                                 {item.description}
                               </Text>
                               <div className="flex-align-center">
-                                <Text className="rating">
-                                  {item.average_rating}
-                                </Text>
+                                <Rate
+                                  disabled
+                                  allowHalf
+                                  value={item.average_rating}
+                                />
                               </div>
                               <Text className="card-meta-location">
                                 {item.location}
@@ -350,8 +401,10 @@ function FilterPage() {
             <Pagination
               current={currentPage}
               pageSize={itemsPerPage}
-              total={filteredResults.length}
+              total={totalElements * totalPages * 1.0}
               onChange={handlePageChange}
+              showSizeChanger
+              onShowSizeChange={handleItemsPerPageChange}
             />
           </div>
         </Col>

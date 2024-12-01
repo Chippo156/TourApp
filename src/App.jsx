@@ -88,6 +88,11 @@ function App() {
         },
         {
           index: true,
+          path: "/filterTour",
+          element: <FilterTour />,
+        },
+        {
+          index: true,
           path: "/historyBooking",
           element: <BookingHistory />,
         },
@@ -108,10 +113,6 @@ function App() {
     //   path: "/tour-details",
     //   element: <TourDetails />
     // },
-    {
-      path: "/home",
-      element: <Home />,
-    },
     {
       path: "/admin",
       element: <LayoutAdmin />,

@@ -76,11 +76,42 @@
       font-size: 16px;
     }
   }
-  .card-meta-location {
-    display: block;
-    margin-top: 10px;
-    font-size: 14px;
+
+  .card-meta-title {
+    font-size: 20px;
+    font-weight: bold;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.2;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .card-meta-description {
+    font-size: 16px;
     color: #666;
+    margin-bottom: 10px;
+    display: block;
+    line-height: 20px;
+    height: 40px;
+  }
+  
+  .flex-align-center {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .rating {
+    font-size: 16px;
+    color: #f39c12;
+    font-weight: bold;
+  }
+  
+  .card-meta-location {
+    font-size: 16px;
+    color: #3498db;
+    margin-top: 10px;
   }
   .results-section {
     background-color: #fff;
@@ -109,4 +140,5 @@
     margin-top: 20px;
     text-align: center;
   }
+  
 }
