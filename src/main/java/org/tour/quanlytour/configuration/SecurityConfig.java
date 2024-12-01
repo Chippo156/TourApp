@@ -42,7 +42,7 @@ public class SecurityConfig {
                 endpoint + "/destinations",
                 endpoint + "/destinations/*",
                 endpoint + "/amenities",
-                endpoint +"/**"
+                endpoint + "/**",
         };
     }
     @Autowired
@@ -66,7 +66,9 @@ public class SecurityConfig {
         http.oauth2ResourceServer(oauth2 -> {
             oauth2.jwt(jwtConfigurer -> jwtConfigurer
                     .decoder(customJwtDecoder)
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter()));
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                    .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+            ;
         });
         http.csrf(AbstractHttpConfigurer::disable);
 

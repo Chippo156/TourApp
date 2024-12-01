@@ -2,6 +2,7 @@ package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.request.TourRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
@@ -19,6 +20,8 @@ import java.util.List;
 public class TourController {
     private final TourService tourService;
     private final TourMapper tourMapper;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<TourResponse> createTour(@RequestBody TourRequest request) {
         try{
@@ -54,6 +57,7 @@ public class TourController {
             return new ApiResponse<>(400,e.getMessage(),null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteTour(@PathVariable Long id) {
         try{
@@ -64,6 +68,7 @@ public class TourController {
             return new ApiResponse<>(400,e.getMessage(),null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<TourResponse> updateTour(@PathVariable Long id, @RequestBody TourRequest request) {
         try{
@@ -75,7 +80,6 @@ public class TourController {
     }
     @GetMapping("/filter")
     public ApiResponse<ListTourResponse> filterTour(
-
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false)  Double rating,

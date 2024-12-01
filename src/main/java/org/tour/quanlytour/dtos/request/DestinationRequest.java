@@ -12,7 +12,6 @@ import lombok.*;
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = false)
 @Builder
 public class DestinationRequest {
-
     String name;
     String description;
     String location;

@@ -1,6 +1,7 @@
 package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.response.ApiResponse;
@@ -25,6 +26,7 @@ public class TourTypeController {
 
       }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<String> saveTourType(@RequestBody TourType tourType) {
         try{

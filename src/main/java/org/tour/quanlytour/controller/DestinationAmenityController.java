@@ -1,5 +1,6 @@
 package org.tour.quanlytour.controller;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.tour.quanlytour.dtos.request.DestinationAmenityRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
 import org.tour.quanlytour.entites.DestinationAmenity;
@@ -15,7 +16,7 @@ import java.util.List;
 public class DestinationAmenityController {
 
     private final DestinationAmenityService destinationAmenityService;
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<String> saveDestinationAmenity(@RequestBody DestinationAmenityRequest request) {
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.tour.quanlytour.dtos.request.DestinationImageRequest;
 import org.tour.quanlytour.dtos.request.DestinationRequest;
 import org.tour.quanlytour.dtos.response.ListDestinationResponse;
@@ -35,7 +36,7 @@ public class DestinationController {
     private final DestinationImageService destinationImageService;
     private final CloudinaryService cloudinaryService;
     private final Logger logger = Logger.getLogger(DestinationController.class.getName());
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<DestinationResponse> createDestination(@RequestBody DestinationRequest destinationRequest) {
         try {
@@ -79,7 +80,7 @@ public class DestinationController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/uploadImages/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<DestinationResponse> uploadImage(@PathVariable Long id, @RequestParam("files") List<MultipartFile> files) {
         try {
@@ -163,7 +164,6 @@ public class DestinationController {
     @GetMapping("/search")
     public ApiResponse<List<DestinationResponse>> searchDestination(
             @RequestParam(required = false) String search
-
     ) {
         try {
             return new ApiResponse<>(200, "success",
@@ -172,6 +172,25 @@ public class DestinationController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    public ApiResponse<DestinationResponse> updateDestination(@PathVariable Long id, @RequestBody DestinationRequest request) {
+        try {
+            return new ApiResponse<>(200, "success",
+                  destinationService.updateDestination(id, request));
+        } catch (Exception e) {
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> deleteDestination(@PathVariable Long id) {
+        try {
+            destinationService.deleteDestination(id);
+            return new ApiResponse<>(200, "success", null);
+        } catch (Exception e) {
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
 
 }

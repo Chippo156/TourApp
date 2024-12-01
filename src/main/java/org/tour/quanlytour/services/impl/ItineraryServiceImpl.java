@@ -86,6 +86,16 @@ public class ItineraryServiceImpl implements ItineraryService {
                 "Day 5: Cultural and Culinary Delights - Begin with a visit to the Hoi An Museum of History and Culture to learn about the town's fascinating past.",
                 "Day 6: Nature and Adventure - Start the day with a visit to the stunning Marble Mountains, where you can explore the ancient caves and pagodas."
         };
+        String[] activities = {
+                "You have breakfast at the hotel, then depart for Muangboran (Ancient City) - a miniature Thailand with a system of architectural works built exactly like the original. Coming here, visitors can rent a traditional Thai costume to take extremely sparkling photos.The group had lunch at the restaurant.The whole group will visit famous destinations.In addition, the campus around the mountain also has many beautiful flower gardens for visitors to enjoy.The next destination on the Thailand tour from Ho Chi Minh is the Four Regions Floating Market: You are free to visit and enjoy authentic Thai dishes. In particular, some shops in the market have Vietnamese signs to conveniently identify prices and items while also bringing closeness to Vietnamese customers.You will experience a very refreshing traditional Thai Massage after a long day of travel. Professional massage therapists press acupressure points all over the body, awakening visitors' body senses.",
+                "You gather at the international airport - Tan Son Nhat airport at 2:15 p.m., check in for flight VJ805 at 5:15 p.m. to Bangkok.Arriving at Suvanabhumi Airport, Thailand, the group went through immigration procedures. After that, the tour guide takes you to dinner, then the group returns to the hotel to check in and rest.",
+                "5:30: Tour guide and group go to Can Tho pier, visit Cai Rang floating market early in the morning. When the sun still shines on the dew drops like sparkling pearls in the early morning, you will have the opportunity to immerse yourself in the bustle and excitement, learning about the typical lifestyle of the residents of the river region.Next, you check out of the hotel and have lunch.The car took the group back to Ho Chi Minh City. When you arrive, the car will return you to the original pick up point.End of 2-day Western tour, see you again!",
+                "Take a roller coaster ride down to the base of Datanla Waterfall",
+                "Visit the Domaine De Marie Church in Da Lat. Enjoy the stunning French colonial architecture. Learn about the church's rich history. ",
+                "You gather at the international airport - Tan Son Nhat airport at 2:15 p.m., check in for flight VJ805 at 5:15 p.m. to Bangkok.Arriving at Suvanabhumi Airport, Thailand, the group went through immigration procedures. After that, the tour guide takes you to dinner, then the group returns to the hotel to check in and rest.",
+                "You have breakfast at the hotel, then depart for Muangboran (Ancient City) - a miniature Thailand with a system of architectural works built exactly like the original. Coming here, visitors can rent a traditional Thai costume to take extremely sparkling photos.The group had lunch at the restaurant.The whole group will visit famous destinations.In addition, the campus around the mountain also has many beautiful flower gardens for visitors to enjoy.The next destination on the Thailand tour from Ho Chi Minh is the Four Regions Floating Market: You are free to visit and enjoy authentic Thai dishes. In particular, some shops in the market have Vietnamese signs to conveniently identify prices and items while also bringing closeness to Vietnamese customers.You will experience a very refreshing traditional Thai Massage after a long day of travel. Professional massage therapists press acupressure points all over the body, awakening visitors' body senses.",
+
+        };
 
         for (int i = 21; i <= 34; i++) {
             Tour tour = tourRepository.findById((long) i).orElseThrow(() -> new RuntimeException("Tour not found"));
@@ -94,7 +104,7 @@ public class ItineraryServiceImpl implements ItineraryService {
                     Itinerary itinerary = new Itinerary();
                     itinerary.setTour(tour);
                     itinerary.setDay(day[j]);
-                    itinerary.setActivities(faker.lorem().sentence());
+                    itinerary.setActivities(activities[j]);
                     itinerary.setTime(faker.lorem().sentence());
                     itineraryRepository.save(itinerary);
                 }
@@ -124,7 +134,7 @@ public class ItineraryServiceImpl implements ItineraryService {
                     Itinerary itinerary = new Itinerary();
                     itinerary.setTour(tour);
                     itinerary.setDay(day[j]);
-                    itinerary.setActivities(faker.lorem().sentence());
+                    itinerary.setActivities(activities[j]);
                     itinerary.setTime(faker.lorem().sentence());
                     itineraryRepository.save(itinerary);
                 }

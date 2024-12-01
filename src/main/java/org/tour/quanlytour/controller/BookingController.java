@@ -2,6 +2,7 @@ package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.tour.quanlytour.dtos.request.BookingRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
 import org.tour.quanlytour.dtos.response.BookingResponse;
@@ -19,6 +20,8 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
     private final BookingMapper bookingMapper;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ApiResponse<List<BookingResponse>> getAllBookings() {
         try{
@@ -28,6 +31,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ApiResponse<BookingResponse> createBooking(@RequestBody BookingRequest bookingRequest){
         try{
@@ -37,6 +41,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/tour")
     public ApiResponse<BookingResponse> createBookingTour(@RequestBody BookingRequest bookingRequest){
         try{
@@ -55,6 +60,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<BookingResponse> updateBooking(@PathVariable Long id, @RequestBody BookingRequest bookingRequest){
         try{
@@ -64,6 +70,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{id}")
     public ApiResponse<Boolean> deleteBooking(@PathVariable Long id){
         try{
@@ -73,6 +80,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user/{userId}")
     public ApiResponse<List<BookingResponse>> getBookingsByUserId(@PathVariable Long userId){
         try{
@@ -82,6 +90,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/bookingDestination")
     public ApiResponse<ListBookingResponse> getBookingDestination(
             @RequestParam("page") int page,
@@ -96,6 +105,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/bookingTour")
     public ApiResponse<ListBookingResponse> getBookingTour(
             @RequestParam("page") int page,

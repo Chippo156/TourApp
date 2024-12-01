@@ -2,6 +2,7 @@ package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.tour.quanlytour.dtos.request.TourImageRequest;
@@ -31,6 +32,7 @@ public class TourImageController {
             return new ApiResponse<>(400, ex.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
 
     @PostMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<TourImage> uploadImage(@PathVariable Long id, @RequestParam("files") List<MultipartFile> files) {

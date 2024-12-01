@@ -3,6 +3,7 @@ package org.tour.quanlytour.controller;
 
 import com.cloudinary.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.tour.quanlytour.dtos.request.DestinationImageRequest;
 import org.tour.quanlytour.dtos.request.RoomImageRequest;
 import org.tour.quanlytour.dtos.request.RoomRequest;
@@ -43,6 +44,8 @@ public class RoomController {
             return new ApiResponse<>(400, ex.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping
     public ApiResponse<RoomResponse> createRoom(@RequestBody RoomRequest roomRequest) {
         try {
@@ -59,6 +62,7 @@ public class RoomController {
             return new ApiResponse<>(400, ex.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<RoomResponse> updateRoom(@PathVariable Long id, @RequestBody RoomRequest roomRequest) {
         try {
@@ -67,6 +71,7 @@ public class RoomController {
             return new ApiResponse<>(400, ex.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteRoom(@PathVariable Long id) {
         try {
@@ -76,6 +81,8 @@ public class RoomController {
             return new ApiResponse<>(400, ex.getMessage(), null);
         }
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/uploadImages/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<RoomResponse> uploadImage(@PathVariable Long id, @RequestParam("files") List<MultipartFile> files) {
         try {

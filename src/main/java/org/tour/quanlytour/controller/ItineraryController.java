@@ -1,6 +1,7 @@
 package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.request.ItineraryRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
@@ -25,6 +26,7 @@ public class ItineraryController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<ItineraryResponse> createItinerary(@RequestBody ItineraryRequest request) {
         try {
@@ -33,6 +35,7 @@ public class ItineraryController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteItinerary(@PathVariable Long id) {
         try {
@@ -42,6 +45,7 @@ public class ItineraryController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<ItineraryResponse> updateItinerary(@PathVariable Long id, @RequestBody ItineraryRequest request) {
         try {

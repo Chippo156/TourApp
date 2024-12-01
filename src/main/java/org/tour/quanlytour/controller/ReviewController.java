@@ -1,6 +1,7 @@
 package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.request.ReviewRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
@@ -12,6 +13,7 @@ import org.tour.quanlytour.services.service.ReviewService;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<String> createReview(@RequestBody ReviewRequest reviewRequest) {
         try{

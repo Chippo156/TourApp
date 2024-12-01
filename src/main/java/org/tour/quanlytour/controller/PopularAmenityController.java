@@ -1,6 +1,7 @@
 package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.tour.quanlytour.dtos.request.PopularAmenityRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
@@ -23,7 +24,7 @@ public class PopularAmenityController {
             return new ApiResponse<>(400, ex.getMessage(), null);
         }
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<PopularAmenityResponse> createPopularAmenity(@RequestBody PopularAmenityRequest popularAmenityRequest) {
         try {
