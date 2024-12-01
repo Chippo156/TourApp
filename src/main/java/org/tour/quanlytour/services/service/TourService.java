@@ -13,4 +13,6 @@ public interface TourService {
     void updateTourImage(Long id, String url);
     Page<Tour> filterTour(Double minPrice, Double maxPrice, Double rating, String duration,Long tourTypeId, int page, int size);
 
+    void fakeData();
+
 }

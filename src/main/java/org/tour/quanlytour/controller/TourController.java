@@ -97,5 +97,15 @@ public class TourController {
             return new ApiResponse<>(400,e.getMessage(),null);
         }
     }
+    @GetMapping("/fake-data")
+    public ApiResponse<String> fakeData() {
+        try{
+            tourService.fakeData();
+            return new ApiResponse<>(200,"success",null);
+        }
+        catch (Exception e) {
+            return new ApiResponse<>(400,e.getMessage(),null);
+        }
+    }
 
 }
