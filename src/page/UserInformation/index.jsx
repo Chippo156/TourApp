@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import "./infor.scss";
 export default function UserDetails() {
   const user = useSelector((state) => state.user.user);
+  console.log(user);
 
   return (
     <div className="user-container">
@@ -39,7 +40,7 @@ export default function UserDetails() {
           </div>
           <div className="infor_left">
             <label>Information: </label>
-            <div className="title"> {user.informationAgent}</div>
+            <div className="title"> {user.information_agent}</div>
           </div>
         </div>
       </div>
