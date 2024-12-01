@@ -11,4 +11,5 @@ public interface TourImageService {
 
     TourImage uploadImage(Long tourId, TourImageRequest request);
     List<TourImage> get(Long roomId);
+    void fakeData();
 }

@@ -1,6 +1,7 @@
 package org.tour.quanlytour.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
 import org.tour.quanlytour.dtos.request.TourImageRequest;
 import org.tour.quanlytour.entites.Room;
@@ -40,5 +41,19 @@ public class TourImageServiceImpl implements TourImageService {
     @Override
     public List<TourImage> get(Long roomId) {
         return tourImageRepository.findAllByTourId(roomId);
+    }
+
+    @Override
+    public void fakeData() {
+        Faker faker = new Faker();
+        for(int i = 21;i<= 34;i++){
+            for(int j = 0;j<3;j++){
+                TourImage tourImage = new TourImage();
+                tourImage.setImageUrl(faker.internet().image());
+                tourImage.setTour(tourRepository.findById((long) i).orElseThrow(() -> new RuntimeException("Tour not found")));
+                tourImageRepository.save(tourImage);
+            }
+        }
+
     }
 }

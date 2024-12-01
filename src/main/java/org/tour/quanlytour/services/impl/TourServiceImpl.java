@@ -78,8 +78,6 @@ public class TourServiceImpl implements TourService {
             throw new RuntimeException(e.getMessage());
         }
     }
-
-
     @Override
     public void deleteTour(Long id) {
         try {

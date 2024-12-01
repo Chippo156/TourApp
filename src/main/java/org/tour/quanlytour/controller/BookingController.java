@@ -1,9 +1,12 @@
 package org.tour.quanlytour.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.tour.quanlytour.dtos.request.BookingRequest;
 import org.tour.quanlytour.dtos.response.ApiResponse;
 import org.tour.quanlytour.dtos.response.BookingResponse;
+import org.tour.quanlytour.dtos.response.ListBookingResponse;
+import org.tour.quanlytour.entites.Bookings;
 import org.tour.quanlytour.mapper.BookingMapper;
 import org.tour.quanlytour.services.service.BookingService;
 import org.springframework.web.bind.annotation.*;
@@ -74,6 +77,34 @@ public class BookingController {
     public ApiResponse<List<BookingResponse>> getBookingsByUserId(@PathVariable Long userId){
         try{
             return new ApiResponse<>(200, "success", bookingService.getBookingsByUserId(userId));
+        }
+        catch (Exception e){
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
+    @GetMapping("/bookingDestination")
+    public ApiResponse<ListBookingResponse> getBookingDestination(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ){
+        try{
+            Page<Bookings> bookings = bookingService.findByDestinationIsNotEmptyAndRoomNotEmpty(page-1, size);
+            List<BookingResponse> bookingResponses = bookings.getContent().stream().map(bookingMapper::toBookingResponse).toList();
+            return new ApiResponse<>(200, "success", new ListBookingResponse(bookingResponses, bookings.getTotalPages(), bookings.getNumberOfElements()));
+        }
+        catch (Exception e){
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
+    @GetMapping("/bookingTour")
+    public ApiResponse<ListBookingResponse> getBookingTour(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ){
+        try{
+            Page<Bookings> bookings = bookingService.findByTourNotEmpty(page-1, size);
+            List<BookingResponse> bookingResponses = bookings.getContent().stream().map(bookingMapper::toBookingResponse).toList();
+            return new ApiResponse<>(200, "success", new ListBookingResponse(bookingResponses, bookings.getTotalPages(), bookings.getNumberOfElements()));
         }
         catch (Exception e){
             return new ApiResponse<>(400, e.getMessage(), null);

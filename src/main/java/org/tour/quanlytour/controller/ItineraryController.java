@@ -50,4 +50,13 @@ public class ItineraryController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @GetMapping("/fake")
+    public ApiResponse<String> fakeData() {
+        try {
+            itineraryService.fakeData();
+            return new ApiResponse<>(200, "success", null);
+        } catch (Exception e) {
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
 }

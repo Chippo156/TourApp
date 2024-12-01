@@ -1,6 +1,8 @@
 package org.tour.quanlytour.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.tour.quanlytour.dtos.request.BookingRequest;
 import org.tour.quanlytour.dtos.response.BookingResponse;
 import org.tour.quanlytour.entites.*;
@@ -129,5 +131,17 @@ public class BookingServiceImpl implements BookingService {
         }catch (Exception ex){
             throw new Exception(ex.getMessage());
         }
+    }
+
+    @Override
+    public Page<Bookings> findByDestinationIsNotEmptyAndRoomNotEmpty(int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return bookingRepository.findByDestinationIsNotEmpty(pageable);
+    }
+
+    @Override
+    public Page<Bookings> findByTourNotEmpty(int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return bookingRepository.findByTourIsNotEmpty(pageable);
     }
 }

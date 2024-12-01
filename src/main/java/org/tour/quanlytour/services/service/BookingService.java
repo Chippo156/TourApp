@@ -1,5 +1,6 @@
 package org.tour.quanlytour.services.service;
 
+import org.springframework.data.domain.Page;
 import org.tour.quanlytour.dtos.request.BookingRequest;
 import org.tour.quanlytour.dtos.response.BookingResponse;
 import org.tour.quanlytour.entites.Bookings;
@@ -20,6 +21,10 @@ public interface BookingService {
     List<BookingResponse> getBookingsByUserId(Long userId);
 
     BookingResponse createBookingTour(BookingRequest bookingRequest) throws Exception;
+
+
+    Page<Bookings> findByDestinationIsNotEmptyAndRoomNotEmpty(int page, int size);
+    Page<Bookings> findByTourNotEmpty(int page, int size);
 
 
 }

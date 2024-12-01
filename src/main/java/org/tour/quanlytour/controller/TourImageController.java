@@ -52,5 +52,14 @@ public class TourImageController {
             return new ApiResponse<>(400, ex.getMessage(), null);
         }
     }
+    @GetMapping("/fake")
+    public ApiResponse<String> fakeData() {
+        try {
+            tourImageService.fakeData();
+            return new ApiResponse<>(200, "success", null);
+        } catch (Exception e) {
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
 
 }

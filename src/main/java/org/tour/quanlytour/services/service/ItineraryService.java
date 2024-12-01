@@ -12,4 +12,5 @@ public interface ItineraryService {
     void deleteItinerary(Long id);
     Itinerary getItineraryById(Long id);
     List<Itinerary> getItineraryByTour(Long id);
+    void fakeData();
 }
