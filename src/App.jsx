@@ -14,8 +14,10 @@ import TourDetails from "./page/TourDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
-import {login, logout} from "./redux/UserSlice";
+import { login, logout } from "./redux/UserSlice";
 import FilterTour from "./page/FilterTour";
+import TourBooking from "./page/Deserve/tourBooking";
+import ResetWithEmail from "./page/Forgot";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -36,7 +38,7 @@ function App() {
       // element: <Login />,
       errorElement: <Error />,
       children: [
-        { index: false, path: "/", element: <FilterTour /> },
+        { index: false, path: "/", element: <Home /> },
         {
           index: true,
           path: "/destination/:id",
@@ -60,12 +62,7 @@ function App() {
         {
           index: true,
           path: "/forgot",
-          element: <Forgot />,
-        },
-        {
-          index: true,
-          path: "/payment/:id",
-          element: <Payment />,
+          element: <ResetWithEmail />,
         },
 
         {
@@ -84,13 +81,6 @@ function App() {
           element: <Register />,
         },
 
-          element: <TourDetails />
-        },
-        // {
-        //   index: true,
-        //   path: "/user",
-        //   element: <UserDetails />,
-        // },
         // { path: "/product/:id", element: <Product /> },
         // { path: "/profile", element: <Profile /> },
         // { path: "/category/:id", element: <CategoryPage /> },
