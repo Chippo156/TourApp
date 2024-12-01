@@ -8,15 +8,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LayoutAdmin from "./component/LayoutAdmin/LayoutAdmin";
 import FilterPage from "./page/Destination";
 import TravelDetail from "./page/Hotel_Details";
-import Deserve from "./page/Deserve";
+import Deserve from "./page/Deserve/hotelBooking";
 import UserDetails from "./page/UserInformation";
 import TourDetails from "./page/TourDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { reloadUser } from "./controller/loginController";
 import { useEffect } from "react";
 import {login, logout} from "./redux/UserSlice";
-import FilterTour from "./page/FilterTour";
-import Admin from "./page/Admin";
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -26,7 +24,7 @@ function App() {
     if (res && res.code === 200) {
       dispatch(login(res.result));
     }
-  }
+  };
   useEffect(() => {
     handleGetUser();
   }, []);
@@ -53,11 +51,6 @@ function App() {
           path: "/tour-details/:id",
           element: <TourDetails />
         },
-        {
-          index: true,
-          path:"/tour-filter",
-          element:<FilterTour />
-        },
         // {
         //   index: true,
         //   path: "/user",
@@ -80,10 +73,10 @@ function App() {
       path: "register",
       element: <Register />,
     },
-    // {
-    //   path: "/tour-details",
-    //   element: <TourDetails />
-    // },
+    {
+      path: "/tour-details",
+      element: <TourDetails />
+    },
     {
       path: "/home",
       element: <Home />,
