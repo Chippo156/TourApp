@@ -20,9 +20,12 @@ import "./destination.scss";
 import { getFilterDestination } from "../../controller/filterController";
 import { Spin } from "antd"; // Import Spin
 import { ReloadOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+
 const { Title, Text } = Typography;
 
 function FilterPage() {
+  const navigate = useNavigate();
   const { value } = useParams();
   const [priceRange, setPriceRange] = useState({ min: 0, max: 20000000 });
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -152,7 +155,7 @@ function FilterPage() {
         if (selectedLocation) {
           res = await getFilterDestination("Other", param,selectedLocation);
         } else {
-          res = await getFilterDestination("Other", param,value);
+          res = await getFilterDestination("Other", param);
         }
       } else {
         res = await getFilterDestination(value, param);
@@ -160,7 +163,9 @@ function FilterPage() {
       console.log(param);
       if (res && res.code === 200) {
         console.log(res);
-        setFilteredResults(res.result); // Update data after receiving
+        setFilteredResults(res.result.destinations); // Update data after receiving
+        setTotalPages(res.result.totalPage);
+        setTotalElements(res.result.totalElement);
       }
     } catch (error) {
       console.error("Failed to fetch destinations", error);
@@ -207,8 +212,12 @@ function FilterPage() {
     selectedSecondLastDay,
     selectedLastDayOfMonth,
     selectedLocation,
+    currentPage,
+    itemsPerPage,
   ]);
-
+  const handleDetails = (des_id) => {
+    navigate(`/destination/${des_id}`);
+  };
   return (
     <div className="container_filter">
       <Row gutter={16}>
@@ -368,6 +377,7 @@ function FilterPage() {
                             style={{ height: 200 }}
                           />
                         }
+                        onClick={() => handleDetails(item.id)}
                       >
                         <Card.Meta
                           title={
@@ -401,7 +411,7 @@ function FilterPage() {
             <Pagination
               current={currentPage}
               pageSize={itemsPerPage}
-              total={totalElements * totalPages * 1.0}
+              total={itemsPerPage * totalPages * 1.0}
               onChange={handlePageChange}
               showSizeChanger
               onShowSizeChange={handleItemsPerPageChange}
