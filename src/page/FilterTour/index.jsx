@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Row,
   Col,
@@ -27,6 +27,7 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 
 function FilterTour() {
+  const navigate = useNavigate();
   const [priceRange, setPriceRange] = useState({ min: 0, max: 20000000 });
   const [selectedTourType, setSelectedTourType] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
@@ -48,7 +49,7 @@ function FilterTour() {
     "2 days 1 night",
     "3 days 2 nights",
     "4 days 3 nights",
-    "5 days or more",
+    "5 days 4 nights",
   ];
 
   const handlePriceChange = (value) => {
@@ -63,8 +64,7 @@ function FilterTour() {
   };
 
   const handleCategoryChange = (id) => {
-    setSelectedTourType([id]
-    );
+    setSelectedTourType([id]);
   };
 
   const handleRatingChange = (rating) => {
@@ -76,18 +76,16 @@ function FilterTour() {
   };
 
   const handleDurationChange = (dur) => {
-    setActiveDuration((prev) =>
-      prev.includes(dur)
-        ? prev.filter((duration) => duration !== dur)
-        : [...prev, dur]
-    );
+    setActiveDuration([dur]);
   };
 
   const handleItemsPerPageChange = (current, size) => {
     setItemsPerPage(size);
     setCurrentPage(1); // Reset to first page
   };
-
+  const handleDetaiTour = (id) => {
+    navigate(`/tour-details/${id}`);
+  };
   const handleGetFilterDestination = async () => {
     setLoading(true);
     let param = `&page=${currentPage}&size=${itemsPerPage}`;
@@ -101,7 +99,7 @@ function FilterTour() {
       param += `&rating=${selectedRating}`;
     }
     if (selectedTourType.length > 0) {
-      param += `&tourTypeId=${selectedTourType.join(",")}`;
+      param += `&tourTypeIds=${selectedTourType.join(",")}`;
     }
     if (activeDuration.length > 0) {
       param += `&duration=${activeDuration.join(",")}`;
@@ -133,6 +131,9 @@ function FilterTour() {
     setItemsPerPage(2); // Reset items per page to default
     setCurrentPage(1);
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     handleGetFilterDestination();
@@ -144,6 +145,9 @@ function FilterTour() {
     currentPage,
     itemsPerPage,
   ]);
+  const handleTourDetails = (id) => {
+    navigate(`/tour-details/${id}`);
+  };
 
   return (
     <div className="container_filter_tour">
@@ -255,7 +259,7 @@ function FilterTour() {
                 grid={{ gutter: 16, column: 2 }}
                 dataSource={filteredResults}
                 renderItem={(item) => (
-                  <List.Item>
+                  <List.Item onClick={() => handleTourDetails(item.id)}>
                     <Card
                       hoverable
                       cover={
@@ -265,6 +269,7 @@ function FilterTour() {
                           style={{ height: 200 }}
                         />
                       }
+                      onClick={() => handleDetaiTour(item.id)}
                     >
                       <Card.Meta
                         title={

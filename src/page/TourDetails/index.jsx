@@ -137,7 +137,7 @@ const TourDetails = () => {
     setPeople(value);
   };
   const handleGetFavorite = async () => {
-    let res = await handleGetFavoriteDestination();
+    let res = await handleGetFavoriteDestination(8);
     if (res && res.code === 200) {
       setItem(res.result.tours);
     }
@@ -428,7 +428,7 @@ const TourDetails = () => {
             Other Tour
           </Title>
           <Row gutter={[16, 16]} style={{ marginTop: 20 }}>
-            {items.slice(0, 4).map((item, index) => (
+            {items.map((item, index) => (
               <Col key={index} span={6}>
                 <Card
                   hoverable

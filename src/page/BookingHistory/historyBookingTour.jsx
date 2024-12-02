@@ -200,6 +200,9 @@ const Bookingtour = () => {
             </Button>
           );
         }
+        if (text === null) {
+          return "Not yet paid";
+        }
         return formatDate(text);
       },
     },
