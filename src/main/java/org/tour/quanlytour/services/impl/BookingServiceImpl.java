@@ -101,6 +101,19 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public boolean deleteBookingTour(Long id) {
+        try{
+            Bookings bookings = bookingRepository.findById(id).orElseThrow(()->new RuntimeException("Booking not found"));
+            Tour tour = tourRepository.findById(bookings.getTour().getId()).orElseThrow(()->new RuntimeException("Tour not found"));
+            bookings.setBookingStatus("CANCELLED");
+            bookingRepository.save(bookings);
+            return true;
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
     public List<BookingResponse> getAllBookings() {
         return bookingRepository.findAll().stream().map(bookingMapper::toBookingResponse).toList();
     }
@@ -143,5 +156,23 @@ public class BookingServiceImpl implements BookingService {
     public Page<Bookings> findByTourNotEmpty(int page, int size) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return bookingRepository.findByTourIsNotEmpty(pageable);
+    }
+
+    @Override
+    public Page<Bookings> findByBookingCancel(Long userId, int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return bookingRepository.findByBookingCancel(userId, pageable);
+    }
+
+    @Override
+    public Page<Bookings> findByUserDestinationIsNotEmpty(Long userId, int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return bookingRepository.findByUserDestinationIsNotEmpty(userId, pageable);
+    }
+
+    @Override
+    public Page<Bookings> findByUserTourIsNotEmpty(Long userId, int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return bookingRepository.findByUserTourIsNotEmpty(userId, pageable);
     }
 }

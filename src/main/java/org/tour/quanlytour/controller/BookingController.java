@@ -21,7 +21,6 @@ public class BookingController {
     private final BookingService bookingService;
     private final BookingMapper bookingMapper;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ApiResponse<List<BookingResponse>> getAllBookings() {
         try{
@@ -90,7 +89,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/bookingDestination")
     public ApiResponse<ListBookingResponse> getBookingDestination(
             @RequestParam("page") int page,
@@ -105,7 +104,7 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/bookingTour")
     public ApiResponse<ListBookingResponse> getBookingTour(
             @RequestParam("page") int page,
@@ -120,6 +119,63 @@ public class BookingController {
             return new ApiResponse<>(400, e.getMessage(), null);
         }
     }
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/bookingCancel/{id}")
+    public ApiResponse<ListBookingResponse> getBookingCancel(
+            @PathVariable Long id,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ){
+        try{
+            Page<Bookings> bookings = bookingService.findByBookingCancel(id, page-1, size);
+            List<BookingResponse> bookingResponses = bookings.getContent().stream().map(bookingMapper::toBookingResponse).toList();
+            return new ApiResponse<>(200, "success", new ListBookingResponse(bookingResponses, bookings.getTotalPages(), bookings.getNumberOfElements()));
+        }
+        catch (Exception e){
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
+    @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("/tour/{id}")
+    public ApiResponse<Boolean> deleteBookingTour(@PathVariable Long id){
+        try{
+            return new ApiResponse<>(200, "success", bookingService.deleteBookingTour(id));
+        }
+        catch (Exception e){
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
 
-
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/userDestination/{id}")
+    public ApiResponse<ListBookingResponse> getUserDestination(
+            @PathVariable Long id,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ){
+        try{
+            Page<Bookings> bookings = bookingService.findByUserDestinationIsNotEmpty(id, page-1, size);
+            List<BookingResponse> bookingResponses = bookings.getContent().stream().map(bookingMapper::toBookingResponse).toList();
+            return new ApiResponse<>(200, "success", new ListBookingResponse(bookingResponses, bookings.getTotalPages(), bookings.getNumberOfElements()));
+        }
+        catch (Exception e){
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/userTour/{id}")
+    public ApiResponse<ListBookingResponse> getUserTour(
+            @PathVariable Long id,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ){
+        try{
+            Page<Bookings> bookings = bookingService.findByUserTourIsNotEmpty(id, page-1, size);
+            List<BookingResponse> bookingResponses = bookings.getContent().stream().map(bookingMapper::toBookingResponse).toList();
+            return new ApiResponse<>(200, "success", new ListBookingResponse(bookingResponses, bookings.getTotalPages(), bookings.getNumberOfElements()));
+        }
+        catch (Exception e){
+            return new ApiResponse<>(400, e.getMessage(), null);
+        }
+    }
 }

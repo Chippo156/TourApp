@@ -25,7 +25,7 @@ public interface DestinationService {
 
     void updateImage(Long id, String imageUrl);
 
-    List<Destination> filterDestination(String search,String location, Long categoryId, Double averageRating, Double price,List<Long> amenityIds, Integer sleeps, LocalDate startDate, LocalDate endDate);
+    Page<Destination> filterDestination(String search,String location, Long categoryId, Double averageRating, Double price,List<Long> amenityIds, Integer sleeps, LocalDate startDate, LocalDate endDate,int page, int size);
     List<Destination> getDestinationByLocation(String location);
     List<Destination> findAvailableDestinations(String startDate, String endDate);
 

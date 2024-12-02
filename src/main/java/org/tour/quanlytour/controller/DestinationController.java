@@ -115,7 +115,7 @@ public class DestinationController {
 
 
     @GetMapping("/filter")
-    public ApiResponse<List<DestinationResponse>> filterDestination(
+    public ApiResponse<ListDestinationResponse> filterDestination(
             @RequestParam(required = false) String location,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Double averageRating,
@@ -124,18 +124,18 @@ public class DestinationController {
             @RequestParam(required = false) Integer sleeps,
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
         try {
             String locationParam = location != null ? StringUtils.stripAccents(location.toLowerCase().replaceAll("[\\s,]", "")) : null;
             String searchParam = search != null ? StringUtils.stripAccents(search.toLowerCase().replaceAll("[\\s,]", "")) : null;
-
-            System.out.println(locationParam);
-
             LocalDate start = startDate != null ? LocalDate.parse(startDate) : null;
             LocalDate end = endDate != null ? LocalDate.parse(endDate) : null;
-            return new ApiResponse<>(200, "success",
-                    destinationService.filterDestination(searchParam,locationParam, categoryId, averageRating, price,amenityIds,sleeps,start,end).stream().map(mapper::toDestinationResponse).toList());
+            Page<Destination> destinations = destinationService.filterDestination(searchParam,locationParam, categoryId, averageRating, price, amenityIds, sleeps, start, end, page-1, size);
+            List<DestinationResponse> destinationResponses = destinations.stream().map(mapper::toDestinationResponse).toList();
+            return new ApiResponse<>(200, "success", new ListDestinationResponse(destinationResponses, destinations.getTotalPages(), destinations.getNumberOfElements()));
         } catch (Exception e) {
             return new ApiResponse<>(400, e.getMessage(), null);
         }

@@ -44,7 +44,7 @@ public interface DestinationRepository extends JpaRepository<Destination, Long>{
             )
           )
 """)
-    List<Destination> filterDestination(
+    Page<Destination> filterDestination(
             @Param("categoryId") Long categoryId,
             @Param("averageRating") Double averageRating,
             @Param("price") Double price,
@@ -53,7 +53,8 @@ public interface DestinationRepository extends JpaRepository<Destination, Long>{
             @Param("sleeps") Integer sleeps,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
-            @Param("search") String search
+            @Param("search") String search,
+            Pageable pageable
     );
 
     List<Destination> findByLocationContaining(String location);

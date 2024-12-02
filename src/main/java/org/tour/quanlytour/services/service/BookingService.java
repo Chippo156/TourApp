@@ -15,6 +15,7 @@ public interface BookingService {
     BookingResponse updateBooking(Long id, BookingRequest bookingRequest);
 
     boolean deleteBooking(Long id);
+    boolean deleteBookingTour(Long id);
 
     List<BookingResponse> getAllBookings();
 
@@ -25,6 +26,11 @@ public interface BookingService {
 
     Page<Bookings> findByDestinationIsNotEmptyAndRoomNotEmpty(int page, int size);
     Page<Bookings> findByTourNotEmpty(int page, int size);
+    Page<Bookings> findByBookingCancel(Long userId, int page, int size);
+
+    Page<Bookings> findByUserDestinationIsNotEmpty(Long userId, int page, int size);
+    Page<Bookings> findByUserTourIsNotEmpty(Long userId, int page, int size);
+
 
 
 }
