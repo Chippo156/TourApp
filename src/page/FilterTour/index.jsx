@@ -49,7 +49,7 @@ function FilterTour() {
     "2 days 1 night",
     "3 days 2 nights",
     "4 days 3 nights",
-    "5 days or more",
+    "5 days 4 nights",
   ];
 
   const handlePriceChange = (value) => {
@@ -76,11 +76,7 @@ function FilterTour() {
   };
 
   const handleDurationChange = (dur) => {
-    setActiveDuration((prev) =>
-      prev.includes(dur)
-        ? prev.filter((duration) => duration !== dur)
-        : [...prev, dur]
-    );
+    setActiveDuration([dur]);
   };
 
   const handleItemsPerPageChange = (current, size) => {
