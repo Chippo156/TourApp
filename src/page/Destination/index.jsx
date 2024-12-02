@@ -20,7 +20,6 @@ import "./destination.scss";
 import { getFilterDestination } from "../../controller/filterController";
 import { Spin } from "antd"; // Import Spin
 import { ReloadOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 

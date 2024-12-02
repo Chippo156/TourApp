@@ -25,7 +25,6 @@ import { ReloadOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
 const { Title, Text } = Typography;
 const { Option } = Select;
-import { useNavigate } from "react-router-dom";
 
 function FilterTour() {
   const navigate = useNavigate();
