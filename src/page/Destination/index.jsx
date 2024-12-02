@@ -76,8 +76,8 @@ function FilterPage() {
   };
 
   const handleCategoryChange = (id) => {
-    setSelectedCategories((prev) =>
-      prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]
+    setSelectedCategories([id]
+
     );
   };
 
