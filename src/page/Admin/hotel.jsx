@@ -227,9 +227,22 @@ const HotelAdmin = () => {
           </div>
           <div style={{ display: 'flex', width: '100%',  }}>
 
-            <Form.Item name="average_rating" style={{ width: '100%' }} label="Average Rating" rules={[{ required: true, message: 'Please input the average rating!' }]}>
-              <Input />
-            </Form.Item>
+          <Form.Item
+                    name="average_rating"
+                    style={{ width: '100%' }}
+                    label="Rating"
+                    rules={[
+                      { required: true, message: 'Please input the average rating!' },
+                      {
+                        validator: (_, value) =>
+                          value >= 1 && value <= 5
+                            ? Promise.resolve()
+                            : Promise.reject(new Error('Please input a number between 1 and 5!')),
+                      },
+                    ]}
+                  >
+          <Input placeholder="Enter a number between 1 and 5" />
+        </Form.Item>
           </div>
           <div style={{ display: 'flex', width: '100%',  }}>
 

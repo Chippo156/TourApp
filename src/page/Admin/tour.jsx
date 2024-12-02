@@ -194,11 +194,42 @@ const TourAdmin = () => {
           <Form.Item name="highlight" label="Highlight" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the highlight!' }]}><Input /></Form.Item>
           </div>
           <div style={{ display: 'flex', width: '100%',  }}>
-          <Form.Item name="price" label="Price"  style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the price!' }]}><Input /></Form.Item>
+          <div style={{ display: 'flex', width: '100%' }}>
+          <Form.Item
+            name="price"
+            label="Price"
+            style={{ width: '100%' }}
+            rules={[
+              { required: true, message: 'Please input the price!' },
+              {
+                validator: (_, value) =>
+                  value > 0
+                    ? Promise.resolve()
+                    : Promise.reject(new Error('Price must be a positive number!')),
+              },
+            ]}
+          >
+            <Input placeholder="Enter a positive number" />
+          </Form.Item>
+        </div>
           </div>
           <div style={{ display: 'flex', width: '100%',  }}>
-          <Form.Item name="rating" label="Rating" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the rating!' }]}><Input /></Form.Item>
-          </div>
+          <Form.Item
+                    name="rating"
+                    style={{ width: '100%' }}
+                    label="Rating"
+                    rules={[
+                      { required: true, message: 'Please input the average rating!' },
+                      {
+                        validator: (_, value) =>
+                          value >= 1 && value <= 5
+                            ? Promise.resolve()
+                            : Promise.reject(new Error('Please input a number between 1 and 5!')),
+                      },
+                    ]}
+                  >
+          <Input placeholder="Enter a number between 1 and 5" />
+        </Form.Item>          </div>
           <div style={{ display: 'flex', width: '100%',  }}>
           <Form.Item name="schedule" label="Schedule" style={{ width: '100%' }} rules={[{ required: true, message: 'Please input the schedule!' }]}><Input /></Form.Item>
           </div>

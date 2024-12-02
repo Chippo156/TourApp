@@ -29,7 +29,7 @@ const BookingHotelAdmin = () => {
 
   useEffect(() => {
     getData();
-  }, [currentPage, itemsPerPage]); // Theo dõi sự thay đổi của `currentPage` và `itemsPerPage`
+  }, [currentPage, itemsPerPage]);
 
   const columns = [
     { title: 'ID', dataIndex: 'id', sorter: (a, b) => a.id - b.id },
@@ -49,7 +49,7 @@ const BookingHotelAdmin = () => {
       render: (text) => (
         <span
           style={{ 
-            color: text === 'pending' ? 'red' : 'green',
+            color: text === 'PENDING' ? 'red' : 'green',
             fontWeight: 'bold',
           }}
         >
