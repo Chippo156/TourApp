@@ -173,6 +173,9 @@ function FilterPage() {
       setLoading(false); // Kết thúc loading
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleLocationChange = (value) => {
     setSelectedLocation((prevSelectedLocation) =>
       prevSelectedLocation === value ? "" : value
