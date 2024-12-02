@@ -650,6 +650,10 @@ export default function Deserve() {
                   </span>
                 </p>
                 <p className="price-detail">
+                  Days:
+                  <span className="price-label"> {dayDiff} day</span>
+                </p>
+                <p className="price-detail">
                   Total:
                   <span className="price-label"> {formatCurrency(total)}</span>
                 </p>

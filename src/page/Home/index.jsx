@@ -143,7 +143,6 @@ function Home() {
 
   const handleSeeMore = () => {
     navigate("/filterTour");
-
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -155,7 +154,9 @@ function Home() {
   }, []);
 
   return (
-    <Spin spinning={loading}> {/* Wrap content with Spin component */}
+    <Spin spinning={loading}>
+      {" "}
+      {/* Wrap content with Spin component */}
       <div className="home-container">
         <Carousel arrows infinite={false} draggable={true} autoplay>
           <div>
@@ -167,7 +168,7 @@ function Home() {
         </Carousel>
         <div className="home-main-container">
           <div style={{ padding: "20px" }}>
-            <Title level={2}>Why choose Klook</Title>
+            <Title level={2}>Why choose T1</Title>
             <Row gutter={[16, 16]}>
               {benefits.map((benefit, index) => (
                 <Col key={index} xs={24} sm={12} lg={6}>

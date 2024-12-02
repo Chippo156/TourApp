@@ -58,7 +58,6 @@ const Bookingtour = () => {
         const bookingsWithTourDetails = await Promise.all(
           bookings.map(async (booking) => {
             const tourDetails = await fetchTourById(booking.tour_id);
-
             return {
               ...booking,
               tourDetails,
@@ -114,8 +113,8 @@ const Bookingtour = () => {
       sorter: (a, b) => a.amount - b.amount,
       render: (text) => formatCurrency(text),
     },
-    { title: "Email", dataIndex: "email" },
-    { title: "Phone", dataIndex: "phone" },
+    { title: "Phone", dataIndex: "email" },
+    { title: "Email", dataIndex: "phone" },
     {
       title: "Tour Image",
       dataIndex: ["tourDetails", "image"],

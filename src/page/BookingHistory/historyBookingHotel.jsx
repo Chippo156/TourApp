@@ -95,8 +95,8 @@ const BookingHotel = () => {
       sorter: (a, b) => a.amount - b.amount,
       render: (text) => formatCurrency(text),
     },
-    { title: "Email", dataIndex: "email" },
-    { title: "Phone", dataIndex: "phone" },
+    { title: "Phone", dataIndex: "email" },
+    { title: "Email", dataIndex: "phone" },
     {
       title: "Room Image",
       dataIndex: ["roomDetails", "image"],
