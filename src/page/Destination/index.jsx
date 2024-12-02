@@ -131,8 +131,11 @@ function FilterPage() {
     if (activeAmenities.length > 0) {
       param += `&amenityIds=${activeAmenities.join(",")}`;
     }
-    if (priceRange.min > 0 || priceRange.max < 1000) {
-      param += `&priceRange=${priceRange.min}-${priceRange.max}`;
+    if (priceRange.min >= 0) {
+      param += `&minPrice=${priceRange.min}`;
+    }
+    if (priceRange.max <= 20000000) {
+      param += `&maxPrice=${priceRange.max}`;
     }
     if (selectedRating) {
       param += `&averageRating=${selectedRating}`;
@@ -173,6 +176,9 @@ function FilterPage() {
       setLoading(false); // Kết thúc loading
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleLocationChange = (value) => {
     setSelectedLocation((prevSelectedLocation) =>
       prevSelectedLocation === value ? "" : value
