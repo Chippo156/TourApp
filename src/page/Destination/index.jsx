@@ -76,9 +76,7 @@ function FilterPage() {
   };
 
   const handleCategoryChange = (id) => {
-    setSelectedCategories([id]
-
-    );
+    setSelectedCategories([id]);
   };
 
   const handleRatingChange = (rating) => {
@@ -141,7 +139,7 @@ function FilterPage() {
       param += `&averageRating=${selectedRating}`;
     }
     if (selectedCategories.length > 0) {
-      param += `&categoryIds=${selectedCategories.join(",")}`;
+      param += `&categoryId=${selectedCategories}`;
     }
     if (numberGuest) {
       param += `&sleeps=${numberGuest}`;

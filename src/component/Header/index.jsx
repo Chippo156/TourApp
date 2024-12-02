@@ -102,10 +102,6 @@ const HeaderPage = () => {
             <FaRegUserCircle />
             <span>Thông tin cá nhân</span>
           </NavLink>
-          <NavLink to="/historyBooking" className="content_item">
-            <FaRegCalendarCheck />
-            <span>Quản lý đơn hàng</span>
-          </NavLink>
           <button className="btn btn_primary" onClick={handleLogout}>
             Đăng xuất
           </button>
