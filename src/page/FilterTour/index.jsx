@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Row,
   Col,
@@ -65,8 +65,7 @@ function FilterTour() {
   };
 
   const handleCategoryChange = (id) => {
-    setSelectedTourType([id]
-    );
+    setSelectedTourType([id]);
   };
 
   const handleRatingChange = (rating) => {
@@ -105,7 +104,7 @@ function FilterTour() {
       param += `&rating=${selectedRating}`;
     }
     if (selectedTourType.length > 0) {
-      param += `&tourTypeId=${selectedTourType.join(",")}`;
+      param += `&tourTypeIds=${selectedTourType.join(",")}`;
     }
     if (activeDuration.length > 0) {
       param += `&duration=${activeDuration.join(",")}`;
@@ -137,6 +136,9 @@ function FilterTour() {
     setItemsPerPage(2); // Reset items per page to default
     setCurrentPage(1);
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     handleGetFilterDestination();
@@ -148,6 +150,9 @@ function FilterTour() {
     currentPage,
     itemsPerPage,
   ]);
+  const handleTourDetails = (id) => {
+    navigate(`/tour-details/${id}`);
+  };
 
   return (
     <div className="container_filter_tour">
@@ -259,7 +264,7 @@ function FilterTour() {
                 grid={{ gutter: 16, column: 2 }}
                 dataSource={filteredResults}
                 renderItem={(item) => (
-                  <List.Item>
+                  <List.Item onClick={() => handleTourDetails(item.id)}>
                     <Card
                       hoverable
                       cover={

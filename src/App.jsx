@@ -91,6 +91,12 @@ function App() {
           path: "/filterTour",
           element: <FilterTour />,
         },
+        {
+          index: true,
+          path: "/historyBooking",
+          element: <BookingHistory />,
+        },
+
         { path: "/destination/filter/:value", element: <FilterPage /> },
       ],
     },

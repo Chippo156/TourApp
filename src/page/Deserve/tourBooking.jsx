@@ -119,7 +119,7 @@ export default function TourBooking() {
       const amount = total;
       let res = await createBookingTour(
         user.id,
-        "pending",
+        "PENDING",
         selectedOption,
         convertDateFormat(departureDate),
         amount,
