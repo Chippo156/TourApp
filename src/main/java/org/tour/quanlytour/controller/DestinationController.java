@@ -119,7 +119,8 @@ public class DestinationController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Double averageRating,
-            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) List<Long> amenityIds,
             @RequestParam(required = false) Integer sleeps,
             @RequestParam(required = false) String startDate,
@@ -133,7 +134,7 @@ public class DestinationController {
             String searchParam = search != null ? StringUtils.stripAccents(search.toLowerCase().replaceAll("[\\s,]", "")) : null;
             LocalDate start = startDate != null ? LocalDate.parse(startDate) : null;
             LocalDate end = endDate != null ? LocalDate.parse(endDate) : null;
-            Page<Destination> destinations = destinationService.filterDestination(searchParam,locationParam, categoryId, averageRating, price, amenityIds, sleeps, start, end, page-1, size);
+            Page<Destination> destinations = destinationService.filterDestination(searchParam,locationParam, categoryId, averageRating,minPrice,maxPrice, amenityIds, sleeps, start, end, page-1, size);
             List<DestinationResponse> destinationResponses = destinations.stream().map(mapper::toDestinationResponse).toList();
             return new ApiResponse<>(200, "success", new ListDestinationResponse(destinationResponses, destinations.getTotalPages(), destinations.getNumberOfElements()));
         } catch (Exception e) {

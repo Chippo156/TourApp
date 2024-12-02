@@ -22,7 +22,8 @@ public interface DestinationRepository extends JpaRepository<Destination, Long>{
     JOIN DestinationAmenity da ON da.destination.id = d.id 
     WHERE (:categoryId IS NULL OR d.category.id = :categoryId) 
       AND (:averageRating IS NULL OR d.averageRating = :averageRating) 
-      AND (:price IS NULL OR r.price <= :price) 
+       and (:minPrice is NULL OR r.price >= :minPrice )
+       and (:maxPrice is NULL OR r.price <= :maxPrice )
       AND (:amenityIds IS NULL OR da.amenity.id IN :amenityIds) 
       AND (:location IS NULL OR LOWER(REPLACE(REPLACE(d.location, ' ', ''), '[^\\p{IsAlphabetic}\\p{IsDigit}]', '')) LIKE LOWER(CONCAT('%', :location, '%'))) 
       AND (
@@ -47,7 +48,8 @@ public interface DestinationRepository extends JpaRepository<Destination, Long>{
     Page<Destination> filterDestination(
             @Param("categoryId") Long categoryId,
             @Param("averageRating") Double averageRating,
-            @Param("price") Double price,
+            @Param("minPrice") Double minPrice,
+            @Param("maxPrice") Double maxPrice,
             @Param("amenityIds") List<Long> amenityIds,
             @Param("location") String location,
             @Param("sleeps") Integer sleeps,

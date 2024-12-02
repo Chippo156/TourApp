@@ -106,11 +106,11 @@ public class DestinationServiceImpl implements DestinationService {
     }
 
     @Override
-    public Page<Destination> filterDestination(String search, String location, Long categoryId, Double averageRating, Double price, List<Long> amenityIds,
+    public Page<Destination> filterDestination(String search, String location, Long categoryId, Double averageRating,  Double minPrice,Double maxPrice, List<Long> amenityIds,
                                                Integer sleeps, LocalDate startDate, LocalDate endDate, int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            return destinationRepository.filterDestination(categoryId, averageRating, price, amenityIds, location, sleeps, startDate, endDate, search,pageable);
+            return destinationRepository.filterDestination(categoryId, averageRating,   minPrice, maxPrice, amenityIds, location, sleeps, startDate, endDate, search,pageable);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
