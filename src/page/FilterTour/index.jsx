@@ -27,6 +27,7 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 
 function FilterTour() {
+  const navigate = useNavigate();
   const [priceRange, setPriceRange] = useState({ min: 0, max: 20000000 });
   const [selectedTourType, setSelectedTourType] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
@@ -43,7 +44,6 @@ function FilterTour() {
     { id: 3, categoryName: "Historical tour" },
     { id: 4, categoryName: "Eco-tour" },
   ];
-  const navigate = useNavigate();
 
   const duration = [
     "2 days 1 night",
@@ -87,7 +87,9 @@ function FilterTour() {
     setItemsPerPage(size);
     setCurrentPage(1); // Reset to first page
   };
-
+  const handleDetaiTour = (id) => {
+    navigate(`/tour-details/${id}`);
+  };
   const handleGetFilterDestination = async () => {
     setLoading(true);
     let param = `&page=${currentPage}&size=${itemsPerPage}`;
@@ -271,6 +273,7 @@ function FilterTour() {
                           style={{ height: 200 }}
                         />
                       }
+                      onClick={() => handleDetaiTour(item.id)}
                     >
                       <Card.Meta
                         title={

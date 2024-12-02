@@ -107,13 +107,11 @@ function Home() {
 
   const handleGetData = async () => {
     let res = await handleGetDestination();
-    console.log(res);
     if (res && res.code === 200) {
       for (const item of res.result.destinations) {
         let count = await handleGetCountReview(item.destination_id);
         item.count_review = count;
       }
-      console.log(res);
 
       setDataLastWeekend(res.result.destinations);
     }
